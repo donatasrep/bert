@@ -400,7 +400,6 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq):
     example["input_mask"].set_shape([max_seq_length])
     example["input_ids"] = pad_up_to(example["input_ids"], [max_seq_length], dynamic_padding=False)
     example["input_ids"].set_shape([max_seq_length])
-    example["input_ids"] = tf.Print(example["input_ids"], [context["length"]], "Cia", summarize=500)
     return example
 
 
