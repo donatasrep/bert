@@ -375,9 +375,13 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq):
         example[name] = t
 
     def a(l):
-        print(l)
-        x= [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]#np.random.randint(0, l, max_predictions_per_seq)
-        print("!",x)
+        try:
+            print(l)
+            x= np.random.randint(0, l, max_predictions_per_seq)
+            print("!",x)
+        except:
+            print("ERROR!!!!!!!!!!:, ", l)
+            x = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
         return x
     positions_to_mask = tf.py_func(lambda l: a(l),
                                    [context["length"]], tf.int32, stateful=False)
