@@ -374,18 +374,19 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq):
             t = tf.to_int32(t)
         example[name] = t
 
-    def get_random_indicies(l):
-        try:
-            print(l)
-            x= [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]# np.random.randint(0, l, max_predictions_per_seq)
-        except:
-            print("ERROR!!!!!!!!!!:, ", l)
-            x = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
-        return x
+    # def get_random_indicies(l):
+    #     try:
+    #         print(l)
+    #         x= [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]# np.random.randint(0, l, max_predictions_per_seq)
+    #     except:
+    #         print("ERROR!!!!!!!!!!:, ", l)
+    #         x = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+    #     return x
+    #
+    # positions_to_mask = tf.py_func(lambda l: get_random_indicies(l),
+    #                                [context["length"]], tf.int32, stateful=False)
 
-    positions_to_mask = tf.py_func(lambda l: get_random_indicies(l),
-                                   [context["length"]], tf.int32, stateful=False)
-
+    positions_to_mask = tf.cast(tf.random.uniform([max_predictions_per_seq], 0, [context["length"]]), tf.int32)
     ## TODO: think if empty spaces also include in masked ids
     example["masked_lm_positions"] = positions_to_mask
     example["masked_lm_ids"] = tf.gather(example["input_ids"], positions_to_mask)
