@@ -374,11 +374,17 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq):
             t = tf.to_int32(t)
         example[name] = t
 
-    positions_to_mask = tf.py_func(lambda l: np.random.randint(0, l, max_predictions_per_seq),
+    def a(l):
+        x = np.random.randint(0, l, max_predictions_per_seq)
+        print(x)
+        return x
+
+    positions_to_mask = tf.py_func(lambda l: a(l),
                                    [context["length"]], tf.int32)
+
     ## TODO: think if empty spaces also include in masked ids
     tf_positions_to_mask = tf.convert_to_tensor(positions_to_mask)
-
+    # example["input_ids"] = tf.Print(example["input_ids"], [example["input_ids"]], "Cia")
     example["masked_lm_positions"] = tf_positions_to_mask
     example["masked_lm_ids"] = tf.gather(example["input_ids"], tf_positions_to_mask)
     example["masked_lm_weights"] =  tf.ones(max_predictions_per_seq, dtype=tf.float32)
