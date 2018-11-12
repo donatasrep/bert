@@ -377,7 +377,7 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq):
     def get_random_indicies(l):
         try:
             print(l)
-            x= np.random.randint(0, l, max_predictions_per_seq)
+            x= [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]# np.random.randint(0, l, max_predictions_per_seq)
         except:
             print("ERROR!!!!!!!!!!:, ", l)
             x = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
