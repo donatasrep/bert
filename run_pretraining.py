@@ -311,7 +311,7 @@ def input_fn_builder(input_files,
                      max_seq_length,
                      max_predictions_per_seq,
                      is_training,
-                     num_cpu_threads=1):
+                     num_cpu_threads=multiprocessing.cpu_count()):
     """Creates an `input_fn` closure to be passed to TPUEstimator."""
 
     def input_fn(params):
@@ -374,7 +374,10 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq):
             t = tf.to_int32(t)
         example[name] = t
 
-    positions_to_mask = tf.py_func(lambda l: np.random.randint(0, l, max_predictions_per_seq),
+    def a(l):
+        print(l)
+        return np.random.randint(0, l, max_predictions_per_seq)
+    positions_to_mask = tf.py_func(lambda l: a(l),
                                    [context["length"]], tf.int32)
 
     ## TODO: think if empty spaces also include in masked ids
