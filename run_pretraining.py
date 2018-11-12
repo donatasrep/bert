@@ -311,7 +311,7 @@ def input_fn_builder(input_files,
                      max_seq_length,
                      max_predictions_per_seq,
                      is_training,
-                     num_cpu_threads=multiprocessing.cpu_count()):
+                     num_cpu_threads=1):
     """Creates an `input_fn` closure to be passed to TPUEstimator."""
 
     def input_fn(params):
@@ -378,12 +378,11 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq):
                                    [context["length"]], tf.int32)
 
     ## TODO: think if empty spaces also include in masked ids
-    #tf_positions_to_mask = tf.convert_to_tensor(positions_to_mask)
 
-    tf_positions_to_mask = tf.convert_to_tensor([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20])
+    positions_to_mask = tf.convert_to_tensor([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20])
 
-    example["masked_lm_positions"] = tf_positions_to_mask
-    example["masked_lm_ids"] = tf.gather(example["input_ids"], tf_positions_to_mask)
+    example["masked_lm_positions"] = positions_to_mask
+    example["masked_lm_ids"] = tf.gather(example["input_ids"], positions_to_mask)
     example["masked_lm_weights"] =  tf.ones(max_predictions_per_seq, dtype=tf.float32)
 
     example["input_mask"] = pad_up_to(tf.ones(context["length"]), [max_seq_length],
