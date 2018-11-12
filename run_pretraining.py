@@ -41,7 +41,7 @@ flags.DEFINE_string(
 
 flags.DEFINE_string(
     "input_file",
-    "..\\PREnzyme\\data\\protein\\embedding\\sample_128\\train\\*",
+    "..\\PREnzyme\\data\\protein\\embedding\\256\\train\\*",
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
@@ -54,7 +54,7 @@ flags.DEFINE_string(
     "Initial checkpoint (usually from a pre-trained BERT model).")
 
 flags.DEFINE_integer(
-    "max_seq_length", 128,
+    "max_seq_length", 256,
     "The maximum total input sequence length after WordPiece tokenization. "
     "Sequences longer than this will be truncated, and sequences shorter "
     "than this will be padded. Must match data generation.")
@@ -438,7 +438,7 @@ def main(_):
 
     # If TPU is not available, this will fall back to normal Estimator on CPU
     # or GPU.
-    # logging_hook = tf.train.LoggingTensorHook(tensors={'loss': 'cls/predictions/ loss'}, every_n_iter=1)
+
     estimator = TPUEstimator(
         use_tpu=FLAGS.use_tpu,
         model_fn=model_fn,
@@ -455,8 +455,9 @@ def main(_):
             max_seq_length=FLAGS.max_seq_length,
             max_predictions_per_seq=FLAGS.max_predictions_per_seq,
             is_training=True)
-        estimator.train(input_fn=train_input_fn, max_steps=FLAGS.num_train_steps)
-
+        estimator.train(input_fn=train_input_fn, max_steps=FLAGS.num_train_steps,
+                        hooks = [tf.train.LoggingTensorHook(tensors={'loss': 'cls/predictions/loss'}, every_n_iter=1)]
+                        )
     if FLAGS.do_eval:
         tf.logging.info("***** Running evaluation *****")
         tf.logging.info("  Batch size = %d", FLAGS.eval_batch_size)
