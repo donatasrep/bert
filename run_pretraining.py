@@ -385,7 +385,7 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq):
     example["input_mask"].set_shape([max_seq_length])
     example["input_ids"] = pad_up_to(example["input_ids"], [max_seq_length], dynamic_padding=False)
     example["input_ids"].set_shape([max_seq_length])
-    example["input_ids"] = tf.Print(example["input_ids"], [example["input_ids"]], "UNIQUE?", summarize=20)
+    example["input_ids"] = tf.Print(example["input_ids"], [positions_to_mask], "UNIQUE?", summarize=20)
     return example
 
 
