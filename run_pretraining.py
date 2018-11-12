@@ -384,7 +384,7 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq):
 
     ## TODO: think if empty spaces also include in masked ids
     tf_positions_to_mask = tf.convert_to_tensor(positions_to_mask)
-    # example["input_ids"] = tf.Print(example["input_ids"], [example["input_ids"]], "Cia")
+
     example["masked_lm_positions"] = tf_positions_to_mask
     example["masked_lm_ids"] = tf.gather(example["input_ids"], tf_positions_to_mask)
     example["masked_lm_weights"] =  tf.ones(max_predictions_per_seq, dtype=tf.float32)
@@ -395,6 +395,7 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq):
     example["input_mask"].set_shape([max_seq_length])
     example["input_ids"] = pad_up_to(example["input_ids"], [max_seq_length], dynamic_padding=False)
     example["input_ids"].set_shape([max_seq_length])
+    example["input_ids"] = tf.Print(example["input_ids"], [example["masked_lm_positions"]], "Cia")
     return example
 
 
