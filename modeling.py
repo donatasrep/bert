@@ -31,15 +31,15 @@ class BertConfig(object):
   """Configuration for `BertModel`."""
 
   def __init__(self,
-               vocab_size,
-               hidden_size=768,
-               num_hidden_layers=12,
-               num_attention_heads=12,
-               intermediate_size=3072,
+               vocab_size=21,
+               hidden_size=256,
+               num_hidden_layers=4,
+               num_attention_heads=4,
+               intermediate_size=1024,
                hidden_act="gelu",
                hidden_dropout_prob=0.1,
                attention_probs_dropout_prob=0.1,
-               max_position_embeddings=512,
+               max_position_embeddings=128,
                type_vocab_size=16,
                initializer_range=0.02):
     """Constructs BertConfig.
@@ -81,7 +81,7 @@ class BertConfig(object):
   @classmethod
   def from_dict(cls, json_object):
     """Constructs a `BertConfig` from a Python dictionary of parameters."""
-    config = BertConfig(vocab_size=None)
+    config = BertConfig()
     for (key, value) in six.iteritems(json_object):
       config.__dict__[key] = value
     return config
@@ -407,7 +407,6 @@ def embedding_lookup(input_ids,
   # reshape to [batch_size, seq_length, 1].
   if input_ids.shape.ndims == 2:
     input_ids = tf.expand_dims(input_ids, axis=[-1])
-
   embedding_table = tf.get_variable(
       name=word_embedding_name,
       shape=[vocab_size, embedding_size],
@@ -468,7 +467,6 @@ def embedding_postprocessor(input_tensor,
   batch_size = input_shape[0]
   seq_length = input_shape[1]
   width = input_shape[2]
-
   if seq_length > max_position_embeddings:
     raise ValueError("The seq length (%d) cannot be greater than "
                      "`max_position_embeddings` (%d)" %
