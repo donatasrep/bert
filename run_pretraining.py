@@ -41,7 +41,7 @@ flags.DEFINE_string(
 
 flags.DEFINE_string(
     "input_file",
-    "..\\data\\protein\\embedding\\sample_128\\train\\*",
+    "..\\PREnzyme\\data\\protein\\embedding\\sample_128\\train\\*",
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
@@ -64,9 +64,9 @@ flags.DEFINE_integer(
     "Maximum number of masked LM predictions per sequence. "
     "Must match data generation.")
 
-flags.DEFINE_bool("do_train", False, "Whether to run training.")
+flags.DEFINE_bool("do_train", True, "Whether to run training.")
 
-flags.DEFINE_bool("do_eval", True, "Whether to run eval on the dev set.")
+flags.DEFINE_bool("do_eval", False, "Whether to run eval on the dev set.")
 
 flags.DEFINE_integer("train_batch_size", 32, "Total batch size for training.")
 
