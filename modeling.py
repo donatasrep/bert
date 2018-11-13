@@ -31,7 +31,7 @@ class BertConfig(object):
   """Configuration for `BertModel`."""
 
   def __init__(self,
-               vocab_size=21,
+               vocab_size=22,
                hidden_size=256,
                num_hidden_layers=4,
                num_attention_heads=4,
