@@ -22,6 +22,8 @@ import multiprocessing
 import os
 
 from model.ops import pad_up_to
+from sqlalchemy.sql.functions import sum
+from tensorflow.contrib.data import parallel_interleave
 from tensorflow.contrib.tpu import TPUEstimator
 from torch._C import dtype
 
@@ -41,11 +43,11 @@ flags.DEFINE_string(
 
 flags.DEFINE_string(
     "input_file",
-    "..\\PREnzyme\\data\\protein\\embedding\\256\\train\\*",
+    "..\\PREnzyme\\data\\protein\\embedding\\sample\\*",
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
-    "output_dir", "weights",
+    "output_dir", "weights\\test",
     "The output directory where the model checkpoints will be written.")
 
 ## Other parameters
@@ -306,13 +308,13 @@ def input_fn_builder(input_files,
             # `sloppy` mode means that the interleaving is not exact. This adds
             # even more randomness to the training pipeline.
             d = d.apply(
-                tf.contrib.data.parallel_interleave(
-                    tf.data.TFRecordDataset,
+                parallel_interleave(
+                    lambda filename: tf.data.TFRecordDataset(filename, compression_type='GZIP'),
                     sloppy=is_training,
                     cycle_length=cycle_length))
             d = d.shuffle(buffer_size=100)
         else:
-            d = tf.data.TFRecordDataset(input_files)
+            d = tf.data.TFRecordDataset(input_files, compression_type='GZIP')
             # Since we evaluate for a fixed number of steps we don't want to encounter
             # out-of-range exceptions.
             d = d.repeat()
@@ -334,36 +336,37 @@ def input_fn_builder(input_files,
 
 def _decode_record(record, max_seq_length, max_predictions_per_seq):
     """Decodes a record to a TensorFlow example."""
-    context, example = tf.parse_single_sequence_example(record,
-                                               context_features={
-                                                   "length": tf.FixedLenFeature([], tf.int64)
-                                               },
-                                               sequence_features={
-                                                   "input_ids": tf.FixedLenSequenceFeature([], tf.int64, allow_missing=True)
-                                               })
+    feature = tf.parse_single_example(record, features={
+        "length": tf.FixedLenFeature([], tf.int64),
+        'seq': tf.FixedLenSequenceFeature([], tf.int64, allow_missing=True)
+    })
+
     # tf.Example only supports tf.int64, but the TPU only supports tf.int32.
     # So cast all int64 to int32.
-    for name in list(example.keys()):
-        t = example[name]
+    for name in list(feature.keys()):
+        t = feature[name]
         if t.dtype == tf.int64:
             t = tf.to_int32(t)
-        example[name] = t
+        feature[name] = t
 
-    positions_to_mask = tf.cast(tf.random.uniform([max_predictions_per_seq], 0, [context["length"]]), tf.int32)
+    positions_to_mask = tf.cast(tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]), tf.int32)
+
     ## TODO: think if empty spaces also include in masked ids
-    example["masked_lm_positions"] = positions_to_mask
-    example["masked_lm_ids"] = tf.gather(example["input_ids"], positions_to_mask)
-    example["masked_lm_weights"] =  tf.ones(max_predictions_per_seq, dtype=tf.float32)
+    feature["masked_lm_positions"] = positions_to_mask
+    feature["masked_lm_ids"] = tf.gather(feature["seq"], positions_to_mask)
+    feature["masked_lm_weights"] = tf.ones(max_predictions_per_seq, dtype=tf.float32)
 
-    example["input_mask"] = pad_up_to(tf.ones(context["length"]), [max_seq_length],
+    feature["input_mask"] = pad_up_to(tf.ones(feature["length"]), [max_seq_length],
                                       dynamic_padding=False)
 
-    example["input_mask"].set_shape([max_seq_length])
-    example["input_ids"] = pad_up_to(example["input_ids"], [max_seq_length], dynamic_padding=False)
-    example["input_ids"].set_shape([max_seq_length])
-    to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1), tf.ones([max_predictions_per_seq], dtype=tf.int32) * 22, [max_seq_length])
-    example["input_ids"] = tf.clip_by_value(tf.add(example["input_ids"], to_mask), 0, 21)
-    return example
+    feature["input_mask"].set_shape([max_seq_length])
+    feature["input_ids"] = pad_up_to(feature["seq"], [max_seq_length], dynamic_padding=False)
+    feature["input_ids"].set_shape([max_seq_length])
+    to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1),
+                            tf.ones([max_predictions_per_seq], dtype=tf.int32) * 22, [max_seq_length])
+    feature["input_ids"] = tf.clip_by_value(tf.add(feature["input_ids"], to_mask), 0, 21)
+    feature.pop("seq", None)
+    return feature
 
 
 def main(_):
@@ -409,7 +412,6 @@ def main(_):
         use_tpu=FLAGS.use_tpu,
         use_one_hot_embeddings=FLAGS.use_tpu)
 
-
     # If TPU is not available, this will fall back to normal Estimator on CPU
     # or GPU.
 
@@ -430,7 +432,7 @@ def main(_):
             max_predictions_per_seq=FLAGS.max_predictions_per_seq,
             is_training=True)
         estimator.train(input_fn=train_input_fn, max_steps=FLAGS.num_train_steps,
-                        hooks = [tf.train.LoggingTensorHook(tensors={'loss': 'cls/predictions/loss'}, every_n_iter=1)]
+                        hooks=[tf.train.LoggingTensorHook(tensors={'loss': 'cls/predictions/loss'}, every_n_iter=1)]
                         )
     if FLAGS.do_eval:
         tf.logging.info("***** Running evaluation *****")
