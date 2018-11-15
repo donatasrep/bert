@@ -432,7 +432,7 @@ def main(_):
             max_predictions_per_seq=FLAGS.max_predictions_per_seq,
             is_training=True)
         estimator.train(input_fn=train_input_fn, max_steps=FLAGS.num_train_steps,
-                        hooks=[tf.train.LoggingTensorHook(tensors={'loss': 'cls/predictions/loss'}, every_n_iter=1)]
+                        #hooks=[tf.train.LoggingTensorHook(tensors={'loss': 'cls/predictions/loss'}, every_n_iter=1)]
                         )
     if FLAGS.do_eval:
         tf.logging.info("***** Running evaluation *****")
