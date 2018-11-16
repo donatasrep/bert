@@ -18,14 +18,13 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import multiprocessing
 import os
+import random
+from multiprocessing import cpu_count
 
 from model.ops import pad_up_to
-from sqlalchemy.sql.functions import sum
 from tensorflow.contrib.data import parallel_interleave
 from tensorflow.contrib.tpu import TPUEstimator
-from torch._C import dtype
 
 import modeling
 import optimization
@@ -47,7 +46,7 @@ flags.DEFINE_string(
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
-    "output_dir", "weights\\test",
+    "output_dir", "weights\\sample",
     "The output directory where the model checkpoints will be written.")
 
 ## Other parameters
@@ -56,13 +55,13 @@ flags.DEFINE_string(
     "Initial checkpoint (usually from a pre-trained BERT model).")
 
 flags.DEFINE_integer(
-    "max_seq_length", 256,
+    "max_seq_length", 512,
     "The maximum total input sequence length after WordPiece tokenization. "
     "Sequences longer than this will be truncated, and sequences shorter "
     "than this will be padded. Must match data generation.")
 
 flags.DEFINE_integer(
-    "max_predictions_per_seq", 20,
+    "max_predictions_per_seq", 50,
     "Maximum number of masked LM predictions per sequence. "
     "Must match data generation.")
 
@@ -72,7 +71,7 @@ flags.DEFINE_bool("do_eval", False, "Whether to run eval on the dev set.")
 
 flags.DEFINE_integer("train_batch_size", 32, "Total batch size for training.")
 
-flags.DEFINE_integer("eval_batch_size", 8, "Total batch size for eval.")
+flags.DEFINE_integer("eval_batch_size", 64, "Total batch size for eval.")
 
 flags.DEFINE_float("learning_rate", 5e-5, "The initial learning rate for Adam.")
 
@@ -114,6 +113,8 @@ flags.DEFINE_integer(
     "num_tpu_cores", 8,
     "Only used if `use_tpu` is True. Total number of TPU cores to use.")
 
+
+rng = random.Random(1992)
 
 def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                      num_train_steps, num_warmup_steps, use_tpu,
@@ -287,6 +288,7 @@ def gather_indexes(sequence_tensor, positions):
 def input_fn_builder(input_files,
                      max_seq_length,
                      max_predictions_per_seq,
+                     vocab_size,
                      is_training,
                      num_cpu_threads=1):
     """Creates an `input_fn` closure to be passed to TPUEstimator."""
@@ -325,7 +327,7 @@ def input_fn_builder(input_files,
         # every sample.
         d = d.apply(
             tf.contrib.data.map_and_batch(
-                lambda record: _decode_record(record, max_seq_length, max_predictions_per_seq),
+                lambda record: _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size),
                 batch_size=batch_size,
                 num_parallel_batches=num_cpu_threads,
                 drop_remainder=True))
@@ -334,7 +336,7 @@ def input_fn_builder(input_files,
     return input_fn
 
 
-def _decode_record(record, max_seq_length, max_predictions_per_seq):
+def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size):
     """Decodes a record to a TensorFlow example."""
     feature = tf.parse_single_example(record, features={
         "length": tf.FixedLenFeature([], tf.int64),
@@ -349,25 +351,38 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq):
             t = tf.to_int32(t)
         feature[name] = t
 
-    positions_to_mask = tf.cast(tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]), tf.int32)
-
-    ## TODO: think if empty spaces also include in masked ids
-    feature["masked_lm_positions"] = positions_to_mask
-    feature["masked_lm_ids"] = tf.gather(feature["seq"], positions_to_mask)
-    feature["masked_lm_weights"] = tf.ones(max_predictions_per_seq, dtype=tf.float32)
-
-    feature["input_mask"] = pad_up_to(tf.ones(feature["length"]), [max_seq_length],
-                                      dynamic_padding=False)
-
+    feature["input_mask"] = pad_up_to(tf.ones(feature["length"]), [max_seq_length], dynamic_padding=False)
     feature["input_mask"].set_shape([max_seq_length])
     feature["input_ids"] = pad_up_to(feature["seq"], [max_seq_length], dynamic_padding=False)
     feature["input_ids"].set_shape([max_seq_length])
-    to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1),
-                            tf.ones([max_predictions_per_seq], dtype=tf.int32) * 22, [max_seq_length])
+
+    if rng.random() < 0.9:
+        positions_to_mask = tf.cast(tf.random.uniform([max_predictions_per_seq], 0, [max_seq_length]), tf.int32)
+    else:
+        positions_to_mask = tf.cast(tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]), tf.int32)
+
+    feature["masked_lm_positions"] = positions_to_mask
+    feature["masked_lm_ids"] = tf.gather(feature["input_ids"], positions_to_mask)
+    feature["masked_lm_weights"] = tf.ones(max_predictions_per_seq, dtype=tf.float32)
+
+    c1 = tf.less(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.8)
+    c2 = tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9)
+
+    def mask_ids():
+        return tf.ones([max_predictions_per_seq], dtype=tf.int32)* vocab_size
+    def unchanged_ids():
+        return tf.zeros([max_predictions_per_seq], dtype=tf.int32)
+    def random_ids():
+        rand = tf.random.truncated_normal(mean=0, stddev=10, shape=[max_predictions_per_seq], dtype=tf.float32)
+        return tf.cast(rand, tf.int32)
+    def else_cond():
+        return tf.cond(c2, unchanged_ids, random_ids)
+
+    mask = tf.cond(c1, mask_ids, else_cond)
+    to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1), mask, [max_seq_length])
     feature["input_ids"] = tf.clip_by_value(tf.add(feature["input_ids"], to_mask), 0, 21)
     feature.pop("seq", None)
     return feature
-
 
 def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
@@ -430,7 +445,10 @@ def main(_):
             input_files=input_files,
             max_seq_length=FLAGS.max_seq_length,
             max_predictions_per_seq=FLAGS.max_predictions_per_seq,
-            is_training=True)
+            vocab_size=bert_config.vocab_size,
+            is_training=True,
+            num_cpu_threads = cpu_count() - 1
+        )
         estimator.train(input_fn=train_input_fn, max_steps=FLAGS.num_train_steps,
                         #hooks=[tf.train.LoggingTensorHook(tensors={'loss': 'cls/predictions/loss'}, every_n_iter=1)]
                         )
@@ -442,7 +460,10 @@ def main(_):
             input_files=input_files,
             max_seq_length=FLAGS.max_seq_length,
             max_predictions_per_seq=FLAGS.max_predictions_per_seq,
-            is_training=False)
+            vocab_size=bert_config.vocab_size,
+            is_training=False,
+            num_cpu_threads=cpu_count()-1
+        )
 
         result = estimator.evaluate(
             input_fn=eval_input_fn, steps=FLAGS.max_eval_steps)
