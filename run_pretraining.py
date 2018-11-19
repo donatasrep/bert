@@ -327,7 +327,7 @@ def input_fn_builder(input_files,
         # every sample.
         d = d.apply(
             tf.contrib.data.map_and_batch(
-                lambda record: _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size),
+                lambda record: _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training),
                 batch_size=batch_size,
                 num_parallel_batches=num_cpu_threads,
                 drop_remainder=True))
@@ -336,7 +336,7 @@ def input_fn_builder(input_files,
     return input_fn
 
 
-def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size):
+def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training):
     """Decodes a record to a TensorFlow example."""
     feature = tf.parse_single_example(record, features={
         "length": tf.FixedLenFeature([], tf.int64),
@@ -365,22 +365,28 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size):
     feature["masked_lm_ids"] = tf.gather(feature["input_ids"], positions_to_mask)
     feature["masked_lm_weights"] = tf.ones(max_predictions_per_seq, dtype=tf.float32)
 
-    c1 = tf.less(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.8)
-    c2 = tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9)
-
     def mask_ids():
-        return tf.ones([max_predictions_per_seq], dtype=tf.int32)* vocab_size
+        return tf.ones([max_predictions_per_seq], dtype=tf.int32) * vocab_size
+
     def unchanged_ids():
         return tf.zeros([max_predictions_per_seq], dtype=tf.int32)
+
     def random_ids():
         rand = tf.random.truncated_normal(mean=0, stddev=10, shape=[max_predictions_per_seq], dtype=tf.float32)
         return tf.cast(rand, tf.int32)
+
     def else_cond():
         return tf.cond(c2, unchanged_ids, random_ids)
 
-    mask = tf.cond(c1, mask_ids, else_cond)
+    if is_training:
+        c1 = tf.less(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.8)
+        c2 = tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9)
+        mask = tf.cond(c1, mask_ids, else_cond)
+    else:
+        mask = mask_ids()
     to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1), mask, [max_seq_length])
     feature["input_ids"] = tf.clip_by_value(tf.add(feature["input_ids"], to_mask), 0, 21)
+
     feature.pop("seq", None)
     return feature
 
