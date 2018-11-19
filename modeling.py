@@ -410,8 +410,8 @@ def embedding_lookup(input_ids,
   embedding_table = tf.get_variable(
       name=word_embedding_name,
       shape=[vocab_size, embedding_size],
-      initializer=tf.ones_initializer())
-      #initializer=create_initializer(initializer_range))
+      #initializer=tf.ones_initializer())
+      initializer=create_initializer(3))
   embedding_table = tf.Print(embedding_table, [embedding_table], "embedding_table", summarize=512)
   if use_one_hot_embeddings:
     flat_input_ids = tf.reshape(input_ids, [-1])
