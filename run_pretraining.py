@@ -46,7 +46,7 @@ flags.DEFINE_string(
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
-    "output_dir", "weights\\sample",
+    "output_dir", "weights\\test",
     "The output directory where the model checkpoints will be written.")
 
 ## Other parameters
@@ -151,7 +151,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
         masked_lm_accuracy, _ = tf.metrics.accuracy(
             labels=tf.reshape(masked_lm_ids, [-1]),
             predictions=masked_lm_predictions,
-            weights=masked_lm_weights)
+            weights=tf.reshape(masked_lm_weights, [-1]))
 
         tf.summary.scalar("accuracy", masked_lm_accuracy)
 
