@@ -254,9 +254,8 @@ def get_masked_lm_output(bert_config, input_tensor, output_weights, positions,
             "output_bias",
             shape=[bert_config.vocab_size],
             initializer=tf.zeros_initializer())
-        output_bias = tf.Print(output_bias, [output_bias], "output_bias", summarize=512)
+        
         logits = tf.matmul(input_tensor, output_weights, transpose_b=True)
-        logits = tf.Print(logits, [output_weights], "output_weights", summarize=512)
         logits = tf.nn.bias_add(logits, output_bias)
         log_probs = tf.nn.log_softmax(logits, axis=-1)
 
