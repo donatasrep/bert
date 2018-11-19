@@ -148,10 +148,8 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
          masked_lm_example_loss, masked_lm_log_probs) = get_masked_lm_output(
             bert_config, model.get_sequence_output(), model.get_embedding_table(),
             masked_lm_positions, masked_lm_ids, masked_lm_weights)
-        masked_lm_log_probs = tf.reshape(masked_lm_log_probs,
-                                         [-1, masked_lm_log_probs.shape[-1]])
-        masked_lm_predictions = tf.argmax(
-            masked_lm_log_probs, axis=-1, output_type=tf.int32)
+        masked_lm_predictions = tf.argmax(tf.reshape(masked_lm_log_probs, [-1, masked_lm_log_probs.shape[-1]]),
+                                          axis=-1, output_type=tf.int32)
         masked_lm_accuracy, _ = tf.metrics.accuracy(
             labels=masked_lm_ids,
             predictions=masked_lm_predictions,
