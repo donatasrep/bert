@@ -154,6 +154,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
         masked_lm_loss = tf.Print(masked_lm_loss, [masked_lm_log_probs[0]], "Probabs:", summarize=128)
         masked_lm_loss = tf.Print(masked_lm_loss, [input_ids[0]], "input:", summarize=512)
         masked_lm_loss = tf.Print(masked_lm_loss, [masked_lm_ids[0]], "mask ids:", summarize=512)
+        masked_lm_loss = tf.Print(masked_lm_loss, [masked_lm_positions[0]], "mask positions:", summarize=512)
         masked_lm_loss = tf.Print(masked_lm_loss, [masked_lm_loss], "mask loss:", summarize=512)
         total_loss = masked_lm_loss
 
