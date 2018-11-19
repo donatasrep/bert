@@ -114,8 +114,6 @@ flags.DEFINE_integer(
     "Only used if `use_tpu` is True. Total number of TPU cores to use.")
 
 
-rng = random.Random(1992)
-
 def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                      num_train_steps, num_warmup_steps, use_tpu,
                      use_one_hot_embeddings):
@@ -365,8 +363,8 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
     feature["input_ids"].set_shape([max_seq_length])
 
     positions_to_mask = tf.cond(tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9),
-                                lambda : tf.random.uniform([max_predictions_per_seq], 0, [max_seq_length]),
-                                lambda : tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]))
+                                lambda: tf.random.uniform([max_predictions_per_seq], 0, [max_seq_length]),
+                                lambda: tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]))
     positions_to_mask = tf.cast(positions_to_mask, tf.int32)
 
     feature["masked_lm_positions"] = positions_to_mask
@@ -397,6 +395,7 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
 
     feature.pop("seq", None)
     return feature
+
 
 def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
@@ -461,10 +460,10 @@ def main(_):
             max_predictions_per_seq=FLAGS.max_predictions_per_seq,
             vocab_size=bert_config.vocab_size,
             is_training=True,
-            num_cpu_threads = cpu_count() - 1
+            num_cpu_threads=cpu_count() - 1
         )
         estimator.train(input_fn=train_input_fn, max_steps=FLAGS.num_train_steps,
-                        #hooks=[tf.train.LoggingTensorHook(tensors={'loss': 'cls/predictions/loss'}, every_n_iter=1)]
+                        # hooks=[tf.train.LoggingTensorHook(tensors={'loss': 'cls/predictions/loss'}, every_n_iter=1)]
                         )
     if FLAGS.do_eval:
         tf.logging.info("***** Running evaluation *****")
@@ -476,7 +475,7 @@ def main(_):
             max_predictions_per_seq=FLAGS.max_predictions_per_seq,
             vocab_size=bert_config.vocab_size,
             is_training=False,
-            num_cpu_threads=cpu_count()-1
+            num_cpu_threads=cpu_count() - 1
         )
 
         result = estimator.evaluate(
