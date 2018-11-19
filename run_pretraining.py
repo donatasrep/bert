@@ -219,6 +219,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
             eval_metrics = (metric_fn, [
                 masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
                 masked_lm_weights])
+            total_loss = tf.Print(total_loss, [total_loss], "EVAL total_loss")
             output_spec = tf.contrib.tpu.TPUEstimatorSpec(
                 mode=mode,
                 loss=total_loss,
