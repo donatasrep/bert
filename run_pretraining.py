@@ -149,7 +149,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
             bert_config, model.get_sequence_output(), model.get_embedding_table(),
             masked_lm_positions, masked_lm_ids, masked_lm_weights)
 
-        masked_lm_loss = tf.Print(masked_lm_loss, [tf.argmax(masked_lm_log_probs[0], axis=-1, output_type=tf.int32)], "Guess:", summarize=128)
+        masked_lm_loss = tf.Print(masked_lm_loss, [tf.argmax(masked_lm_log_probs[0], axis=0, output_type=tf.int32)], "Guess:", summarize=128)
         masked_lm_loss = tf.Print(masked_lm_loss, [masked_lm_ids[0]], "Correct:", summarize=128)
         masked_lm_loss = tf.Print(masked_lm_loss, [masked_lm_log_probs[0]], "Probabs:", summarize=128)
         masked_lm_loss = tf.Print(masked_lm_loss, [input_ids[0]], "input:", summarize=512)
