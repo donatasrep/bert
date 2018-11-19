@@ -69,9 +69,7 @@ def create_optimizer(loss, init_lr, num_train_steps, num_warmup_steps, use_tpu):
 
   tvars = tf.trainable_variables()
   # tvars = tf.Print(tvars, [tvars], "tvars")
-  loss = tf.Print(loss, [loss], "loss")
   grads = tf.gradients(loss, tvars)
-  grads = tf.Print(grads, [grads], "grads")
   # This is how the model was pre-trained.
   (grads, _) = tf.clip_by_global_norm(grads, clip_norm=1.0)
 
