@@ -74,7 +74,7 @@ def create_optimizer(loss, init_lr, num_train_steps, num_warmup_steps, use_tpu):
 
   # This is how the model was pre-trained.
   (grads, _) = tf.clip_by_global_norm(grads, clip_norm=1.0)
-
+  grads = tf.Print(grads, [grads], "grads")
   train_op = optimizer.apply_gradients(
       zip(grads, tvars), global_step=global_step)
 
