@@ -156,7 +156,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
         masked_lm_loss = tf.Print(masked_lm_loss, [masked_lm_ids[0]], "mask ids:", summarize=512)
         masked_lm_loss = tf.Print(masked_lm_loss, [masked_lm_positions[0]], "mask positions:", summarize=512)
         masked_lm_loss = tf.Print(masked_lm_loss, [masked_lm_loss], "mask loss:", summarize=512)
-        masked_lm_loss = tf.Print(masked_lm_loss, [input_mask], "input mask:", summarize=512)
+        masked_lm_loss = tf.Print(masked_lm_loss, [input_mask][0], "input mask:", summarize=512)
         total_loss = masked_lm_loss
 
         tvars = tf.trainable_variables()
@@ -364,7 +364,7 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
     feature["input_ids"] = pad_up_to(feature["seq"], [max_seq_length], dynamic_padding=False)
     feature["input_ids"].set_shape([max_seq_length])
 
-    if rng.random() < 0.9:
+    if rng.random() > 0.9:
         positions_to_mask = tf.cast(tf.random.uniform([max_predictions_per_seq], 0, [max_seq_length]), tf.int32)
     else:
         positions_to_mask = tf.cast(tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]), tf.int32)
