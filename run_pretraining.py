@@ -152,7 +152,8 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
             labels=tf.reshape(masked_lm_ids, [-1]),
             predictions=masked_lm_predictions,
             weights=tf.reshape(masked_lm_weights, [-1]))
-
+        
+        tf.summary.histogram("predictions", masked_lm_predictions)
         tf.summary.scalar("train_accuracy", masked_lm_accuracy)
 
         total_loss = masked_lm_loss
@@ -186,7 +187,6 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
         if mode == tf.estimator.ModeKeys.TRAIN:
             train_op = optimization.create_optimizer(
                 total_loss, learning_rate, num_train_steps, num_warmup_steps, use_tpu)
-            total_loss = tf.Print(total_loss, [total_loss], "total_loss")
             output_spec = tf.contrib.tpu.TPUEstimatorSpec(
                 mode=mode,
                 loss=total_loss,
@@ -254,7 +254,7 @@ def get_masked_lm_output(bert_config, input_tensor, output_weights, positions,
             "output_bias",
             shape=[bert_config.vocab_size],
             initializer=tf.zeros_initializer())
-        
+
         logits = tf.matmul(input_tensor, output_weights, transpose_b=True)
         logits = tf.nn.bias_add(logits, output_bias)
         log_probs = tf.nn.log_softmax(logits, axis=-1)
@@ -450,7 +450,8 @@ def main(_):
         config=run_config,
         train_batch_size=FLAGS.train_batch_size,
         eval_batch_size=FLAGS.eval_batch_size)
-
+    for v in tf.trainable_variables():
+        tf.summary.histogram("{}".format(v.name.split(":")[0]), v)
     if FLAGS.do_train:
         tf.logging.info("***** Running training *****")
         tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
