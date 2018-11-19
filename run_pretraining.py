@@ -149,7 +149,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
         masked_lm_predictions = tf.argmax(tf.reshape(masked_lm_log_probs, [-1, masked_lm_log_probs.shape[-1]]),
                                           axis=-1, output_type=tf.int32)
         masked_lm_accuracy, _ = tf.metrics.accuracy(
-            labels=masked_lm_ids,
+            labels=tf.reshape(masked_lm_ids, [-1]),
             predictions=masked_lm_predictions,
             weights=masked_lm_weights)
 
