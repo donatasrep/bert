@@ -110,7 +110,6 @@ class AdamWeightDecayOptimizer(tf.train.Optimizer):
         continue
 
       param_name = self._get_variable_name(param.name)
-
       m = tf.get_variable(
           name=param_name + "/adam_m",
           shape=param.shape.as_list(),
@@ -132,6 +131,8 @@ class AdamWeightDecayOptimizer(tf.train.Optimizer):
                                                     tf.square(grad)))
 
       update = next_m / (tf.sqrt(next_v) + self.epsilon)
+
+      update = tf.Print(update, [update], "update")
 
       # Just adding the square of the weights to the loss function is *not*
       # the correct way of using L2 regularization/weight decay with Adam,
