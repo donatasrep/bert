@@ -487,6 +487,7 @@ def main(_):
         with tf.gfile.GFile(output_eval_file, "w") as writer:
             tf.logging.info("***** Eval results *****")
             for key in sorted(result.keys()):
+                tf.logging.info(result)
                 tf.logging.info("  %s = %s", key, str(result[key]))
                 writer.write("%s = %s\n" % (key, str(result[key])))
 
