@@ -194,6 +194,12 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                 train_op=train_op,
                 scaffold_fn=scaffold_fn)
         elif mode == tf.estimator.ModeKeys.EVAL:
+            masked_lm_example_loss = tf.Print(masked_lm_example_loss, [input_ids[0]], "input", summarize=512)
+            masked_lm_example_loss = tf.Print(masked_lm_example_loss, [input_mask[0]], "input_mask", summarize=512)
+            masked_lm_example_loss = tf.Print(masked_lm_example_loss, [masked_lm_positions[0]], "masked_lm_positions",
+                                              summarize=512)
+            masked_lm_example_loss = tf.Print(masked_lm_example_loss, [masked_lm_ids[0]], "masked_lm_ids",
+                                              summarize=512)
 
             def metric_fn(masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
                           masked_lm_weights):
@@ -211,6 +217,13 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                     weights=masked_lm_weights)
                 masked_lm_mean_loss = tf.metrics.mean(
                     values=masked_lm_example_loss, weights=masked_lm_weights)
+
+                masked_lm_accuracy = tf.Print(masked_lm_accuracy, [masked_lm_log_probs[0]], "masked_lm_log_probs",
+                                                  summarize=1000)
+                masked_lm_accuracy = tf.Print(masked_lm_accuracy, [masked_lm_predictions[0]], "masked_lm_predictions",
+                                                  summarize=1000)
+                masked_lm_accuracy = tf.Print(masked_lm_accuracy, [masked_lm_accuracy[0]], "masked_lm_accuracy",
+                                              summarize=1000)
 
                 return {
                     "masked_lm_accuracy": masked_lm_accuracy,
@@ -487,7 +500,6 @@ def main(_):
         with tf.gfile.GFile(output_eval_file, "w") as writer:
             tf.logging.info("***** Eval results *****")
             for key in sorted(result.keys()):
-                tf.logging.info(result)
                 tf.logging.info("  %s = %s", key, str(result[key]))
                 writer.write("%s = %s\n" % (key, str(result[key])))
 
