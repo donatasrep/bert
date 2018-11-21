@@ -209,7 +209,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                     masked_lm_log_probs, axis=-1, output_type=tf.int32)
                 masked_lm_ids = tf.Print(masked_lm_ids, [masked_lm_log_probs[0]], "masked_lm_log_probs",
                                                   summarize=1000)
-                masked_lm_ids = tf.Print(masked_lm_ids, [masked_lm_predictions[0]], "masked_lm_predictions",
+                masked_lm_ids = tf.Print(masked_lm_ids, [masked_lm_predictions[0:masked_lm_log_probs.shape[-1]]], "masked_lm_predictions",
                                                   summarize=1000)
                 masked_lm_example_loss = tf.reshape(masked_lm_example_loss, [-1])
                 masked_lm_ids = tf.reshape(masked_lm_ids, [-1])
