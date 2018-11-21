@@ -195,7 +195,6 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                 scaffold_fn=scaffold_fn)
         elif mode == tf.estimator.ModeKeys.EVAL:
             masked_lm_example_loss = tf.Print(masked_lm_example_loss, [input_ids[0]], "input", summarize=512)
-            masked_lm_example_loss = tf.Print(masked_lm_example_loss, [input_mask[0]], "input_mask", summarize=512)
             masked_lm_example_loss = tf.Print(masked_lm_example_loss, [masked_lm_positions[0]], "masked_lm_positions",
                                               summarize=512)
             masked_lm_example_loss = tf.Print(masked_lm_example_loss, [masked_lm_ids[0]], "masked_lm_ids",
@@ -208,12 +207,13 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                                                  [-1, masked_lm_log_probs.shape[-1]])
                 masked_lm_predictions = tf.argmax(
                     masked_lm_log_probs, axis=-1, output_type=tf.int32)
-                masked_lm_example_loss = tf.reshape(masked_lm_example_loss, [-1])
-                masked_lm_ids = tf.reshape(masked_lm_ids, [-1])
                 masked_lm_ids = tf.Print(masked_lm_ids, [masked_lm_log_probs[0]], "masked_lm_log_probs",
                                                   summarize=1000)
                 masked_lm_ids = tf.Print(masked_lm_ids, [masked_lm_predictions[0]], "masked_lm_predictions",
                                                   summarize=1000)
+                masked_lm_example_loss = tf.reshape(masked_lm_example_loss, [-1])
+                masked_lm_ids = tf.reshape(masked_lm_ids, [-1])
+
                 masked_lm_weights = tf.reshape(masked_lm_weights, [-1])
                 masked_lm_accuracy = tf.metrics.accuracy(
                     labels=masked_lm_ids,
