@@ -381,7 +381,7 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
                                     lambda: tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]))
         positions_to_mask = tf.cast(positions_to_mask, tf.int32)
     else:
-        positions_to_mask = tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]], dtype=tf.int32)
+        positions_to_mask = tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]])
 
 
     feature["masked_lm_positions"] = positions_to_mask
