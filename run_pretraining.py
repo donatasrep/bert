@@ -208,7 +208,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                 reshaped_p = tf.reshape(masked_lm_predictions, [input_ids.get_shape().as_list()[0], -1])
                 masked_lm_ids = tf.Print(masked_lm_ids, [reshaped_p[0]], "masked_lm_predictions",
                                          summarize=1000)
-                masked_lm_ids = tf.Print(masked_lm_ids, [ tf.equal(reshaped_p[0], masked_lm_ids[0])], "accuracy",
+                masked_lm_ids = tf.Print(masked_lm_ids, [ tf.recude_mean(tf.equal(reshaped_p[0], masked_lm_ids[0]))], "accuracy",
                                          summarize=1000)
                 reshaped_s = tf.reshape(masked_lm_log_probs, [input_ids.get_shape().as_list()[0], -1, 22])
                 masked_lm_ids = tf.Print(masked_lm_ids, [reshaped_s[0]], "masked_lm_log_probs",
