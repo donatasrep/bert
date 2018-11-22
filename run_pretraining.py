@@ -467,7 +467,7 @@ def main(_):
         eval_batch_size=FLAGS.eval_batch_size)
 
     if FLAGS.do_train:
-        with ProfileContext(FLAGS.output_dir) as pctx:
+        with ProfileContext(FLAGS.output_dir, dump_steps=range(1,5)) as pctx:
             tf.logging.info("***** Running training *****")
             tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
 
