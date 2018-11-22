@@ -364,51 +364,53 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
 
     # tf.Example only supports tf.int64, but the TPU only supports tf.int32.
     # So cast all int64 to int32.
-    for name in list(feature.keys()):
-        t = feature[name]
-        if t.dtype == tf.int64:
-            t = tf.to_int32(t)
-        feature[name] = t
+
+    # for name in list(feature.keys()):
+    #     t = feature[name]
+    #     if t.dtype == tf.int64:
+    #         t = tf.to_int32(t)
+    #     feature[name] = t
 
     feature["input_mask"] = pad_up_to(tf.ones(feature["length"]), [max_seq_length], dynamic_padding=False)
     feature["input_mask"].set_shape([max_seq_length])
     feature["input_ids"] = pad_up_to(feature["seq"], [max_seq_length], dynamic_padding=False)
     feature["input_ids"].set_shape([max_seq_length])
 
-    if is_training:
-        positions_to_mask = tf.cond(tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9),
-                                    lambda: tf.random.uniform([max_predictions_per_seq], 0, [max_seq_length]),
-                                    lambda: tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]))
-        positions_to_mask = tf.cast(positions_to_mask, tf.int32)
-    else:
-        positions_to_mask = tf.cast(tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]), tf.int32)
+    # if is_training:
+    #     positions_to_mask = tf.cond(tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9),
+    #                                 lambda: tf.random.uniform([max_predictions_per_seq], 0, [max_seq_length]),
+    #                                 lambda: tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]))
+    #     positions_to_mask = tf.cast(positions_to_mask, tf.int32)
+    # else:
+    #     positions_to_mask = tf.cast(tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]), tf.int32)
 
-
+    positions_to_mask = tf.constant([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50])
     feature["masked_lm_positions"] = positions_to_mask
     feature["masked_lm_ids"] = tf.gather(feature["input_ids"], positions_to_mask)
     feature["masked_lm_weights"] = tf.ones(max_predictions_per_seq, dtype=tf.float32)
 
-    def mask_ids():
-        return tf.ones([max_predictions_per_seq], dtype=tf.int32) * vocab_size
+    # def mask_ids():
+    #     return tf.ones([max_predictions_per_seq], dtype=tf.int32) * vocab_size
+    #
+    # def unchanged_ids():
+    #     return tf.zeros([max_predictions_per_seq], dtype=tf.int32)
+    #
+    # def random_ids():
+    #     rand = tf.random.truncated_normal(mean=0, stddev=10, shape=[max_predictions_per_seq], dtype=tf.float32)
+    #     return tf.cast(rand, tf.int32)
+    #
+    # def else_cond():
+    #     return tf.cond(c2, unchanged_ids, random_ids)
+    #
+    # if is_training:
+    #     c1 = tf.less(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.8)
+    #     c2 = tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9)
+    #     mask = tf.cond(c1, mask_ids, else_cond)
+    # else:
+    #     mask = mask_ids()
 
-    def unchanged_ids():
-        return tf.zeros([max_predictions_per_seq], dtype=tf.int32)
-
-    def random_ids():
-        rand = tf.random.truncated_normal(mean=0, stddev=10, shape=[max_predictions_per_seq], dtype=tf.float32)
-        return tf.cast(rand, tf.int32)
-
-    def else_cond():
-        return tf.cond(c2, unchanged_ids, random_ids)
-
-    if is_training:
-        c1 = tf.less(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.8)
-        c2 = tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9)
-        mask = tf.cond(c1, mask_ids, else_cond)
-    else:
-        mask = mask_ids()
-    to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1), mask, [max_seq_length])
-    feature["input_ids"] = tf.clip_by_value(tf.add(feature["input_ids"], to_mask), 0, 21)
+    # to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1), mask, [max_seq_length])
+    # feature["input_ids"] = tf.clip_by_value(tf.add(feature["input_ids"], to_mask), 0, 21)
 
     feature.pop("seq", None)
     return feature
