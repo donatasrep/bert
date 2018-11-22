@@ -467,10 +467,16 @@ def main(_):
         eval_batch_size=FLAGS.eval_batch_size)
 
     if FLAGS.do_train:
+
+        opts4 = (tf.profiler.ProfileOptionBuilder(tf.profiler.ProfileOptionBuilder.time_and_memory())
+                 .with_timeline_output("FLAGS.output_dir"+ "/time-memory-profile-timeline.json")
+                 .build()
+                 )
+
         with ProfileContext(FLAGS.output_dir, dump_steps=range(1,5), trace_steps=range(1,5)) as pctx:
             tf.logging.info("***** Running training *****")
             tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
-
+            pctx.add_auto_profiling('graph', opts4, (1,5))
             train_input_fn = input_fn_builder(
                 input_files=input_files,
                 max_seq_length=FLAGS.max_seq_length,
