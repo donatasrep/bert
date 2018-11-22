@@ -473,7 +473,7 @@ def main(_):
                  .build()
                  )
 
-        with ProfileContext(FLAGS.output_dir, dump_steps=[1000], trace_steps=range[1000]) as pctx:
+        with ProfileContext(FLAGS.output_dir, dump_steps=[1000], trace_steps=[1000]) as pctx:
             tf.logging.info("***** Running training *****")
             tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
             pctx.add_auto_profiling('graph', opts4, (1,5))
