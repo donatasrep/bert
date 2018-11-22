@@ -19,7 +19,6 @@ from __future__ import division
 from __future__ import print_function
 
 import os
-import random
 from multiprocessing import cpu_count
 
 from model.ops import pad_up_to
@@ -375,40 +374,39 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
     feature["input_ids"] = pad_up_to(feature["seq"], [max_seq_length], dynamic_padding=False)
     feature["input_ids"].set_shape([max_seq_length])
 
-    # if is_training:
-    #     positions_to_mask = tf.cond(tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9),
-    #                                 lambda: tf.random.uniform([max_predictions_per_seq], 0, [max_seq_length]),
-    #                                 lambda: tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]))
-    #     positions_to_mask = tf.cast(positions_to_mask, tf.int32)
-    # else:
-    #     positions_to_mask = tf.cast(tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]), tf.int32)
+    if is_training:
+        positions_to_mask = tf.cond(tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9),
+                                    lambda: tf.random.uniform([max_predictions_per_seq], 0, [max_seq_length]),
+                                    lambda: tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]))
+        positions_to_mask = tf.cast(positions_to_mask, tf.int32)
+    else:
+        positions_to_mask = tf.cast(tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]), tf.int32)
 
-    positions_to_mask = tf.constant([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50])
     feature["masked_lm_positions"] = positions_to_mask
     feature["masked_lm_ids"] = tf.gather(feature["input_ids"], positions_to_mask)
     feature["masked_lm_weights"] = tf.ones(max_predictions_per_seq, dtype=tf.float32)
 
-    # def mask_ids():
-    #     return tf.ones([max_predictions_per_seq], dtype=tf.int32) * vocab_size
-    #
-    # def unchanged_ids():
-    #     return tf.zeros([max_predictions_per_seq], dtype=tf.int32)
-    #
-    # def random_ids():
-    #     rand = tf.random.truncated_normal(mean=0, stddev=10, shape=[max_predictions_per_seq], dtype=tf.float32)
-    #     return tf.cast(rand, tf.int32)
-    #
-    # def else_cond():
-    #     return tf.cond(c2, unchanged_ids, random_ids)
-    #
-    # if is_training:
-    #     c1 = tf.less(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.8)
-    #     c2 = tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9)
-    #     mask = tf.cond(c1, mask_ids, else_cond)
-    # else:
-    #     mask = mask_ids()
-    # to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1), mask, [max_seq_length])
-    # feature["input_ids"] = tf.clip_by_value(tf.add(feature["input_ids"], to_mask), 0, 21)
+    def mask_ids():
+        return tf.ones([max_predictions_per_seq], dtype=tf.int32) * vocab_size
+
+    def unchanged_ids():
+        return tf.zeros([max_predictions_per_seq], dtype=tf.int32)
+
+    def random_ids():
+        rand = tf.random.truncated_normal(mean=0, stddev=10, shape=[max_predictions_per_seq], dtype=tf.float32)
+        return tf.cast(rand, tf.int32)
+
+    def else_cond():
+        return tf.cond(c2, unchanged_ids, random_ids)
+
+    if is_training:
+        c1 = tf.less(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.8)
+        c2 = tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9)
+        mask = tf.cond(c1, mask_ids, else_cond)
+    else:
+        mask = mask_ids()
+    to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1), mask, [max_seq_length])
+    feature["input_ids"] = tf.clip_by_value(tf.add(feature["input_ids"], to_mask), 0, 21)
 
     feature.pop("seq", None)
     return feature
@@ -468,20 +466,21 @@ def main(_):
         eval_batch_size=FLAGS.eval_batch_size)
 
     if FLAGS.do_train:
-        tf.logging.info("***** Running training *****")
-        tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
+        with tf.contrib.tfprof.ProfileContext(FLAGS.output_dir, dump_steps=[1]) as pctx:
+            tf.logging.info("***** Running training *****")
+            tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
 
-        train_input_fn = input_fn_builder(
-            input_files=input_files,
-            max_seq_length=FLAGS.max_seq_length,
-            max_predictions_per_seq=FLAGS.max_predictions_per_seq,
-            vocab_size=bert_config.vocab_size,
-            is_training=True,
-            num_cpu_threads=cpu_count() - 1
-        )
-        estimator.train(input_fn=train_input_fn, max_steps=FLAGS.num_train_steps,
-                        # hooks=[tf.train.LoggingTensorHook(tensors={'loss': 'cls/predictions/loss'}, every_n_iter=1)]
-                        )
+            train_input_fn = input_fn_builder(
+                input_files=input_files,
+                max_seq_length=FLAGS.max_seq_length,
+                max_predictions_per_seq=FLAGS.max_predictions_per_seq,
+                vocab_size=bert_config.vocab_size,
+                is_training=True,
+                num_cpu_threads=cpu_count() - 1
+            )
+            estimator.train(input_fn=train_input_fn, max_steps=FLAGS.num_train_steps,
+                            # hooks=[tf.train.LoggingTensorHook(tensors={'loss': 'cls/predictions/loss'}, every_n_iter=1)]
+                            )
     if FLAGS.do_eval:
         tf.logging.info("***** Running evaluation *****")
         tf.logging.info("  Batch size = %d", FLAGS.eval_batch_size)
