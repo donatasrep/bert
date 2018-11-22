@@ -163,8 +163,8 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
         initialized_variable_names = {}
         scaffold_fn = None
         if init_checkpoint:
-            (assignment_map, initialized_variable_names
-             ) = modeling.get_assignment_map_from_checkpoint(tvars, init_checkpoint)
+            (assignment_map, initialized_variable_names) = modeling.get_assignment_map_from_checkpoint(tvars,
+                                                                                                       init_checkpoint)
             if use_tpu:
 
                 def tpu_scaffold():
@@ -203,14 +203,15 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
             def metric_fn(masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
                           masked_lm_weights):
                 """Computes the loss and accuracy of the model."""
-                masked_lm_log_probs = tf.reshape(masked_lm_log_probs,
-                                                 [-1, masked_lm_log_probs.shape[-1]])
-                masked_lm_predictions = tf.argmax(
-                    masked_lm_log_probs, axis=-1, output_type=tf.int32)
-                masked_lm_ids = tf.Print(masked_lm_ids, [masked_lm_log_probs[0]], "masked_lm_log_probs",
+                print("masked_lm_log_probs before", masked_lm_log_probs.shape)
+                masked_lm_predictions = tf.argmax(masked_lm_log_probs, axis=-1, output_type=tf.int32)
+                print("masked_lm_predictions", masked_lm_predictions.shape)
+                reshaped_s = tf.reshape(masked_lm_log_probs, [input_ids.get_shape().as_list()[0], -1, 22])
+                masked_lm_ids = tf.Print(masked_lm_ids, [reshaped_s[0]], "masked_lm_log_probs",
                                                   summarize=1000)
-                masked_lm_ids = tf.Print(masked_lm_ids, [masked_lm_predictions[0:masked_lm_log_probs.shape[-1]]], "masked_lm_predictions",
-                                                  summarize=1000)
+                reshaped_p = tf.reshape(masked_lm_predictions, [input_ids.get_shape().as_list()[0], -1])
+                masked_lm_ids = tf.Print(masked_lm_ids, [reshaped_p[0]], "masked_lm_predictions",
+                                         summarize=1000)
                 masked_lm_example_loss = tf.reshape(masked_lm_example_loss, [-1])
                 masked_lm_ids = tf.reshape(masked_lm_ids, [-1])
 
@@ -247,7 +248,6 @@ def get_masked_lm_output(bert_config, input_tensor, output_weights, positions,
                          label_ids, label_weights):
     """Get loss and log probs for the masked LM."""
     input_tensor = gather_indexes(input_tensor, positions)
-
     with tf.variable_scope("cls/predictions"):
         # We apply one more non-linear transformation before the output layer.
         # This matrix is not used after pre-training.
@@ -265,7 +265,6 @@ def get_masked_lm_output(bert_config, input_tensor, output_weights, positions,
             "output_bias",
             shape=[bert_config.vocab_size],
             initializer=tf.zeros_initializer())
-
         logits = tf.matmul(input_tensor, output_weights, transpose_b=True)
         logits = tf.nn.bias_add(logits, output_bias)
         log_probs = tf.nn.log_softmax(logits, axis=-1)
