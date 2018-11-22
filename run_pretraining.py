@@ -375,10 +375,14 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
     feature["input_ids"] = pad_up_to(feature["seq"], [max_seq_length], dynamic_padding=False)
     feature["input_ids"].set_shape([max_seq_length])
 
-    positions_to_mask = tf.cond(tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9),
-                                lambda: tf.random.uniform([max_predictions_per_seq], 0, [max_seq_length]),
-                                lambda: tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]))
-    positions_to_mask = tf.cast(positions_to_mask, tf.int32)
+    if is_training:
+        positions_to_mask = tf.cond(tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9),
+                                    lambda: tf.random.uniform([max_predictions_per_seq], 0, [max_seq_length]),
+                                    lambda: tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]))
+        positions_to_mask = tf.cast(positions_to_mask, tf.int32)
+    else:
+        positions_to_mask = tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]], dtype=tf.int32)
+
 
     feature["masked_lm_positions"] = positions_to_mask
     feature["masked_lm_ids"] = tf.gather(feature["input_ids"], positions_to_mask)
