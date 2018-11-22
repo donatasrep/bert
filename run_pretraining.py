@@ -69,7 +69,7 @@ flags.DEFINE_bool("do_train", False, "Whether to run training.")
 
 flags.DEFINE_bool("do_eval", False, "Whether to run eval on the dev set.")
 
-flags.DEFINE_integer("train_batch_size", 32, "Total batch size for training.")
+flags.DEFINE_integer("train_batch_size", 16, "Total batch size for training.")
 
 flags.DEFINE_integer("eval_batch_size", 64, "Total batch size for eval.")
 
@@ -467,15 +467,7 @@ def main(_):
         eval_batch_size=FLAGS.eval_batch_size)
 
     if FLAGS.do_train:
-        builder = tf.profiler.ProfileOptionBuilder
-        opts = builder(builder.time_and_memory()).order_by('micros').build()
-        opts2 = tf.profiler.ProfileOptionBuilder.trainable_variables_parameter()
-        with ProfileContext(FLAGS.output_dir, dump_steps=[1]) as pctx:
-            # Run online profiling with 'op' view and 'opts' options at step 15, 18, 20.
-            pctx.add_auto_profiling('op', opts, [1])
-            # Run online profiling with 'scope' view and 'opts2' options at step 20.
-            pctx.add_auto_profiling('scope', opts2, [1])
-
+        with ProfileContext(FLAGS.output_dir) as pctx:
             tf.logging.info("***** Running training *****")
             tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
 
