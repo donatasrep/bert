@@ -364,12 +364,11 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
 
     # tf.Example only supports tf.int64, but the TPU only supports tf.int32.
     # So cast all int64 to int32.
-
-    # for name in list(feature.keys()):
-    #     t = feature[name]
-    #     if t.dtype == tf.int64:
-    #         t = tf.to_int32(t)
-    #     feature[name] = t
+    for name in list(feature.keys()):
+        t = feature[name]
+        if t.dtype == tf.int64:
+            t = tf.to_int32(t)
+        feature[name] = t
 
     feature["input_mask"] = pad_up_to(tf.ones(feature["length"]), [max_seq_length], dynamic_padding=False)
     feature["input_mask"].set_shape([max_seq_length])
@@ -408,7 +407,6 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
     #     mask = tf.cond(c1, mask_ids, else_cond)
     # else:
     #     mask = mask_ids()
-
     # to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1), mask, [max_seq_length])
     # feature["input_ids"] = tf.clip_by_value(tf.add(feature["input_ids"], to_mask), 0, 21)
 
