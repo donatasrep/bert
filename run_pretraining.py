@@ -472,9 +472,9 @@ def main(_):
         opts2 = tf.profiler.ProfileOptionBuilder.trainable_variables_parameter()
         with ProfileContext(FLAGS.output_dir, dump_steps=[1]) as pctx:
             # Run online profiling with 'op' view and 'opts' options at step 15, 18, 20.
-            pctx.add_auto_profiling('op', opts, [15, 18, 20])
+            pctx.add_auto_profiling('op', opts, [1])
             # Run online profiling with 'scope' view and 'opts2' options at step 20.
-            pctx.add_auto_profiling('scope', opts2, [20])
+            pctx.add_auto_profiling('scope', opts2, [1])
 
             tf.logging.info("***** Running training *****")
             tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
