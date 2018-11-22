@@ -24,6 +24,7 @@ from multiprocessing import cpu_count
 from model.ops import pad_up_to
 from tensorflow.contrib.data import parallel_interleave
 from tensorflow.contrib.tpu import TPUEstimator
+from tensorflow.python.profiler.profile_context import ProfileContext
 
 import modeling
 import optimization
@@ -466,7 +467,15 @@ def main(_):
         eval_batch_size=FLAGS.eval_batch_size)
 
     if FLAGS.do_train:
-        with tf.contrib.tfprof.ProfileContext(FLAGS.output_dir, dump_steps=[1]) as pctx:
+        builder = tf.profiler.ProfileOptionBuilder
+        opts = builder(builder.time_and_memory()).order_by('micros').build()
+        opts2 = tf.profiler.ProfileOptionBuilder.trainable_variables_parameter()
+        with ProfileContext(FLAGS.output_dir, dump_steps=[1]) as pctx:
+            # Run online profiling with 'op' view and 'opts' options at step 15, 18, 20.
+            pctx.add_auto_profiling('op', opts, [15, 18, 20])
+            # Run online profiling with 'scope' view and 'opts2' options at step 20.
+            pctx.add_auto_profiling('scope', opts2, [20])
+
             tf.logging.info("***** Running training *****")
             tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
 
