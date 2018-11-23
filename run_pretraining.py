@@ -22,9 +22,8 @@ import os
 from multiprocessing import cpu_count
 
 from model.ops import pad_up_to
-from tensorflow.contrib.data import parallel_interleave
 from tensorflow.contrib.tpu import TPUEstimator
-from tensorflow.python.profiler.profile_context import ProfileContext
+from tensorflow.python.data.experimental import parallel_interleave, map_and_batch
 
 import modeling
 import optimization
@@ -61,7 +60,7 @@ flags.DEFINE_integer(
     "than this will be padded. Must match data generation.")
 
 flags.DEFINE_integer(
-    "max_predictions_per_seq", 50,
+    "max_predictions_per_seq", 20,
     "Maximum number of masked LM predictions per sequence. "
     "Must match data generation.")
 
@@ -345,7 +344,7 @@ def input_fn_builder(input_files,
         # and we *don't* want to drop the remainder, otherwise we wont cover
         # every sample.
         d = d.apply(
-            tf.contrib.data.map_and_batch(
+            map_and_batch(
                 lambda record: _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training),
                 batch_size=batch_size,
                 num_parallel_batches=num_cpu_threads,
@@ -354,65 +353,90 @@ def input_fn_builder(input_files,
 
     return input_fn
 
-
 def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training):
     """Decodes a record to a TensorFlow example."""
-    with tf.name_scope("preprocessing") as scope:
+    feature = tf.parse_single_example(record, features={
+        "length": tf.FixedLenFeature([], tf.int64),
+        'seq': tf.FixedLenSequenceFeature([], tf.int64, allow_missing=True)
+    })
 
-        feature = tf.parse_single_example(record, features={
-            "length": tf.FixedLenFeature([], tf.int64),
-            'seq': tf.FixedLenSequenceFeature([], tf.int64, allow_missing=True)
-        })
+    # tf.Example only supports tf.int64, but the TPU only supports tf.int32.
+    # So cast all int64 to int32.
+    for name in list(feature.keys()):
+        t = feature[name]
+        if t.dtype == tf.int64:
+            t = tf.to_int32(t)
+        feature[name] = t
 
-        # tf.Example only supports tf.int64, but the TPU only supports tf.int32.
-        # So cast all int64 to int32.
-        for name in list(feature.keys()):
-            t = feature[name]
-            if t.dtype == tf.int64:
-                t = tf.to_int32(t)
-            feature[name] = t
-
-        feature["input_mask"] = pad_up_to(tf.ones(feature["length"]), [max_seq_length], dynamic_padding=False)
-        feature["input_mask"].set_shape([max_seq_length])
-        feature["input_ids"] = pad_up_to(feature["seq"], [max_seq_length], dynamic_padding=False)
-        feature["input_ids"].set_shape([max_seq_length])
-
-        if is_training:
-            positions_to_mask = tf.cond(tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9),
-                                        lambda: tf.random.uniform([max_predictions_per_seq], 0, [max_seq_length]),
-                                        lambda: tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]))
-            positions_to_mask = tf.cast(positions_to_mask, tf.int32)
-        else:
-            positions_to_mask = tf.cast(tf.random.uniform([max_predictions_per_seq], 0, [feature["length"]]), tf.int32)
-
-        feature["masked_lm_positions"] = positions_to_mask
-        feature["masked_lm_ids"] = tf.gather(feature["input_ids"], positions_to_mask)
-        feature["masked_lm_weights"] = tf.ones(max_predictions_per_seq, dtype=tf.float32)
-
-        def mask_ids():
-            return tf.ones([max_predictions_per_seq], dtype=tf.int32) * vocab_size
-
-        def unchanged_ids():
-            return tf.zeros([max_predictions_per_seq], dtype=tf.int32)
-
-        def random_ids():
-            rand = tf.random.truncated_normal(mean=0, stddev=10, shape=[max_predictions_per_seq], dtype=tf.float32)
-            return tf.cast(rand, tf.int32)
-
-        def else_cond():
-            return tf.cond(c2, unchanged_ids, random_ids)
-
-        if is_training:
-            c1 = tf.less(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.8)
-            c2 = tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9)
-            mask = tf.cond(c1, mask_ids, else_cond)
-        else:
-            mask = mask_ids()
-        to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1), mask, [max_seq_length])
-        feature["input_ids"] = tf.clip_by_value(tf.add(feature["input_ids"], to_mask), 0, 21)
-
-        feature.pop("seq", None)
+    feature["input_mask"] = pad_up_to(tf.ones(feature["length"]), [max_seq_length], dynamic_padding=False)
+    feature["input_mask"].set_shape([max_seq_length])
+    feature["input_ids"] = pad_up_to(feature["seq"], [max_seq_length], dynamic_padding=False)
+    feature["input_ids"].set_shape([max_seq_length])
+    m = tf.constant([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20])
+    feature["masked_lm_positions"] = m
+    feature["masked_lm_ids"] = tf.gather(feature["input_ids"], m)
+    feature["masked_lm_weights"] = tf.ones(max_predictions_per_seq, dtype=tf.float32)
+    feature.pop("seq", None)
     return feature
+
+# def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training):
+#     """Decodes a record to a TensorFlow example."""
+#     feature = tf.parse_single_example(record, features={
+#         "length": tf.FixedLenFeature([], tf.int64),
+#         'seq': tf.FixedLenSequenceFeature([], tf.int64, allow_missing=True)
+#     })
+#
+#     # tf.Example only supports tf.int64, but the TPU only supports tf.int32.
+#     # So cast all int64 to int32.
+#     for name in list(feature.keys()):
+#         t = feature[name]
+#         if t.dtype == tf.int64:
+#             t = tf.to_int32(t)
+#         feature[name] = t
+#
+#     feature["input_mask"] = pad_up_to(tf.ones(feature["length"]), [max_seq_length], dynamic_padding=False)
+#     feature["input_mask"].set_shape([max_seq_length])
+#     feature["input_ids"] = pad_up_to(feature["seq"], [max_seq_length], dynamic_padding=False)
+#     feature["input_ids"].set_shape([max_seq_length])
+#
+#     pred_len = tf.cast(tf.divide(feature["length"], tf.constant(10)), tf.int32)
+#     if is_training:
+#
+#         positions_to_mask = tf.cond(tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9),
+#                                     lambda: tf.random.uniform([pred_len], 0, [max_seq_length]),
+#                                     lambda: tf.random.uniform([pred_len], 0, [feature["length"]]))
+#         positions_to_mask = tf.cast(positions_to_mask, tf.int32)
+#     else:
+#         positions_to_mask = tf.cast(tf.random.uniform([pred_len], 0, [feature["length"]]), tf.int32)
+#
+#     feature["masked_lm_positions"] = positions_to_mask
+#     feature["masked_lm_ids"] = tf.gather(feature["input_ids"], positions_to_mask)
+#     feature["masked_lm_weights"] = tf.ones(pred_len, dtype=tf.float32)
+#
+#     def mask_ids():
+#         return tf.ones([pred_len], dtype=tf.int32) * vocab_size
+#
+#     def unchanged_ids():
+#         return tf.zeros([pred_len], dtype=tf.int32)
+#
+#     def random_ids():
+#         rand = tf.random.truncated_normal(mean=0, stddev=10, shape=[max_predictions_per_seq], dtype=tf.float32)
+#         return tf.cast(rand, tf.int32)
+#
+#     def else_cond():
+#         return tf.cond(c2, unchanged_ids, random_ids)
+#
+#     if is_training:
+#         c1 = tf.less(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.8)
+#         c2 = tf.greater(tf.random.uniform(minval=0, maxval=1, shape=[]), 0.9)
+#         mask = tf.cond(c1, mask_ids, else_cond)
+#     else:
+#         mask = mask_ids()
+#     to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1), mask, [max_seq_length])
+#     feature["input_ids"] = tf.clip_by_value(tf.add(feature["input_ids"], to_mask), 0, 21)
+#
+#     feature.pop("seq", None)
+#     return feature
 
 
 def main(_):
@@ -469,16 +493,8 @@ def main(_):
         eval_batch_size=FLAGS.eval_batch_size)
 
     if FLAGS.do_train:
-
-        opts4 = (tf.profiler.ProfileOptionBuilder(tf.profiler.ProfileOptionBuilder.time_and_memory())
-                 .with_timeline_output(FLAGS.output_dir+ "/time-memory-profile-timeline.json")
-                 .build()
-                 )
-
-        with ProfileContext(FLAGS.output_dir, dump_steps=[100, 200, 1000], trace_steps=[100, 200, 1000]) as pctx:
             tf.logging.info("***** Running training *****")
             tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
-            pctx.add_auto_profiling('graph', opts4, [100, 200, 1000])
             train_input_fn = input_fn_builder(
                 input_files=input_files,
                 max_seq_length=FLAGS.max_seq_length,
