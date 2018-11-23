@@ -22,12 +22,14 @@ import os
 from multiprocessing import cpu_count
 
 from model.ops import pad_up_to
-from tensorflow.contrib.tpu import TPUEstimator
+from tensorflow.contrib.tpu import TPUEstimator, TPUEstimatorSpec
 from tensorflow.python.data.experimental import parallel_interleave, map_and_batch
 
 import modeling
 import optimization
 import tensorflow as tf
+
+from export_hook import ExportHook
 
 flags = tf.flags
 
@@ -145,8 +147,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
          masked_lm_example_loss, masked_lm_log_probs) = get_masked_lm_output(
             bert_config, model.get_sequence_output(), model.get_embedding_table(),
             masked_lm_positions, masked_lm_ids, masked_lm_weights)
-        masked_lm_predictions = tf.argmax(tf.reshape(masked_lm_log_probs, [-1, masked_lm_log_probs.shape[-1]]),
-                                          axis=-1, output_type=tf.int32)
+        masked_lm_predictions = tf.argmax(masked_lm_log_probs, axis=-1, output_type=tf.int32)
         masked_lm_accuracy, _ = tf.metrics.accuracy(
             labels=tf.reshape(masked_lm_ids, [-1]),
             predictions=masked_lm_predictions,
@@ -181,7 +182,6 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                 init_string = ", *INIT_FROM_CKPT*"
             tf.logging.info("  name = %s, shape = %s%s", var.name, var.shape,
                             init_string)
-            #tf.summary.histogram("{}".format(var.name.split(":")[0]), var)
 
         output_spec = None
         if mode == tf.estimator.ModeKeys.TRAIN:
@@ -193,25 +193,12 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                 train_op=train_op,
                 scaffold_fn=scaffold_fn)
         elif mode == tf.estimator.ModeKeys.EVAL:
-            masked_lm_example_loss = tf.Print(masked_lm_example_loss, [input_ids[0]], "input", summarize=512)
-            masked_lm_example_loss = tf.Print(masked_lm_example_loss, [masked_lm_positions[0]], "masked_lm_positions",
-                                              summarize=512)
-            masked_lm_example_loss = tf.Print(masked_lm_example_loss, [masked_lm_ids[0]], "masked_lm_ids",
-                                              summarize=512)
 
             def metric_fn(masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
                           masked_lm_weights):
                 """Computes the loss and accuracy of the model."""
 
                 masked_lm_predictions = tf.argmax(masked_lm_log_probs, axis=-1, output_type=tf.int32)
-                reshaped_p = tf.reshape(masked_lm_predictions, [input_ids.get_shape().as_list()[0], -1])
-                masked_lm_ids = tf.Print(masked_lm_ids, [reshaped_p[0]], "masked_lm_predictions",
-                                         summarize=1000)
-                masked_lm_ids = tf.Print(masked_lm_ids, [ tf.reduce_mean(tf.cast(tf.equal(reshaped_p[0], masked_lm_ids[0]),dtype=tf.float32))], "accuracy",
-                                         summarize=1000)
-                reshaped_s = tf.reshape(masked_lm_log_probs, [input_ids.get_shape().as_list()[0], -1, 22])
-                masked_lm_ids = tf.Print(masked_lm_ids, [reshaped_s[0]], "masked_lm_log_probs",
-                                                  summarize=1000)
 
                 masked_lm_example_loss = tf.reshape(masked_lm_example_loss, [-1])
                 masked_lm_ids = tf.reshape(masked_lm_ids, [-1])
@@ -232,11 +219,14 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
             eval_metrics = (metric_fn, [
                 masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
                 masked_lm_weights])
-            output_spec = tf.contrib.tpu.TPUEstimatorSpec(
+            variables_to_export = [input_ids, input_mask, masked_lm_positions, masked_lm_ids, masked_lm_weights,
+                      masked_lm_example_loss, masked_lm_log_probs]
+            output_spec = TPUEstimatorSpec(
                 mode=mode,
                 loss=total_loss,
                 eval_metrics=eval_metrics,
-                scaffold_fn=scaffold_fn)
+                scaffold_fn=scaffold_fn,
+                evaluation_hooks=[ExportHook(variables_to_export, FLAGS.output_dir)])
         else:
             raise ValueError("Only TRAIN and EVAL modes are supported: %s" % (mode))
 
