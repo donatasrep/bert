@@ -21,7 +21,6 @@ from __future__ import print_function
 import os
 from multiprocessing import cpu_count
 
-from model.ops import pad_up_to
 from tensorflow.contrib.tpu import TPUEstimator, TPUEstimatorSpec
 from tensorflow.python.data.experimental import parallel_interleave, map_and_batch
 
@@ -482,6 +481,40 @@ def main(_):
             for key in sorted(result.keys()):
                 tf.logging.info("  %s = %s", key, str(result[key]))
                 writer.write("%s = %s\n" % (key, str(result[key])))
+
+def calculate(current_shape, target_shape, dynamic_padding=False):
+    if dynamic_padding:
+        missing_padding = target_shape - current_shape
+
+        def empty_padding(): return [missing_padding, missing_padding]
+
+        def random_padding():
+            front = tf.squeeze(
+                tf.random_uniform([1], minval=0, maxval=missing_padding, name="random_padding", dtype=tf.int32))
+            end = missing_padding - front
+            return [front, end]
+
+        return tf.cond(tf.equal(missing_padding, tf.constant(0)),
+                       empty_padding,
+                       random_padding)
+
+    else:
+        return [0, target_shape - current_shape]
+
+def pad_up_to(x, output_shape, constant_values=0, dynamic_padding=False):
+    """
+
+    Args:
+      x: Input tensor
+      output_shape: Output shape
+      constant_values:  Values used for padding (Default value = 0)
+
+    Returns:
+        Returns padded tensor that is the shape of output_shape.
+    """
+    s = tf.shape(x)
+    paddings = [ calculate(s[i], m, dynamic_padding) for (i, m) in enumerate(output_shape)]
+    return tf.pad(x, paddings, 'CONSTANT', constant_values=constant_values)
 
 
 if __name__ == "__main__":
