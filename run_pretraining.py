@@ -181,7 +181,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                 init_string = ", *INIT_FROM_CKPT*"
             tf.logging.info("  name = %s, shape = %s%s", var.name, var.shape,
                             init_string)
-            tf.summary.histogram("{}".format(var.name.split(":")[0]), var)
+            #tf.summary.histogram("{}".format(var.name.split(":")[0]), var)
 
         output_spec = None
         if mode == tf.estimator.ModeKeys.TRAIN:
