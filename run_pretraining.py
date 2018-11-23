@@ -152,7 +152,6 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
             predictions=masked_lm_predictions,
             weights=tf.reshape(masked_lm_weights, [-1]))
 
-        tf.summary.histogram("predictions", masked_lm_predictions)
         tf.summary.scalar("train_accuracy", masked_lm_accuracy)
 
         total_loss = masked_lm_loss
