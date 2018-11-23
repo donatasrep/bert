@@ -130,12 +130,6 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
         masked_lm_positions = features["masked_lm_positions"]
         masked_lm_ids = features["masked_lm_ids"]
         masked_lm_weights = features["masked_lm_weights"]
-        #
-        # input_ids = tf.Print(input_ids, [input_ids[0]], "input_ids", summarize=512)
-        # input_mask = tf.Print(input_mask, [input_mask[0]], "input_mask", summarize=512)
-        # masked_lm_positions = tf.Print(masked_lm_positions, [masked_lm_positions[0]], "masked_lm_positions", summarize=512)
-        # masked_lm_ids = tf.Print(masked_lm_ids, [masked_lm_ids[0]], "masked_lm_ids", summarize=512)
-        # masked_lm_weights = tf.Print(masked_lm_weights, [masked_lm_weights[0]], "masked_lm_weights", summarize=512)
 
         is_training = (mode == tf.estimator.ModeKeys.TRAIN)
 
@@ -405,11 +399,6 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
     to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1), mask, [max_seq_length])
     feature["input_ids"] = tf.clip_by_value(tf.add(feature["input_ids"], to_mask), 0, 21)
 
-    feature["input_ids"] = tf.Print(feature["input_ids"], [feature["seq"]], "seq", summarize=512)
-    feature["input_ids"] = tf.Print(feature["input_ids"], [feature["input_ids"]], "input_ids", summarize=512)
-    feature["input_ids"] = tf.Print(feature["input_ids"], [feature["masked_lm_positions"]], "masked_lm_positions", summarize=512)
-    feature["input_ids"] = tf.Print(feature["input_ids"], [feature["masked_lm_ids"]], "masked_lm_ids", summarize=512)
-    feature["input_ids"] = tf.Print(feature["input_ids"], [feature["input_ids"]], "masked_lm_weights", summarize=512)
     feature.pop("seq", None)
     return feature
 
