@@ -10,7 +10,7 @@ class ExportHook(SessionRunHook):
     def __init__(self, args_to_store, output_dir):
         self.args_to_store = args_to_store
         filename = datetime.now().strftime("%Y%m%d-%H%M%S")
-        os.makedirs( os.path.join(output_dir, "eval_results"), exist_ok=True)
+        os.makedirs(os.path.join(output_dir, "eval_results"), exist_ok=True)
         self.filename = os.path.join(output_dir, "eval_results", filename+".npy")
 
 
