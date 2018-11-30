@@ -326,6 +326,7 @@ def input_fn_builder(input_files,
             # Since we evaluate for a fixed number of steps we don't want to encounter
             # out-of-range exceptions.
             d = d.repeat()
+            d = d.shuffle(buffer_size=100000)
 
         # We must `drop_remainder` on training because the TPU requires fixed
         # size dimensions. For eval, we assume we are evaluating on the CPU or GPU
