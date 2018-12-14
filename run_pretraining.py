@@ -28,6 +28,7 @@ import modeling
 import optimization
 import tensorflow as tf
 
+from eval_results_hook import EvalResultsHook
 from export_hook import ExportHook
 
 flags = tf.flags
@@ -68,6 +69,8 @@ flags.DEFINE_integer(
 flags.DEFINE_bool("do_train", False, "Whether to run training.")
 
 flags.DEFINE_bool("do_eval", False, "Whether to run eval on the dev set.")
+
+flags.DEFINE_bool("do_full_eval", False, "Whether to run eval on the all set.")
 
 flags.DEFINE_integer("train_batch_size", 16, "Total batch size for training.")
 
@@ -116,7 +119,7 @@ flags.DEFINE_integer(
 
 def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                      num_train_steps, num_warmup_steps, use_tpu,
-                     use_one_hot_embeddings):
+                     use_one_hot_embeddings, eval_hook=None):
     """Returns `model_fn` closure for TPUEstimator."""
 
     def model_fn(features, labels, mode, params):  # pylint: disable=unused-argument
@@ -134,25 +137,23 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
 
         is_training = (mode == tf.estimator.ModeKeys.TRAIN)
 
-        model = modeling.BertModel(
-            config=bert_config,
-            is_training=is_training,
-            input_ids=input_ids,
-            input_mask=input_mask,
-            token_type_ids=None,
-            use_one_hot_embeddings=use_one_hot_embeddings)
+        model = modeling.BertModel(config=bert_config,
+                                   is_training=is_training,
+                                   input_ids=input_ids,
+                                   input_mask=input_mask,
+                                   token_type_ids=None,
+                                   use_one_hot_embeddings=use_one_hot_embeddings)
 
         (masked_lm_loss,
          masked_lm_example_loss, masked_lm_log_probs) = get_masked_lm_output(
             bert_config, model.get_sequence_output(), model.get_embedding_table(),
             masked_lm_positions, masked_lm_ids, masked_lm_weights)
         masked_lm_predictions = tf.argmax(masked_lm_log_probs, axis=-1, output_type=tf.int32)
-        masked_lm_accuracy, _ = tf.metrics.accuracy(
-            labels=tf.reshape(masked_lm_ids, [-1]),
-            predictions=masked_lm_predictions,
-            weights=tf.reshape(masked_lm_weights, [-1]))
+        masked_lm_accuracy, _ = tf.metrics.accuracy(labels=tf.reshape(masked_lm_ids, [-1]),
+                                                    predictions=masked_lm_predictions,
+                                                    weights=tf.reshape(masked_lm_weights, [-1]))
 
-        #tf.summary.scalar("train_accuracy", masked_lm_accuracy)
+        # tf.summary.scalar("train_accuracy", masked_lm_accuracy)
 
         total_loss = masked_lm_loss
 
@@ -183,13 +184,12 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
 
         output_spec = None
         if mode == tf.estimator.ModeKeys.TRAIN:
-            train_op = optimization.create_optimizer(
-                total_loss, learning_rate, num_train_steps, num_warmup_steps, use_tpu)
-            output_spec = tf.contrib.tpu.TPUEstimatorSpec(
-                mode=mode,
-                loss=total_loss,
-                train_op=train_op,
-                scaffold_fn=scaffold_fn)
+            train_op = optimization.create_optimizer(total_loss, learning_rate, num_train_steps, num_warmup_steps,
+                                                     use_tpu)
+            output_spec = tf.contrib.tpu.TPUEstimatorSpec(mode=mode,
+                                                          loss=total_loss,
+                                                          train_op=train_op,
+                                                          scaffold_fn=scaffold_fn)
         elif mode == tf.estimator.ModeKeys.EVAL:
 
             def metric_fn(masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
@@ -202,12 +202,11 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                 masked_lm_ids = tf.reshape(masked_lm_ids, [-1])
 
                 masked_lm_weights = tf.reshape(masked_lm_weights, [-1])
-                masked_lm_accuracy = tf.metrics.accuracy(
-                    labels=masked_lm_ids,
-                    predictions=masked_lm_predictions,
-                    weights=masked_lm_weights)
-                masked_lm_mean_loss = tf.metrics.mean(
-                    values=masked_lm_example_loss, weights=masked_lm_weights)
+                masked_lm_accuracy = tf.metrics.accuracy(labels=masked_lm_ids,
+                                                         predictions=masked_lm_predictions,
+                                                         weights=masked_lm_weights)
+                masked_lm_mean_loss = tf.metrics.mean(values=masked_lm_example_loss,
+                                                      weights=masked_lm_weights)
 
                 return {
                     "masked_lm_accuracy": masked_lm_accuracy,
@@ -218,13 +217,12 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                 masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
                 masked_lm_weights])
             variables_to_export = [input_ids, input_mask, masked_lm_positions, masked_lm_ids, masked_lm_weights,
-                      masked_lm_example_loss, masked_lm_log_probs]
-            output_spec = TPUEstimatorSpec(
-                mode=mode,
-                loss=total_loss,
-                eval_metrics=eval_metrics,
-                scaffold_fn=scaffold_fn,
-                evaluation_hooks=[ExportHook(variables_to_export, FLAGS.output_dir)])
+                                   masked_lm_example_loss, masked_lm_log_probs, masked_lm_accuracy, features["seq"]]
+            output_spec = TPUEstimatorSpec(mode=mode,
+                                           loss=total_loss,
+                                           eval_metrics=eval_metrics,
+                                           scaffold_fn=scaffold_fn,
+                                           evaluation_hooks=[eval_hook(variables_to_export, FLAGS.output_dir)])
         else:
             raise ValueError("Only TRAIN and EVAL modes are supported: %s" % (mode))
 
@@ -325,8 +323,9 @@ def input_fn_builder(input_files,
             d = tf.data.TFRecordDataset(input_files, compression_type='GZIP')
             # Since we evaluate for a fixed number of steps we don't want to encounter
             # out-of-range exceptions.
-            d = d.repeat()
-            d = d.shuffle(buffer_size=100000)
+
+            # d = d.repeat()
+            # d = d.shuffle(buffer_size=100000)
 
         # We must `drop_remainder` on training because the TPU requires fixed
         # size dimensions. For eval, we assume we are evaluating on the CPU or GPU
@@ -337,7 +336,7 @@ def input_fn_builder(input_files,
                 lambda record: _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training),
                 batch_size=batch_size,
                 num_parallel_batches=num_cpu_threads,
-                drop_remainder=True))
+                drop_remainder=is_training))
         return d
 
     return input_fn
@@ -360,8 +359,9 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
 
     feature["input_mask"] = pad_up_to(tf.ones(feature["length"]), [max_seq_length], dynamic_padding=False)
     feature["input_mask"].set_shape([max_seq_length])
-    feature["input_ids"] = pad_up_to(feature["seq"], [max_seq_length], dynamic_padding=False)
-    feature["input_ids"].set_shape([max_seq_length])
+    feature["seq"] = pad_up_to(feature["seq"], [max_seq_length], dynamic_padding=False)
+    feature["seq"].set_shape([max_seq_length])
+    feature["input_ids"] = feature["seq"]
 
     if is_training:
 
@@ -388,14 +388,14 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
     to_mask = tf.scatter_nd(tf.expand_dims(positions_to_mask, axis=1), mask, [max_seq_length])
     feature["input_ids"] = tf.clip_by_value(tf.add(feature["input_ids"], to_mask), 0, 21)
 
-    feature.pop("seq", None)
+    # feature.pop("seq", None)
     return feature
 
 
 def main(_):
     tf.logging.set_verbosity(tf.logging.INFO)
 
-    if not FLAGS.do_train and not FLAGS.do_eval:
+    if not FLAGS.do_train and not FLAGS.do_eval and not FLAGS.do_full_eval:
         raise ValueError("At least one of `do_train` or `do_eval` must be True.")
 
     bert_config = modeling.BertConfig.from_json_file(FLAGS.bert_config_file)
@@ -421,59 +421,50 @@ def main(_):
         master=FLAGS.master,
         model_dir=FLAGS.output_dir,
         save_checkpoints_steps=FLAGS.save_checkpoints_steps,
-        tpu_config=tf.contrib.tpu.TPUConfig(
-            iterations_per_loop=FLAGS.iterations_per_loop,
-            num_shards=FLAGS.num_tpu_cores,
-            per_host_input_for_training=is_per_host))
-
-    model_fn = model_fn_builder(
-        bert_config=bert_config,
-        init_checkpoint=FLAGS.init_checkpoint,
-        learning_rate=FLAGS.learning_rate,
-        num_train_steps=FLAGS.num_train_steps,
-        num_warmup_steps=FLAGS.num_warmup_steps,
-        use_tpu=FLAGS.use_tpu,
-        use_one_hot_embeddings=FLAGS.use_tpu)
+        tpu_config=tf.contrib.tpu.TPUConfig(iterations_per_loop=FLAGS.iterations_per_loop,
+                                            num_shards=FLAGS.num_tpu_cores,
+                                            per_host_input_for_training=is_per_host))
+    eval_hook = None
+    if FLAGS.do_eval:
+        eval_hook = ExportHook
+    if FLAGS.do_full_eval:
+        eval_hook = EvalResultsHook
+    model_fn = model_fn_builder(bert_config=bert_config,
+                                init_checkpoint=FLAGS.init_checkpoint,
+                                learning_rate=FLAGS.learning_rate,
+                                num_train_steps=FLAGS.num_train_steps,
+                                num_warmup_steps=FLAGS.num_warmup_steps,
+                                use_tpu=FLAGS.use_tpu,
+                                use_one_hot_embeddings=FLAGS.use_tpu,
+                                eval_hook=eval_hook)
 
     # If TPU is not available, this will fall back to normal Estimator on CPU
     # or GPU.
 
-    estimator = TPUEstimator(
-        use_tpu=FLAGS.use_tpu,
-        model_fn=model_fn,
-        config=run_config,
-        train_batch_size=FLAGS.train_batch_size,
-        eval_batch_size=FLAGS.eval_batch_size)
+    estimator = TPUEstimator(use_tpu=FLAGS.use_tpu,
+                             model_fn=model_fn,
+                             config=run_config,
+                             train_batch_size=FLAGS.train_batch_size,
+                             eval_batch_size=FLAGS.eval_batch_size)
 
+    input_fn = input_fn_builder(input_files=input_files,
+                                max_seq_length=FLAGS.max_seq_length,
+                                max_predictions_per_seq=FLAGS.max_predictions_per_seq,
+                                vocab_size=bert_config.vocab_size,
+                                is_training=FLAGS.do_train,
+                                num_cpu_threads=cpu_count() - 1)
     if FLAGS.do_train:
-            tf.logging.info("***** Running training *****")
-            tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
-            train_input_fn = input_fn_builder(
-                input_files=input_files,
-                max_seq_length=FLAGS.max_seq_length,
-                max_predictions_per_seq=FLAGS.max_predictions_per_seq,
-                vocab_size=bert_config.vocab_size,
-                is_training=True,
-                num_cpu_threads=cpu_count() - 1
-            )
-            estimator.train(input_fn=train_input_fn, max_steps=FLAGS.num_train_steps,
-                            # hooks=[tf.train.LoggingTensorHook(tensors={'loss': 'cls/predictions/loss'}, every_n_iter=1)]
-                            )
+        tf.logging.info("***** Running training *****")
+        tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
+        estimator.train(input_fn=input_fn, max_steps=FLAGS.num_train_steps,
+                        # hooks=[tf.train.LoggingTensorHook(tensors={'loss': 'cls/predictions/loss'}, every_n_iter=1)]
+                        )
     if FLAGS.do_eval:
         tf.logging.info("***** Running evaluation *****")
         tf.logging.info("  Batch size = %d", FLAGS.eval_batch_size)
 
-        eval_input_fn = input_fn_builder(
-            input_files=input_files,
-            max_seq_length=FLAGS.max_seq_length,
-            max_predictions_per_seq=FLAGS.max_predictions_per_seq,
-            vocab_size=bert_config.vocab_size,
-            is_training=False,
-            num_cpu_threads=cpu_count() - 1
-        )
-
         result = estimator.evaluate(
-            input_fn=eval_input_fn, steps=FLAGS.max_eval_steps)
+            input_fn=input_fn, steps=FLAGS.max_eval_steps)
 
         output_eval_file = os.path.join(FLAGS.output_dir, "eval_results.txt")
         with tf.gfile.GFile(output_eval_file, "w") as writer:
@@ -482,11 +473,18 @@ def main(_):
                 tf.logging.info("  %s = %s", key, str(result[key]))
                 writer.write("%s = %s\n" % (key, str(result[key])))
 
+    if FLAGS.do_full_eval:
+        tf.logging.info("***** Running full evaluation *****")
+        tf.logging.info("  Batch size = %d", FLAGS.eval_batch_size)
+        result = estimator.evaluate(input_fn=input_fn)
+
+
 def calculate(current_shape, target_shape, dynamic_padding=False):
     if dynamic_padding:
         missing_padding = target_shape - current_shape
 
-        def empty_padding(): return [missing_padding, missing_padding]
+        def empty_padding():
+            return [missing_padding, missing_padding]
 
         def random_padding():
             front = tf.squeeze(
@@ -501,6 +499,7 @@ def calculate(current_shape, target_shape, dynamic_padding=False):
     else:
         return [0, target_shape - current_shape]
 
+
 def pad_up_to(x, output_shape, constant_values=0, dynamic_padding=False):
     """
 
@@ -513,7 +512,7 @@ def pad_up_to(x, output_shape, constant_values=0, dynamic_padding=False):
         Returns padded tensor that is the shape of output_shape.
     """
     s = tf.shape(x)
-    paddings = [ calculate(s[i], m, dynamic_padding) for (i, m) in enumerate(output_shape)]
+    paddings = [calculate(s[i], m, dynamic_padding) for (i, m) in enumerate(output_shape)]
     return tf.pad(x, paddings, 'CONSTANT', constant_values=constant_values)
 
 
