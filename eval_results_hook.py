@@ -14,7 +14,7 @@ class EvalResultsHook(SessionRunHook):
         return SessionRunArgs(self.args_to_store)
 
     def after_run(self, run_context, run_values):
-        filename = datetime.now().strftime("%Y%m%d-%H%M%S")
+        filename = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
         # os.makedirs(os.path.join("weight", "eval_full"), exist_ok=True)
         filename = os.path.join("weights", "eval_full", filename+".npy")
         values = run_values.results
