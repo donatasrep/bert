@@ -19,7 +19,7 @@ class EvalResultsHook(SessionRunHook):
     def after_run(self, run_context, run_values):
         filename = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
 
-        filename = os.path.join("weights" "full_eval", filename+".npz")
+        filename = os.path.join("weights", "full_eval", filename+".npz")
         values = run_values.results
         Storage(filename, values).run()
 
