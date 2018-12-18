@@ -229,14 +229,14 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
 
 
 
-            variables_to_export = [input_ids, input_mask, masked_lm_positions, masked_lm_ids, masked_lm_weights,
+            variables_to_export = [#input_ids, input_mask, masked_lm_positions, masked_lm_ids, masked_lm_weights,
                                    loss_per_seq, probs, masked_lm_accuracy, features["seq"]]
 
             output_spec = TPUEstimatorSpec(mode=mode,
                                            loss=total_loss,
                                            eval_metrics=eval_metrics,
                                            scaffold_fn=scaffold_fn,
-                                           #evaluation_hooks=[eval_hook(variables_to_export, FLAGS.output_dir)]
+                                           evaluation_hooks=[eval_hook(variables_to_export, FLAGS.output_dir)]
             )
         else:
             raise ValueError("Only TRAIN and EVAL modes are supported: %s" % (mode))

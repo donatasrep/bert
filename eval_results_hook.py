@@ -8,7 +8,8 @@ import os
 class EvalResultsHook(SessionRunHook):
 
     def __init__(self, args_to_store, output_dir):
-        self.args_to_store = [ args_to_store[i] for i in [5,6,7,8]]
+        #self.args_to_store = [ args_to_store[i] for i in [5,6,7,8]]
+        self.args_to_store = args_to_store
         self.output_dir = output_dir
         os.makedirs(os.path.join("weights", "full_eval"), exist_ok=True)
 
