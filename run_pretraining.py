@@ -463,7 +463,7 @@ def main(_):
                                 max_predictions_per_seq=FLAGS.max_predictions_per_seq,
                                 vocab_size=bert_config.vocab_size,
                                 is_training=FLAGS.do_train,
-                                num_cpu_threads=cpu_count() - 1)
+                                num_cpu_threads=cpu_count())
     if FLAGS.do_train:
         tf.logging.info("***** Running training *****")
         tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
