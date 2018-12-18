@@ -220,7 +220,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
 
             output_spec = TPUEstimatorSpec(mode=mode,
                                            loss=total_loss,
-                                           eval_metrics=eval_metrics,
+                                           #eval_metrics=eval_metrics,
                                            scaffold_fn=scaffold_fn,
                                            evaluation_hooks=[eval_hook(variables_to_export, FLAGS.output_dir)])
         else:
