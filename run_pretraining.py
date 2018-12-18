@@ -186,41 +186,55 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                                                           scaffold_fn=scaffold_fn)
         elif mode == tf.estimator.ModeKeys.EVAL:
 
-            def metric_fn(masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
-                          masked_lm_weights):
+            # def metric_fn(masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
+            #               masked_lm_weights):
+            #     """Computes the loss and accuracy of the model."""
+            #     masked_lm_weights = tf.reshape(masked_lm_weights, [-1])
+            #     masked_lm_predictions = tf.argmax(masked_lm_log_probs, axis=-1, output_type=tf.int32)
+            #     masked_lm_ids = tf.reshape(masked_lm_ids, [-1])
+            #     masked_lm_accuracy = tf.metrics.accuracy(labels=masked_lm_ids,
+            #                                              predictions=masked_lm_predictions,
+            #                                              weights=masked_lm_weights)
+            #     masked_lm_example_loss = tf.reshape(masked_lm_example_loss, [-1])
+            #     masked_lm_mean_loss = tf.metrics.mean(values=masked_lm_example_loss,
+            #                                           weights=masked_lm_weights)
+            #
+            #     return {
+            #         "masked_lm_accuracy": masked_lm_accuracy,
+            #         "masked_lm_loss": masked_lm_mean_loss
+            #     }
+
+            def metric_fn(masked_lm_accuracy, loss_per_seq):
                 """Computes the loss and accuracy of the model."""
-                masked_lm_weights = tf.reshape(masked_lm_weights, [-1])
-                masked_lm_predictions = tf.argmax(masked_lm_log_probs, axis=-1, output_type=tf.int32)
-                masked_lm_ids = tf.reshape(masked_lm_ids, [-1])
-                masked_lm_accuracy = tf.metrics.accuracy(labels=masked_lm_ids,
-                                                         predictions=masked_lm_predictions,
-                                                         weights=masked_lm_weights)
-                masked_lm_example_loss = tf.reshape(masked_lm_example_loss, [-1])
-                masked_lm_mean_loss = tf.metrics.mean(values=masked_lm_example_loss,
-                                                      weights=masked_lm_weights)
+
 
                 return {
-                    "masked_lm_accuracy": masked_lm_accuracy,
-                    "masked_lm_loss": masked_lm_mean_loss
+                    "masked_lm_accuracy": tf.readuce_mean(masked_lm_accuracy),
+                    "masked_lm_loss": tf.readuce_mean(loss_per_seq)
                 }
 
-            eval_metrics = (metric_fn, [masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
-                                        masked_lm_weights])
 
             n_predictions = masked_lm_ids.get_shape().as_list()[-1]
             probs = tf.reshape(masked_lm_log_probs,
                                [1024, n_predictions, bert_config.vocab_size])
             masked_lm_predictions = tf.argmax(probs, axis=-1, output_type=tf.int32)
             correct_prediction = tf.equal(masked_lm_predictions, masked_lm_ids)
-            # masked_lm_accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), axis=1)
-            # # tf.summary.scalar("train_accuracy", tf.reduce_mean(masked_lm_accuracy))
-            # loss_per_seq = tf.reduce_mean(tf.reshape(masked_lm_example_loss, [1024, n_predictions]), axis=1)
+            masked_lm_accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), axis=1)
+            # tf.summary.scalar("train_accuracy", tf.reduce_mean(masked_lm_accuracy))
+            loss_per_seq = tf.reduce_mean(tf.reshape(masked_lm_example_loss, [1024, n_predictions]), axis=1)
+
+            # eval_metrics = (metric_fn, [masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
+            #                             masked_lm_weights])
+            eval_metrics = (metric_fn, [masked_lm_accuracy, loss_per_seq])
+
+
+
             variables_to_export = [input_ids, input_mask, masked_lm_positions, masked_lm_ids, masked_lm_weights,
-                                   tf.constant(0), probs, tf.constant(0), features["seq"]]
+                                   loss_per_seq, probs, masked_lm_accuracy, features["seq"]]
 
             output_spec = TPUEstimatorSpec(mode=mode,
                                            loss=total_loss,
-                                           #eval_metrics=eval_metrics,
+                                           eval_metrics=eval_metrics,
                                            scaffold_fn=scaffold_fn,
                                            evaluation_hooks=[eval_hook(variables_to_export, FLAGS.output_dir)])
         else:
