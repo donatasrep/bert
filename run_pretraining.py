@@ -336,7 +336,7 @@ def input_fn_builder(input_files,
                 lambda record: _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training),
                 batch_size=batch_size,
                 num_parallel_batches=num_cpu_threads,
-                drop_remainder=is_training))
+                drop_remainder=True))
         return d
 
     return input_fn
