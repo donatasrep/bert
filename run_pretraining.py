@@ -476,7 +476,7 @@ def main(_):
     if FLAGS.do_full_eval:
         tf.logging.info("***** Running full evaluation *****")
         tf.logging.info("  Batch size = %d", FLAGS.eval_batch_size)
-        result = estimator.evaluate(input_fn=input_fn)
+        result = estimator.evaluate(input_fn=input_fn, steps=FLAGS.max_eval_steps)
 
 
 def calculate(current_shape, target_shape, dynamic_padding=False):
