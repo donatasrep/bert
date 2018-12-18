@@ -216,7 +216,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
             # # tf.summary.scalar("train_accuracy", tf.reduce_mean(masked_lm_accuracy))
             # loss_per_seq = tf.reduce_mean(tf.reshape(masked_lm_example_loss, [1024, n_predictions]), axis=1)
             variables_to_export = [input_ids, input_mask, masked_lm_positions, masked_lm_ids, masked_lm_weights,
-                                   tf.constant(0), probs, tf.constant(0, features["seq"]]
+                                   tf.constant(0), probs, tf.constant(0), features["seq"]]
 
             output_spec = TPUEstimatorSpec(mode=mode,
                                            loss=total_loss,
