@@ -209,8 +209,8 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
 
 
                 return {
-                    "masked_lm_accuracy": tf.readuce_mean(masked_lm_accuracy),
-                    "masked_lm_loss": tf.readuce_mean(loss_per_seq)
+                    "masked_lm_accuracy": tf.reduce_mean(masked_lm_accuracy),
+                    "masked_lm_loss": tf.reduce_mean(loss_per_seq)
                 }
 
 
