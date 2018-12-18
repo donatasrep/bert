@@ -209,12 +209,12 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
 
             n_predictions = masked_lm_ids.get_shape().as_list()[-1]
             probs = tf.reshape(masked_lm_log_probs,
-                               [8192, n_predictions, bert_config.vocab_size])
+                               [1024, n_predictions, bert_config.vocab_size])
             masked_lm_predictions = tf.argmax(probs, axis=-1, output_type=tf.int32)
             correct_prediction = tf.equal(masked_lm_predictions, masked_lm_ids)
             masked_lm_accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), axis=1)
             # tf.summary.scalar("train_accuracy", tf.reduce_mean(masked_lm_accuracy))
-            loss_per_seq = tf.reduce_mean(tf.reshape(masked_lm_example_loss, [8192, n_predictions]), axis=1)
+            loss_per_seq = tf.reduce_mean(tf.reshape(masked_lm_example_loss, [1024, n_predictions]), axis=1)
             variables_to_export = [input_ids, input_mask, masked_lm_positions, masked_lm_ids, masked_lm_weights,
                                    loss_per_seq, probs, masked_lm_accuracy, features["seq"]]
 
