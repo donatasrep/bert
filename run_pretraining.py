@@ -186,58 +186,43 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                                                           scaffold_fn=scaffold_fn)
         elif mode == tf.estimator.ModeKeys.EVAL:
 
-            # def metric_fn(masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
-            #               masked_lm_weights):
-            #     """Computes the loss and accuracy of the model."""
-            #     masked_lm_weights = tf.reshape(masked_lm_weights, [-1])
-            #     masked_lm_predictions = tf.argmax(masked_lm_log_probs, axis=-1, output_type=tf.int32)
-            #     masked_lm_ids = tf.reshape(masked_lm_ids, [-1])
-            #     masked_lm_accuracy = tf.metrics.accuracy(labels=masked_lm_ids,
-            #                                              predictions=masked_lm_predictions,
-            #                                              weights=masked_lm_weights)
-            #     masked_lm_example_loss = tf.reshape(masked_lm_example_loss, [-1])
-            #     masked_lm_mean_loss = tf.metrics.mean(values=masked_lm_example_loss,
-            #                                           weights=masked_lm_weights)
-            #
-            #     return {
-            #         "masked_lm_accuracy": masked_lm_accuracy,
-            #         "masked_lm_loss": masked_lm_mean_loss
-            #     }
-
-            def metric_fn(masked_lm_accuracy, loss_per_seq):
+            def metric_fn(masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
+                          masked_lm_weights):
                 """Computes the loss and accuracy of the model."""
-
+                masked_lm_weights = tf.reshape(masked_lm_weights, [-1])
+                masked_lm_predictions = tf.argmax(masked_lm_log_probs, axis=-1, output_type=tf.int32)
+                masked_lm_ids = tf.reshape(masked_lm_ids, [-1])
+                masked_lm_accuracy = tf.metrics.accuracy(labels=masked_lm_ids,
+                                                         predictions=masked_lm_predictions,
+                                                         weights=masked_lm_weights)
+                masked_lm_example_loss = tf.reshape(masked_lm_example_loss, [-1])
+                masked_lm_mean_loss = tf.metrics.mean(values=masked_lm_example_loss,
+                                                      weights=masked_lm_weights)
 
                 return {
-                    "masked_lm_accuracy": (tf.reduce_mean(masked_lm_accuracy, name="mean_3"), tf.reduce_mean(masked_lm_accuracy, name="mean_4")),
-                    "masked_lm_loss": (tf.reduce_mean(loss_per_seq, name="mean_5"), tf.reduce_mean(loss_per_seq, name="mean_6"))
+                    "masked_lm_accuracy": masked_lm_accuracy,
+                    "masked_lm_loss": masked_lm_mean_loss
                 }
 
+            eval_metrics = (metric_fn, [masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
+                                        masked_lm_weights])
 
             n_predictions = masked_lm_ids.get_shape().as_list()[-1]
             probs = tf.reshape(masked_lm_log_probs,
                                [-1, n_predictions, bert_config.vocab_size])
             masked_lm_predictions = tf.argmax(probs, axis=-1, output_type=tf.int32)
             correct_prediction = tf.equal(masked_lm_predictions, masked_lm_ids)
-            masked_lm_accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), axis=1, name="mean_1")
-            # tf.summary.scalar("train_accuracy", tf.reduce_mean(masked_lm_accuracy))
-            loss_per_seq = tf.reduce_mean(tf.reshape(masked_lm_example_loss, [-1, n_predictions]), axis=1, name="mean_2")
-
-            # eval_metrics = (metric_fn, [masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
-            #                             masked_lm_weights])
-            eval_metrics = (metric_fn, [masked_lm_accuracy, loss_per_seq])
-
-
-
-            variables_to_export = [#input_ids, input_mask, masked_lm_positions, masked_lm_ids, masked_lm_weights,
-                masked_lm_accuracy, probs, masked_lm_accuracy, features["seq"]]
+            masked_lm_accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), axis=1)
+            tf.summary.scalar("train_accuracy", tf.reduce_mean(masked_lm_accuracy))
+            loss_per_seq = tf.reduce_mean(tf.reshape(masked_lm_example_loss, [-1, n_predictions]), axis=1)
+            variables_to_export = [input_ids, input_mask, masked_lm_positions, masked_lm_ids, masked_lm_weights,
+                                   loss_per_seq, probs, masked_lm_accuracy, features["seq"]]
 
             output_spec = TPUEstimatorSpec(mode=mode,
                                            loss=total_loss,
                                            eval_metrics=eval_metrics,
                                            scaffold_fn=scaffold_fn,
-                                           evaluation_hooks=[eval_hook(variables_to_export, FLAGS.output_dir)]
-            )
+                                           evaluation_hooks=[eval_hook(variables_to_export, FLAGS.output_dir)])
         else:
             raise ValueError("Only TRAIN and EVAL modes are supported: %s" % (mode))
 
@@ -269,21 +254,29 @@ def get_masked_lm_output(bert_config, input_tensor, output_weights, positions,
             initializer=tf.zeros_initializer())
         logits = tf.matmul(input_tensor, output_weights, transpose_b=True)
         logits = tf.nn.bias_add(logits, output_bias)
-        log_probs = tf.nn.log_softmax(logits, axis=-1)
 
         label_ids = tf.reshape(label_ids, [-1])
         label_weights = tf.reshape(label_weights, [-1])
-
         one_hot_labels = tf.one_hot(label_ids, depth=bert_config.vocab_size, dtype=tf.float32)
 
-        # The `positions` tensor might be zero-padded (if the sequence is too
-        # short to have the maximum number of predictions). The `label_weights`
-        # tensor has a value of 1.0 for every real prediction and 0.0 for the
-        # padding predictions.
-        per_example_loss = -tf.reduce_sum(log_probs * one_hot_labels, axis=[-1])
-        numerator = tf.reduce_sum(label_weights * per_example_loss)
-        denominator = tf.reduce_sum(label_weights) + 1e-5
-        loss = tf.identity(numerator / denominator, name="loss")
+        if bert_config.loss == "original":
+            log_probs = tf.nn.log_softmax(logits, axis=-1)
+
+            # The `positions` tensor might be zero-padded (if the sequence is too
+            # short to have the maximum number of predictions). The `label_weights`
+            # tensor has a value of 1.0 for every real prediction and 0.0 for the
+            # padding predictions.
+            per_example_loss = -tf.reduce_sum(log_probs * one_hot_labels, axis=[-1])
+            numerator = tf.reduce_sum(label_weights * per_example_loss)
+            denominator = tf.reduce_sum(label_weights) + 1e-5
+            loss = tf.identity(numerator / denominator, name="loss")
+        elif bert_config.loss == "focal":
+            log_probs = tf.nn.softmax(logits, axis=-1)
+            per_example_loss = -tf.reduce_sum( one_hot_labels * ((1-log_probs)**2) * tf.log(log_probs) , axis=[-1])
+            numerator = tf.reduce_sum(label_weights * per_example_loss)
+            denominator = tf.reduce_sum(label_weights) + 1e-5
+            loss = tf.identity(numerator / denominator, name="loss")
+
 
     return (loss, per_example_loss, log_probs)
 
@@ -478,7 +471,7 @@ def main(_):
                                 max_predictions_per_seq=FLAGS.max_predictions_per_seq,
                                 vocab_size=bert_config.vocab_size,
                                 is_training=FLAGS.do_train,
-                                num_cpu_threads=cpu_count())
+                                num_cpu_threads=max(1, cpu_count() - 1))
     if FLAGS.do_train:
         tf.logging.info("***** Running training *****")
         tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
