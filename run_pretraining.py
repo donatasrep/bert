@@ -27,6 +27,7 @@ from tensorflow.python.data.experimental import parallel_interleave, map_and_bat
 import modeling
 import optimization
 import tensorflow as tf
+import numpy as np
 
 from eval_results_hook import EvalResultsHook
 from export_hook import ExportHook
@@ -37,7 +38,7 @@ FLAGS = flags.FLAGS
 
 ## Required parameters
 flags.DEFINE_string(
-    "bert_config_file", "config//bert_config_file.json",
+    "bert_config_file", "config//bert_config_file_512.json",
     "The config json file corresponding to the pre-trained BERT model. "
     "This specifies the model architecture.")
 
@@ -175,6 +176,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                 init_string = ", *INIT_FROM_CKPT*"
             tf.logging.info("  name = %s, shape = %s%s", var.name, var.shape,
                             init_string)
+        tf.logging.info("**** {} parameters ****".format(np.sum([np.prod(v.shape) for v in tf.trainable_variables()])))
 
         output_spec = None
         if mode == tf.estimator.ModeKeys.TRAIN:
@@ -301,31 +303,42 @@ def input_fn_builder(input_files,
                      max_predictions_per_seq,
                      vocab_size,
                      is_training,
-                     num_cpu_threads=1):
+                     num_cpu_threads=1,
+                     balance=True):
     """Creates an `input_fn` closure to be passed to TPUEstimator."""
 
     def input_fn(params):
         """The actual input function."""
         batch_size = params["batch_size"]
-
         # For training, we want a lot of parallel reading and shuffling.
         # For eval, we want no shuffling and parallel reading doesn't matter.
         if is_training:
-            d = tf.data.Dataset.from_tensor_slices(tf.constant(input_files))
-            d = d.repeat()
+            tf.logging.info("There are {} files for training".format(len(input_files)))
+            upsampling_factor = [get_upsampling_factor(fn) for fn in input_files]
+            tf.logging.info(upsampling_factor)
+            d = tf.data.Dataset.from_tensor_slices((tf.constant(input_files), tf.constant(upsampling_factor)))
+
             d = d.shuffle(buffer_size=len(input_files))
 
             # `cycle_length` is the number of parallel files that get read.
             cycle_length = min(num_cpu_threads, len(input_files))
 
+            # Repeat data in the file for unlimited number. This solves class imbalance problem.
+            def get_tfrecord_dataset(filename, upsampling_factor):
+                tfrecord_dataset = tf.data.TFRecordDataset(filename, compression_type='GZIP')
+                if balance:
+                    tfrecord_dataset = tfrecord_dataset.repeat(tf.cast(upsampling_factor, dtype=tf.int64))
+                return tfrecord_dataset
             # `sloppy` mode means that the interleaving is not exact. This adds
             # even more randomness to the training pipeline.
             d = d.apply(
                 parallel_interleave(
-                    lambda filename: tf.data.TFRecordDataset(filename, compression_type='GZIP'),
+                    lambda filename, upsampling_factor: get_tfrecord_dataset(filename, upsampling_factor),
                     sloppy=is_training,
                     cycle_length=cycle_length))
             d = d.shuffle(buffer_size=100)
+            d = d.repeat()
+
         else:
             d = tf.data.Dataset.from_tensor_slices(tf.constant(input_files))
 
@@ -359,6 +372,14 @@ def input_fn_builder(input_files,
 
     return input_fn
 
+
+def get_upsampling_factor(full_path):
+    filename = os.path.splitext(os.path.basename(full_path))[0]
+    parts = filename.split("_")
+    if len(parts) == 2:
+        return int(parts[-1])
+    else:
+        return -1
 
 def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training):
     """Decodes a record to a TensorFlow example."""
