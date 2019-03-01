@@ -375,7 +375,7 @@ def input_fn_builder(input_files,
 
 def get_upsampling_factor(full_path):
     filename = os.path.splitext(os.path.basename(full_path))[0]
-    parts = filename.split("_")
+    parts = filename.split(".")[0].split("_")
     if len(parts) == 2:
         return int(parts[-1])
     else:
