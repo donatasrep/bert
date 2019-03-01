@@ -44,7 +44,7 @@ flags.DEFINE_string(
 
 flags.DEFINE_string(
     "input_file",
-    "..\\PREnzyme\\data\\protein\\embedding\\sample\\*",
+    "..\\PREnzyme\\data\\protein\\embedding\\sample_new\\*",
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
@@ -73,7 +73,7 @@ flags.DEFINE_bool("do_eval", False, "Whether to run eval on the dev set.")
 
 flags.DEFINE_bool("do_full_eval", False, "Whether to run eval on the all set.")
 
-flags.DEFINE_integer("train_batch_size", 16, "Total batch size for training.")
+flags.DEFINE_integer("train_batch_size", 1, "Total batch size for training.")
 
 flags.DEFINE_integer("eval_batch_size", 64, "Total batch size for eval.")
 
@@ -374,7 +374,7 @@ def input_fn_builder(input_files,
 
 
 def get_upsampling_factor(full_path):
-    filename = os.path.splitext(os.path.basename(full_path))[0]
+    filename = os.path.basename(full_path)
     parts = filename.split(".")[0].split("_")
     if len(parts) == 2:
         return int(parts[-1])
