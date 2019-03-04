@@ -18,18 +18,17 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+from tensorflow.python.data.experimental import parallel_interleave, map_and_batch
+
 import os
 from multiprocessing import cpu_count
 
-from tensorflow.contrib.data import parallel_interleave
+import numpy as np
+import tensorflow as tf
 from tensorflow.contrib.tpu import TPUEstimator, TPUEstimatorSpec
-from tensorflow.python.data.experimental import map_and_batch
 
 import modeling
 import optimization
-import tensorflow as tf
-import numpy as np
-
 from eval_results_hook import EvalResultsHook
 from export_hook import ExportHook
 
@@ -274,11 +273,10 @@ def get_masked_lm_output(bert_config, input_tensor, output_weights, positions,
             loss = tf.identity(numerator / denominator, name="loss")
         elif bert_config.loss == "focal":
             log_probs = tf.nn.softmax(logits, axis=-1)
-            per_example_loss = -tf.reduce_sum( one_hot_labels * ((1-log_probs)**2) * tf.log(log_probs) , axis=[-1])
+            per_example_loss = -tf.reduce_sum(one_hot_labels * ((1 - log_probs) ** 2) * tf.log(log_probs), axis=[-1])
             numerator = tf.reduce_sum(label_weights * per_example_loss)
             denominator = tf.reduce_sum(label_weights) + 1e-5
             loss = tf.identity(numerator / denominator, name="loss")
-
 
     return (loss, per_example_loss, log_probs)
 
@@ -330,6 +328,7 @@ def input_fn_builder(input_files,
                 if balance:
                     tfrecord_dataset = tfrecord_dataset.repeat(tf.cast(upsampling_factor, dtype=tf.int64))
                 return tfrecord_dataset
+
             # `sloppy` mode means that the interleaving is not exact. This adds
             # even more randomness to the training pipeline.
             d = d.apply(
@@ -381,6 +380,7 @@ def get_upsampling_factor(full_path):
         return int(parts[-1])
     else:
         return -1
+
 
 def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training):
     """Decodes a record to a TensorFlow example."""
