@@ -21,8 +21,9 @@ from __future__ import print_function
 import os
 from multiprocessing import cpu_count
 
+from tensorflow.contrib.data import parallel_interleave
 from tensorflow.contrib.tpu import TPUEstimator, TPUEstimatorSpec
-from tensorflow.python.data.experimental import parallel_interleave, map_and_batch
+from tensorflow.python.data.experimental import map_and_batch
 
 import modeling
 import optimization
