@@ -29,6 +29,8 @@ import modeling
 import optimization
 from eval_results_hook import EvalResultsHook
 from export_hook import ExportHook
+from _lib.data.experimental.ops.batching import map_and_batch
+from _lib.data.experimental.ops.interleave_ops import parallel_interleave
 
 flags = tf.flags
 
@@ -330,7 +332,7 @@ def input_fn_builder(input_files,
             # `sloppy` mode means that the interleaving is not exact. This adds
             # even more randomness to the training pipeline.
             d = d.apply(
-                tf.contrib.data.parallel_interleave(
+                parallel_interleave(
                     lambda filename, upsampling_factor: get_tfrecord_dataset(filename, upsampling_factor),
                     sloppy=is_training,
                     cycle_length=cycle_length))
@@ -346,7 +348,7 @@ def input_fn_builder(input_files,
             # `sloppy` mode means that the interleaving is not exact. This adds
             # even more randomness to the training pipeline.
             d = d.apply(
-                tf.contrib.data.parallel_interleave(
+                parallel_interleave(
                     lambda filename: tf.data.TFRecordDataset(filename, compression_type='GZIP'),
                     sloppy=is_training,
                     cycle_length=cycle_length))
@@ -361,7 +363,7 @@ def input_fn_builder(input_files,
         # and we *don't* want to drop the remainder, otherwise we wont cover
         # every sample.
         d = d.apply(
-            tf.contrib.data.map_and_batch(
+            map_and_batch(
                 lambda record: _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training),
                 batch_size=batch_size,
                 num_parallel_batches=num_cpu_threads,
