@@ -18,13 +18,13 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from tensorflow.python.data.experimental import parallel_interleave, map_and_batch
 
 import os
 from multiprocessing import cpu_count
 
 import numpy as np
 import tensorflow as tf
+from tensorflow.contrib.data import parallel_interleave, map_and_batch
 from tensorflow.contrib.tpu import TPUEstimator, TPUEstimatorSpec
 
 import modeling
@@ -336,7 +336,7 @@ def input_fn_builder(input_files,
                     lambda filename, upsampling_factor: get_tfrecord_dataset(filename, upsampling_factor),
                     sloppy=is_training,
                     cycle_length=cycle_length))
-            d = d.shuffle(buffer_size=100)
+            d = d.shuffle(buffer_size=1024)
             d = d.repeat()
 
         else:
