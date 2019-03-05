@@ -65,42 +65,42 @@ from __future__ import print_function
 
 # pylint: disable=unused-import
 
-from tensorflow.python.data.experimental.ops.batching import dense_to_sparse_batch
-from tensorflow.python.data.experimental.ops.batching import map_and_batch
-from tensorflow.python.data.experimental.ops.batching import unbatch
-from tensorflow.python.data.experimental.ops.counter import Counter
-from tensorflow.python.data.experimental.ops.enumerate_ops import enumerate_dataset
-from tensorflow.python.data.experimental.ops.error_ops import ignore_errors
-from tensorflow.python.data.experimental.ops.get_single_element import get_single_element
-from tensorflow.python.data.experimental.ops.grouping import bucket_by_sequence_length
-from tensorflow.python.data.experimental.ops.grouping import group_by_reducer
-from tensorflow.python.data.experimental.ops.grouping import group_by_window
-from tensorflow.python.data.experimental.ops.grouping import Reducer
-from tensorflow.python.data.experimental.ops.interleave_ops import choose_from_datasets
-from tensorflow.python.data.experimental.ops.interleave_ops import parallel_interleave
-from tensorflow.python.data.experimental.ops.interleave_ops import sample_from_datasets
-from tensorflow.python.data.experimental.ops.iterator_ops import CheckpointInputPipelineHook
-from tensorflow.python.data.experimental.ops.iterator_ops import make_saveable_from_iterator
+from tf_libs.data.experimental.ops.batching import dense_to_sparse_batch
+from tf_libs.data.experimental.ops.batching import map_and_batch
+from tf_libs.data.experimental.ops.batching import unbatch
+from tf_libs.data.experimental.ops.counter import Counter
+from tf_libs.data.experimental.ops.enumerate_ops import enumerate_dataset
+from tf_libs.data.experimental.ops.error_ops import ignore_errors
+from tf_libs.data.experimental.ops.get_single_element import get_single_element
+from tf_libs.data.experimental.ops.grouping import bucket_by_sequence_length
+from tf_libs.data.experimental.ops.grouping import group_by_reducer
+from tf_libs.data.experimental.ops.grouping import group_by_window
+from tf_libs.data.experimental.ops.grouping import Reducer
+from tf_libs.data.experimental.ops.interleave_ops import choose_from_datasets
+from tf_libs.data.experimental.ops.interleave_ops import parallel_interleave
+from tf_libs.data.experimental.ops.interleave_ops import sample_from_datasets
+from tf_libs.data.experimental.ops.iterator_ops import CheckpointInputPipelineHook
+from tf_libs.data.experimental.ops.iterator_ops import make_saveable_from_iterator
 
 # Optimization constant that can be used to enable auto-tuning.
-from tensorflow.python.data.experimental.ops.optimization import AUTOTUNE
+from tf_libs.data.experimental.ops.optimization import AUTOTUNE
 
-from tensorflow.python.data.experimental.ops.parsing_ops import parse_example_dataset
-from tensorflow.python.data.experimental.ops.prefetching_ops import copy_to_device
-from tensorflow.python.data.experimental.ops.prefetching_ops import prefetch_to_device
-from tensorflow.python.data.experimental.ops.random_ops import RandomDataset
-from tensorflow.python.data.experimental.ops.readers import CsvDataset
-from tensorflow.python.data.experimental.ops.readers import make_batched_features_dataset
-from tensorflow.python.data.experimental.ops.readers import make_csv_dataset
-from tensorflow.python.data.experimental.ops.readers import SqlDataset
-from tensorflow.python.data.experimental.ops.resampling import rejection_resample
-from tensorflow.python.data.experimental.ops.scan_ops import scan
-from tensorflow.python.data.experimental.ops.shuffle_ops import shuffle_and_repeat
-from tensorflow.python.data.experimental.ops.stats_ops import latency_stats
-from tensorflow.python.data.experimental.ops.stats_ops import set_stats_aggregator
-from tensorflow.python.data.experimental.ops.stats_ops import StatsAggregator
-from tensorflow.python.data.experimental.ops.unique import unique
-from tensorflow.python.data.experimental.ops.writers import TFRecordWriter
+from tf_libs.data.experimental.ops.parsing_ops import parse_example_dataset
+from tf_libs.data.experimental.ops.prefetching_ops import copy_to_device
+from tf_libs.data.experimental.ops.prefetching_ops import prefetch_to_device
+from tf_libs.data.experimental.ops.random_ops import RandomDataset
+from tf_libs.data.experimental.ops.readers import CsvDataset
+from tf_libs.data.experimental.ops.readers import make_batched_features_dataset
+from tf_libs.data.experimental.ops.readers import make_csv_dataset
+from tf_libs.data.experimental.ops.readers import SqlDataset
+from tf_libs.data.experimental.ops.resampling import rejection_resample
+from tf_libs.data.experimental.ops.scan_ops import scan
+from tf_libs.data.experimental.ops.shuffle_ops import shuffle_and_repeat
+from tf_libs.data.experimental.ops.stats_ops import latency_stats
+from tf_libs.data.experimental.ops.stats_ops import set_stats_aggregator
+from tf_libs.data.experimental.ops.stats_ops import StatsAggregator
+from tf_libs.data.experimental.ops.unique import unique
+from tf_libs.data.experimental.ops.writers import TFRecordWriter
 from tensorflow.python.data.ops.iterator_ops import get_next_as_optional
 from tensorflow.python.data.ops.optional_ops import Optional
 # pylint: enable=unused-import
