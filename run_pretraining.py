@@ -18,13 +18,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-
 import os
 from multiprocessing import cpu_count
 
 import numpy as np
 import tensorflow as tf
-from tensorflow.contrib.data import parallel_interleave, map_and_batch
 from tensorflow.contrib.tpu import TPUEstimator, TPUEstimatorSpec
 
 import modeling
@@ -332,7 +330,7 @@ def input_fn_builder(input_files,
             # `sloppy` mode means that the interleaving is not exact. This adds
             # even more randomness to the training pipeline.
             d = d.apply(
-                parallel_interleave(
+                tf.contrib.data.parallel_interleave(
                     lambda filename, upsampling_factor: get_tfrecord_dataset(filename, upsampling_factor),
                     sloppy=is_training,
                     cycle_length=cycle_length))
@@ -348,7 +346,7 @@ def input_fn_builder(input_files,
             # `sloppy` mode means that the interleaving is not exact. This adds
             # even more randomness to the training pipeline.
             d = d.apply(
-                parallel_interleave(
+                tf.contrib.data.parallel_interleave(
                     lambda filename: tf.data.TFRecordDataset(filename, compression_type='GZIP'),
                     sloppy=is_training,
                     cycle_length=cycle_length))
@@ -363,7 +361,7 @@ def input_fn_builder(input_files,
         # and we *don't* want to drop the remainder, otherwise we wont cover
         # every sample.
         d = d.apply(
-            map_and_batch(
+            tf.contrib.data.map_and_batch(
                 lambda record: _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training),
                 batch_size=batch_size,
                 num_parallel_batches=num_cpu_threads,
