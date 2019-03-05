@@ -29,8 +29,8 @@ import modeling
 import optimization
 from eval_results_hook import EvalResultsHook
 from export_hook import ExportHook
-from _lib.data.experimental.ops.batching import map_and_batch
-from _lib.data.experimental.ops.interleave_ops import parallel_interleave
+from tf_libs.data.experimental.ops.batching import map_and_batch
+from tf_libs.data.experimental.ops.interleave_ops import parallel_interleave
 
 flags = tf.flags
 
