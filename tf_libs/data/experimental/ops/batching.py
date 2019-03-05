@@ -22,7 +22,8 @@ from tensorflow.python.data.util import nest
 from tensorflow.python.framework import dtypes
 from tensorflow.python.framework import ops
 from tensorflow.python.framework import tensor_shape
-from tensorflow.python.ops import gen_dataset_ops
+
+from tf_libs.data.experimental.ops import gen_dataset_ops
 
 
 class _MapAndBatchDataset(dataset_ops.MapDataset):
