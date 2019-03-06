@@ -337,7 +337,7 @@ def input_fn_builder(input_files,
                     lambda filename, upsampling_factor: get_tfrecord_dataset(filename, upsampling_factor),
                     sloppy=is_training,
                     cycle_length=cycle_length))
-            d = d.shuffle(buffer_size=1024)
+            d = d.shuffle(buffer_size=100)
             d = d.repeat()
 
         else:
