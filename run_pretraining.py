@@ -310,7 +310,7 @@ def input_fn_builder(input_files,
     def input_fn(params):
         """The actual input function."""
         batch_size = params["batch_size"]
-        tf.logging.info("ACTUAL BATCH SIZE".format(batch_size))
+        tf.logging.info("ACTUAL BATCH SIZE {}".format(batch_size))
         # For training, we want a lot of parallel reading and shuffling.
         # For eval, we want no shuffling and parallel reading doesn't matter.
         if is_training:
