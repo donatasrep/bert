@@ -326,8 +326,8 @@ def input_fn_builder(input_files,
             # Repeat data in the file for unlimited number. This solves class imbalance problem.
             def get_tfrecord_dataset(filename, upsampling_factor):
                 tfrecord_dataset = tf.data.TFRecordDataset(filename, compression_type='GZIP')
-                # if balance:
-                #     tfrecord_dataset = tfrecord_dataset.repeat(tf.cast(upsampling_factor, dtype=tf.int64))
+                if balance:
+                    tfrecord_dataset = tfrecord_dataset.repeat(tf.cast(upsampling_factor, dtype=tf.int64))
                 return tfrecord_dataset
 
             # `sloppy` mode means that the interleaving is not exact. This adds
