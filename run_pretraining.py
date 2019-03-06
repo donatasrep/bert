@@ -24,13 +24,14 @@ from multiprocessing import cpu_count
 import numpy as np
 import tensorflow as tf
 from tensorflow.contrib.tpu import TPUEstimator, TPUEstimatorSpec
+from tensorflow.python.data.experimental import parallel_interleave, map_and_batch
 
 import modeling
 import optimization
 from eval_results_hook import EvalResultsHook
 from export_hook import ExportHook
-from tf_libs.data.experimental.ops.batching import map_and_batch
-from tf_libs.data.experimental.ops.interleave_ops import parallel_interleave
+# from tf_libs.data.experimental.ops.batching import map_and_batch
+# from tf_libs.data.experimental.ops.interleave_ops import parallel_interleave
 
 flags = tf.flags
 
