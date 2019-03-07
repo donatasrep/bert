@@ -30,8 +30,6 @@ import modeling
 import optimization
 from eval_results_hook import EvalResultsHook
 from export_hook import ExportHook
-# from tf_libs.data.experimental.ops.batching import map_and_batch
-# from tf_libs.data.experimental.ops.interleave_ops import parallel_interleave
 
 flags = tf.flags
 
@@ -45,11 +43,12 @@ flags.DEFINE_string(
 
 flags.DEFINE_string(
     "input_file",
-    "..\\PREnzyme\\data\\protein\\embedding\\sample_new\\*",
+    "..\\PREnzyme\\data\\protein\\embedding\\val\\*".replace("\\", os.sep),
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
-    "output_dir", "weights\\test",
+    "output_dir", "weights\\test".replace("\\", os.sep),
+    # "gs://tpu-storage/weights_balanced_512",
     "The output directory where the model checkpoints will be written.")
 
 ## Other parameters
@@ -76,7 +75,7 @@ flags.DEFINE_bool("do_full_eval", False, "Whether to run eval on the all set.")
 
 flags.DEFINE_integer("train_batch_size", 1, "Total batch size for training.")
 
-flags.DEFINE_integer("eval_batch_size", 64, "Total batch size for eval.")
+flags.DEFINE_integer("eval_batch_size", 16, "Total batch size for eval.")
 
 flags.DEFINE_float("learning_rate", 5e-5, "The initial learning rate for Adam.")
 
@@ -337,7 +336,7 @@ def input_fn_builder(input_files,
                     lambda filename, upsampling_factor: get_tfrecord_dataset(filename, upsampling_factor),
                     sloppy=is_training,
                     cycle_length=cycle_length))
-            d = d.shuffle(buffer_size=100)
+            d = d.shuffle(buffer_size=100000)
             d = d.repeat()
 
         else:
@@ -357,7 +356,7 @@ def input_fn_builder(input_files,
             # out-of-range exceptions.
 
             # d = d.repeat()
-            # d = d.shuffle(buffer_size=100000)
+            d = d.shuffle(buffer_size=1000000)
 
         # We must `drop_remainder` on training because the TPU requires fixed
         # size dimensions. For eval, we assume we are evaluating on the CPU or GPU

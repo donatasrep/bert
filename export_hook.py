@@ -18,5 +18,5 @@ class ExportHook(SessionRunHook):
 
     def after_run(self, run_context, run_values):
         values = run_values.results
-        with open(self.filename, 'ab+') as f:
-            numpy.save(f, values)
+        # with open(self.filename, 'ab+') as f:
+        #     numpy.save(f, values)
