@@ -310,6 +310,10 @@ def input_fn_builder(input_files,
         """The actual input function."""
         batch_size = params["batch_size"]
         tf.logging.info("Using {} threads".format(num_cpu_threads))
+
+        # `cycle_length` is the number of parallel files that get read.
+        cycle_length = len(input_files)
+
         # For training, we want a lot of parallel reading and shuffling.
         # For eval, we want no shuffling and parallel reading doesn't matter.
         if is_training:
@@ -319,9 +323,6 @@ def input_fn_builder(input_files,
             d = tf.data.Dataset.from_tensor_slices((tf.constant(input_files), tf.constant(upsampling_factor)))
 
             d = d.shuffle(buffer_size=len(input_files))
-
-            # `cycle_length` is the number of parallel files that get read.
-            cycle_length = len(input_files)
 
             # Repeat data in the file for unlimited number. This solves class imbalance problem.
             def get_tfrecord_dataset(filename, upsampling_factor):
@@ -337,15 +338,11 @@ def input_fn_builder(input_files,
                     lambda filename, upsampling_factor: get_tfrecord_dataset(filename, upsampling_factor),
                     sloppy=is_training,
                     cycle_length=cycle_length))
-            d = d.shuffle(buffer_size=1000000)
+            d = d.shuffle(buffer_size=10000)
             d = d.repeat()
 
         else:
             d = tf.data.Dataset.from_tensor_slices(tf.constant(input_files))
-
-            # `cycle_length` is the number of parallel files that get read.
-            cycle_length = len(input_files)
-
             # `sloppy` mode means that the interleaving is not exact. This adds
             # even more randomness to the training pipeline.
             d = d.apply(
@@ -357,7 +354,7 @@ def input_fn_builder(input_files,
             # out-of-range exceptions.
 
             # d = d.repeat()
-            d = d.shuffle(buffer_size=1000000)
+            d = d.shuffle(buffer_size=10000)
 
         # We must `drop_remainder` on training because the TPU requires fixed
         # size dimensions. For eval, we assume we are evaluating on the CPU or GPU
@@ -368,7 +365,7 @@ def input_fn_builder(input_files,
                 lambda record: _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training),
                 batch_size=batch_size,
                 num_parallel_batches=num_cpu_threads,
-                drop_remainder=True))
+                drop_remainder=True)).prefetch(batch_size)
         return d
 
     return input_fn
