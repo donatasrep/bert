@@ -19,7 +19,7 @@ class EvalResultsHook(SessionRunHook):
     def after_run(self, run_context, run_values):
         filename = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
 
-        filename = os.path.join("weights", "full_eval", filename+".npz")
+        filename = os.path.join("weights", "full_eval", filename+".npy")
         values = run_values.results
         Storage(filename, values).run()
 
@@ -38,7 +38,7 @@ class Storage(threading.Thread):
                 score = sorted[:, :, -1] - sorted[:, :, 3]
                 score = numpy.mean(score, axis=1)
                 self.values[1] = score
-                numpy.savez(f, loss=self.values[0], score=self.values[1], acc=self.values[2], seq=self.values[3])
+                numpy.save(f, loss=self.values[0], score=self.values[1], acc=self.values[2], seq=self.values[3])
             print("Finished saving {} file".format(self.filename))
         except Exception as e:
             print("Unexpected error while saving to numpy file:", str(e))

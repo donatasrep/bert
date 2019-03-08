@@ -309,6 +309,7 @@ def input_fn_builder(input_files,
     def input_fn(params):
         """The actual input function."""
         batch_size = params["batch_size"]
+        tf.logging.info("Using {} threads".format(num_cpu_threads))
         # For training, we want a lot of parallel reading and shuffling.
         # For eval, we want no shuffling and parallel reading doesn't matter.
         if is_training:
@@ -336,7 +337,7 @@ def input_fn_builder(input_files,
                     lambda filename, upsampling_factor: get_tfrecord_dataset(filename, upsampling_factor),
                     sloppy=is_training,
                     cycle_length=cycle_length))
-            d = d.shuffle(buffer_size=100000)
+            d = d.shuffle(buffer_size=1000000)
             d = d.repeat()
 
         else:
