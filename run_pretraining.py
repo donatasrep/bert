@@ -321,7 +321,7 @@ def input_fn_builder(input_files,
             d = d.shuffle(buffer_size=len(input_files))
 
             # `cycle_length` is the number of parallel files that get read.
-            cycle_length = min(num_cpu_threads, len(input_files))
+            cycle_length = len(input_files)
 
             # Repeat data in the file for unlimited number. This solves class imbalance problem.
             def get_tfrecord_dataset(filename, upsampling_factor):
@@ -344,7 +344,7 @@ def input_fn_builder(input_files,
             d = tf.data.Dataset.from_tensor_slices(tf.constant(input_files))
 
             # `cycle_length` is the number of parallel files that get read.
-            cycle_length = min(num_cpu_threads, len(input_files))
+            cycle_length = len(input_files)
 
             # `sloppy` mode means that the interleaving is not exact. This adds
             # even more randomness to the training pipeline.
