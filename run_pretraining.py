@@ -43,7 +43,7 @@ flags.DEFINE_string(
 
 flags.DEFINE_string(
     "input_file",
-    "..\\PREnzyme\\data\\protein\\embedding\\val\\*".replace("\\", os.sep),
+    "..\\PREnzyme\\data\\protein\\embedding\\sample_512\\*".replace("\\", os.sep),
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
@@ -338,7 +338,7 @@ def input_fn_builder(input_files,
                     lambda filename, upsampling_factor: get_tfrecord_dataset(filename, upsampling_factor),
                     sloppy=is_training,
                     cycle_length=cycle_length))
-            d = d.shuffle(buffer_size=10000)
+            d = d.shuffle(buffer_size=200000)
             d = d.repeat()
 
         else:
@@ -490,7 +490,7 @@ def main(_):
                                 max_predictions_per_seq=FLAGS.max_predictions_per_seq,
                                 vocab_size=bert_config.vocab_size,
                                 is_training=FLAGS.do_train,
-                                num_cpu_threads=15 if FLAGS.use_tpu else max(1, cpu_count() - 1))
+                                num_cpu_threads=8 if FLAGS.use_tpu else max(1, cpu_count() - 1))
     if FLAGS.do_train:
         tf.logging.info("***** Running training *****")
         tf.logging.info("  Batch size = %d", FLAGS.train_batch_size)
