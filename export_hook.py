@@ -9,7 +9,7 @@ class ExportHook(SessionRunHook):
     def __init__(self, args_to_store, output_dir):
         # input_ids, input_mask, masked_lm_positions, masked_lm_ids, masked_lm_weights,
         # loss_per_seq, probs, masked_lm_accuracy, features["seq"]
-        self.args_to_store = [args_to_store[i] for i in [5, 6, 7, 8, 3]]
+        self.args_to_store = [args_to_store[i] for i in [5, 6, 7, 0, 3]]
         filename = datetime.now().strftime("%Y%m%d-%H%M%S")
         os.makedirs(os.path.join(output_dir, "eval_results"), exist_ok=True)
         self.filename = os.path.join(output_dir, "eval_results", filename + ".npz")

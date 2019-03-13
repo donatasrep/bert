@@ -43,11 +43,11 @@ flags.DEFINE_string(
 
 flags.DEFINE_string(
     "input_file",
-    "..\\PREnzyme\\data\\protein\\embedding\\sample_512\\*".replace("\\", os.sep),
+    "..\\PREnzyme\\data\\protein\\embedding\\sample_512\\0_1.tfrecords.gz".replace("\\", os.sep),
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
-    "output_dir", "weights\\test".replace("\\", os.sep),
+    "output_dir", "weights\\test_focal".replace("\\", os.sep),
     # "gs://tpu-storage/weights_balanced_512",
     "The output directory where the model checkpoints will be written.")
 
