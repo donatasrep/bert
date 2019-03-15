@@ -189,7 +189,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
 
         #
         # with tf.control_dependencies([total_loss]):
-        #     accuracy = tf.reduce_mean(masked_lm_accuracy)
+        accuracy = tf.reduce_mean(masked_lm_accuracy)
 
         output_spec = None
         if mode == tf.estimator.ModeKeys.TRAIN:
