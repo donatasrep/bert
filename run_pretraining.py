@@ -25,6 +25,7 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.contrib.tpu import TPUEstimator, TPUEstimatorSpec
 from tensorflow.python.data.experimental import parallel_interleave, map_and_batch
+from tensorflow.python.training.basic_session_run_hooks import LoggingTensorHook
 
 import modeling
 import optimization
@@ -47,7 +48,7 @@ flags.DEFINE_string(
     "Input TF example files (can be a glob or comma separated).")
 
 flags.DEFINE_string(
-    "output_dir", "weights\\test_focal".replace("\\", os.sep),
+    "output_dir", "weights\\test".replace("\\", os.sep),
     # "gs://tpu-storage/weights_balanced_512",
     "The output directory where the model checkpoints will be written.")
 
@@ -178,6 +179,16 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                             init_string)
         tf.logging.info("**** {} parameters ****".format(np.sum([np.prod(v.shape) for v in tf.trainable_variables()])))
 
+
+        n_predictions = masked_lm_ids.get_shape().as_list()[-1]
+        probs = tf.reshape(masked_lm_log_probs,
+                           [-1, n_predictions, bert_config.vocab_size])
+        masked_lm_predictions = tf.argmax(probs, axis=-1, output_type=tf.int32)
+        correct_prediction = tf.equal(masked_lm_predictions, masked_lm_ids)
+        masked_lm_accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), axis=1)
+        accuracy = tf.reduce_mean(masked_lm_accuracy)
+        tf.summary.scalar("train_accuracy", accuracy)
+
         output_spec = None
         if mode == tf.estimator.ModeKeys.TRAIN:
             train_op = optimization.create_optimizer(total_loss, learning_rate, num_train_steps, num_warmup_steps,
@@ -185,7 +196,9 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
             output_spec = tf.contrib.tpu.TPUEstimatorSpec(mode=mode,
                                                           loss=total_loss,
                                                           train_op=train_op,
-                                                          scaffold_fn=scaffold_fn)
+                                                          scaffold_fn=scaffold_fn,
+                                                          training_hooks=[LoggingTensorHook({'accuracy': accuracy},
+                                                                                           every_n_iter=FLAGS.iterations_per_loop)])
         elif mode == tf.estimator.ModeKeys.EVAL:
 
             def metric_fn(masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
@@ -208,13 +221,6 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
             eval_metrics = (metric_fn, [masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
                                         masked_lm_weights])
 
-            n_predictions = masked_lm_ids.get_shape().as_list()[-1]
-            probs = tf.reshape(masked_lm_log_probs,
-                               [-1, n_predictions, bert_config.vocab_size])
-            masked_lm_predictions = tf.argmax(probs, axis=-1, output_type=tf.int32)
-            correct_prediction = tf.equal(masked_lm_predictions, masked_lm_ids)
-            masked_lm_accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), axis=1)
-            tf.summary.scalar("train_accuracy", tf.reduce_mean(masked_lm_accuracy))
             loss_per_seq = tf.reduce_mean(tf.reshape(masked_lm_example_loss, [-1, n_predictions]), axis=1)
             variables_to_export = [input_ids, input_mask, masked_lm_positions, masked_lm_ids, masked_lm_weights,
                                    loss_per_seq, probs, masked_lm_accuracy, features["seq"]]
