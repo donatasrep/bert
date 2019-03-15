@@ -196,8 +196,9 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                                                           loss=total_loss,
                                                           train_op=train_op,
                                                           scaffold_fn=scaffold_fn,
-                                                          training_hooks=[LoggingTensorHook({'accuracy': accuracy},
-                                                                                           every_n_iter=FLAGS.iterations_per_loop)])
+                                                          # training_hooks=[LoggingTensorHook({'accuracy': accuracy},
+                                                          #                                  every_n_iter=FLAGS.iterations_per_loop)]
+                                                          )
         elif mode == tf.estimator.ModeKeys.EVAL:
 
             def metric_fn(masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
