@@ -187,7 +187,6 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
         correct_prediction = tf.equal(masked_lm_predictions, masked_lm_ids)
         masked_lm_accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), axis=1)
         accuracy = tf.reduce_mean(masked_lm_accuracy)
-        tf.summary.scalar("train_accuracy", accuracy)
 
         output_spec = None
         if mode == tf.estimator.ModeKeys.TRAIN:
@@ -204,6 +203,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
             def metric_fn(masked_lm_example_loss, masked_lm_log_probs, masked_lm_ids,
                           masked_lm_weights):
                 """Computes the loss and accuracy of the model."""
+                tf.summary.scalar("train_accuracy", accuracy)
                 masked_lm_weights = tf.reshape(masked_lm_weights, [-1])
                 masked_lm_predictions = tf.argmax(masked_lm_log_probs, axis=-1, output_type=tf.int32)
                 masked_lm_ids = tf.reshape(masked_lm_ids, [-1])
