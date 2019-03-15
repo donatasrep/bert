@@ -187,9 +187,9 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
         correct_prediction = tf.equal(masked_lm_predictions, masked_lm_ids)
         masked_lm_accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), axis=1)
 
-
-        with tf.control_dependencies([total_loss]):
-            accuracy = tf.reduce_mean(masked_lm_accuracy)
+        #
+        # with tf.control_dependencies([total_loss]):
+        #     accuracy = tf.reduce_mean(masked_lm_accuracy)
 
         output_spec = None
         if mode == tf.estimator.ModeKeys.TRAIN:
@@ -199,8 +199,8 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
                                                           loss=total_loss,
                                                           train_op=train_op,
                                                           scaffold_fn=scaffold_fn,
-                                                          training_hooks=[LoggingTensorHook({'accuracy': accuracy},
-                                                                                           every_n_iter=FLAGS.iterations_per_loop)]
+                                                          # training_hooks=[LoggingTensorHook({'accuracy': accuracy},
+                                                          #                                  every_n_iter=FLAGS.iterations_per_loop)]
                                                           )
         elif mode == tf.estimator.ModeKeys.EVAL:
 
