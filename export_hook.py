@@ -2,7 +2,7 @@ import numpy
 from datetime import datetime
 import os
 from tensorflow.python.training.session_run_hook import SessionRunHook, SessionRunArgs
-
+from pathlib import Path
 
 class ExportHook(SessionRunHook):
 
@@ -11,8 +11,9 @@ class ExportHook(SessionRunHook):
         # loss_per_seq, probs, masked_lm_accuracy, features["seq"]
         self.args_to_store = [args_to_store[i] for i in [5, 6, 7, 0, 3]]
         filename = datetime.now().strftime("%Y%m%d-%H%M%S")
-        os.makedirs(os.path.join(output_dir, "eval_results"), exist_ok=True)
-        self.filename = os.path.join(output_dir, "eval_results", filename + ".npz")
+        base_dir = output_dir.replace("gs://tpu-storage",str(Path.home().joinpath("workspace","bert","weights")))
+        os.makedirs(os.path.join(base_dir, "eval_results"), exist_ok=True)
+        self.filename = os.path.join(base_dir, "eval_results", filename + ".npz")
         self.values = None
 
     def before_run(self, run_context):  # pylint: disable=unused-argument
