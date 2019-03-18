@@ -38,7 +38,7 @@ FLAGS = flags.FLAGS
 
 ## Required parameters
 flags.DEFINE_string(
-    "bert_config_file", "config//bert_config_file_512.json",
+    "bert_config_file", "config//bert_config_file_768.json",
     "The config json file corresponding to the pre-trained BERT model. "
     "This specifies the model architecture.")
 
@@ -51,7 +51,7 @@ flags.DEFINE_string(
 flags.DEFINE_string(
     "output_dir",
     # "weights\\test".replace("\\", os.sep),
-    "gs://tpu-storage/weights_balanced_512",
+    "gs://tpu-storage/weights_balanced_768",
     "The output directory where the model checkpoints will be written.")
 
 ## Other parameters
