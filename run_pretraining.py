@@ -78,7 +78,7 @@ flags.DEFINE_bool("do_full_eval", False, "Whether to run eval on the all set.")
 
 flags.DEFINE_integer("train_batch_size", 1, "Total batch size for training.")
 
-flags.DEFINE_integer("eval_batch_size", 16, "Total batch size for eval.")
+flags.DEFINE_integer("eval_batch_size", 8, "Total batch size for eval.")
 
 flags.DEFINE_float("learning_rate", 5e-5, "The initial learning rate for Adam.")
 
@@ -92,7 +92,7 @@ flags.DEFINE_integer("save_checkpoints_steps", 1000,
 flags.DEFINE_integer("iterations_per_loop", 1000,
                      "How many steps to make in each estimator call.")
 
-flags.DEFINE_integer("max_eval_steps", 100, "Maximum number of eval steps.")
+flags.DEFINE_integer("max_eval_steps", 200, "Maximum number of eval steps.")
 
 flags.DEFINE_bool("use_tpu", False, "Whether to use TPU or GPU/CPU.")
 
@@ -180,7 +180,6 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
             tf.logging.info("  name = %s, shape = %s%s", var.name, var.shape,
                             init_string)
         tf.logging.info("**** {} parameters ****".format(np.sum([np.prod(v.shape) for v in tf.trainable_variables()])))
-
 
         n_predictions = masked_lm_ids.get_shape().as_list()[-1]
         probs = tf.reshape(masked_lm_log_probs,
@@ -321,6 +320,11 @@ def input_fn_builder(input_files,
     def input_fn(params):
         """The actual input function."""
         batch_size = params["batch_size"]
+        weights = tf.constant([1.5, 0.90497106, 0.11277233, 0.51522732, 0.5700573,
+                               0.38485703, 0.67776841, 0.21161174, 0.57328602, 0.46284069,
+                               1., 0.23764507, 0.34020768, 0.44611536, 0.33462288,
+                               0.58122691, 0.59801041, 0.50984613, 0.67622677, 0.12126589,
+                               0.26617994, 0.89106722])
         tf.logging.info("Using {} threads".format(num_cpu_threads))
 
         # `cycle_length` is the number of parallel files that get read.
@@ -374,7 +378,8 @@ def input_fn_builder(input_files,
         # every sample.
         d = d.apply(
             map_and_batch(
-                lambda record: _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training),
+                lambda record: _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training,
+                                              weights),
                 batch_size=batch_size,
                 num_parallel_batches=num_cpu_threads,
                 drop_remainder=True)).prefetch(batch_size)
@@ -392,7 +397,7 @@ def get_upsampling_factor(full_path):
         return -1
 
 
-def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training):
+def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, is_training, weights):
     """Decodes a record to a TensorFlow example."""
     feature = tf.parse_single_example(record, features={
         "length": tf.FixedLenFeature([], tf.int64),
@@ -424,7 +429,10 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
 
     feature["masked_lm_positions"] = positions_to_mask
     feature["masked_lm_ids"] = tf.gather(feature["input_ids"], positions_to_mask)
-    feature["masked_lm_weights"] = tf.ones(max_predictions_per_seq, dtype=tf.float32)
+    if weights is None:
+        feature["masked_lm_weights"] = tf.ones(max_predictions_per_seq, dtype=tf.float32)
+    else:
+        feature["masked_lm_weights"] = tf.squeeze(tf.matmul(tf.one_hot(feature["masked_lm_ids"], 22), tf.expand_dims(weights, -1)))
 
     if is_training:
         r = tf.random.uniform(minval=-28, maxval=170, shape=[max_predictions_per_seq], dtype=tf.int32)
