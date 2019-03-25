@@ -51,7 +51,7 @@ flags.DEFINE_string(
 flags.DEFINE_string(
     "output_dir",
     # "weights\\test".replace("\\", os.sep),
-    "gs://tpu-storage/weights_balanced_768",
+    "gs://tpu-storage/weights_balanced_768_focal",
     "The output directory where the model checkpoints will be written.")
 
 ## Other parameters
@@ -320,11 +320,11 @@ def input_fn_builder(input_files,
     def input_fn(params):
         """The actual input function."""
         batch_size = params["batch_size"]
-        weights = tf.constant([1.5, 0.90497106, 0.11277233, 0.51522732, 0.5700573,
-                               0.38485703, 0.67776841, 0.21161174, 0.57328602, 0.46284069,
-                               1., 0.23764507, 0.34020768, 0.44611536, 0.33462288,
-                               0.58122691, 0.59801041, 0.50984613, 0.67622677, 0.12126589,
-                               0.26617994, 0.89106722])
+        weights = tf.constant([0.00848371, 0.12568271, 1., 0.21912284, 0.19765562,
+                               0.2917226, 0.16554526, 0.53603727, 0.20180552, 0.24538954,
+                               0.11445625, 0.48230798, 0.3348455, 0.25665923, 0.34860096,
+                               0.19817629, 0.18854829, 0.22589214, 0.16924807, 0.9248227,
+                               0.41374934, 0.12746823])
         tf.logging.info("Using {} threads".format(num_cpu_threads))
 
         # `cycle_length` is the number of parallel files that get read.
@@ -432,7 +432,8 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
     if weights is None:
         feature["masked_lm_weights"] = tf.ones(max_predictions_per_seq, dtype=tf.float32)
     else:
-        feature["masked_lm_weights"] = tf.squeeze(tf.matmul(tf.one_hot(feature["masked_lm_ids"], 22), tf.expand_dims(weights, -1)))
+        feature["masked_lm_weights"] = tf.squeeze(
+            tf.matmul(tf.one_hot(feature["masked_lm_ids"], 22), tf.expand_dims(weights, -1)))
 
     if is_training:
         r = tf.random.uniform(minval=-28, maxval=170, shape=[max_predictions_per_seq], dtype=tf.int32)
