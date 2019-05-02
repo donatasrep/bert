@@ -298,30 +298,17 @@ def main(_):
   input_fn = input_fn_builder(
       features=features, seq_length=FLAGS.max_seq_length)
 
-  with codecs.getwriter("utf-8")(tf.gfile.Open(FLAGS.output_file,
-                                               "w")) as writer:
-    for result in estimator.predict(input_fn, yield_single_examples=True):
+  # with codecs.getwriter("utf-8")(tf.gfile.Open(FLAGS.output_file,
+  #                                              "w")) as writer:
+  df = pd.DataFrame(columns=['uniprot_id', 'output'])
+  i = 0
+  for result in estimator.predict(input_fn, yield_single_examples=True):
       unique_id = result["unique_id"].decode("utf-8")
       print("Processing {}".format(unique_id))
-      feature = unique_id_to_feature[unique_id]
-      output_json = collections.OrderedDict()
-      output_json["linex_index"] = unique_id
-      all_features = []
-      for (i, input_id) in enumerate(feature.input_ids):
-        all_layers = []
-        for (j, layer_index) in enumerate(layer_indexes):
-          layer_output = result["layer_output_%d" % j]
-          layers = collections.OrderedDict()
-          layers["index"] = layer_index
-          layers["values"] = [
-              round(float(x), 6) for x in layer_output[i:(i + 1)].flat
-          ]
-          all_layers.append(layers)
-        features = collections.OrderedDict()
-        features["layers"] = all_layers
-        all_features.append(features)
-      output_json["features"] = all_features
-      writer.write(json.dumps(output_json) + "\n")
+      df.loc[i] = [unique_id, 0]
+      df.loc[i].output = result["layer_output_%d" % 0]
+      i = i + 1
+  df.to_pickle(FLAGS.output_file)
 
 
 
