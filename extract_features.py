@@ -195,7 +195,11 @@ def model_fn_builder(bert_config, init_checkpoint, layer_indexes, use_tpu,
     }
 
     for (i, layer_index) in enumerate(layer_indexes):
-      predictions["layer_output_%d" % i] = all_layers[layer_index]
+      i_layer = all_layers[layer_index]
+      m = tf.expand_dims(tf.cast(input_mask, tf.float32), axis=2)
+      only_seq = tf.multiply(i_layer, m)
+      avg_seq = tf.reduce_mean(only_seq, axis = 1)
+      predictions["layer_output_%d" % i] = avg_seq
 
     output_spec = tf.contrib.tpu.TPUEstimatorSpec(
         mode=mode, predictions=predictions, scaffold_fn=scaffold_fn)
@@ -318,6 +322,7 @@ def main(_):
         all_features.append(features)
       output_json["features"] = all_features
       writer.write(json.dumps(output_json) + "\n")
+
 
 
 if __name__ == "__main__":
