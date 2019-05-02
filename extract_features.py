@@ -21,11 +21,10 @@ from __future__ import print_function
 import codecs
 import collections
 import json
-import re
 
 import modeling
-import tokenization
 import tensorflow as tf
+import pandas as pd
 
 flags = tf.flags
 
@@ -35,7 +34,7 @@ flags.DEFINE_string("input_file", None, "")
 
 flags.DEFINE_string("output_file", None, "")
 
-flags.DEFINE_string("layers", "-1,-2,-3,-4", "")
+flags.DEFINE_string("layers", "-1", "")
 
 flags.DEFINE_string(
     "bert_config_file", None,
@@ -43,7 +42,7 @@ flags.DEFINE_string(
     "This specifies the model architecture.")
 
 flags.DEFINE_integer(
-    "max_seq_length", 128,
+    "max_seq_length", 512,
     "The maximum total input sequence length after WordPiece tokenization. "
     "Sequences longer than this will be truncated, and sequences shorter "
     "than this will be padded.")
@@ -60,7 +59,7 @@ flags.DEFINE_bool(
     "Whether to lower case the input text. Should be True for uncased "
     "models and False for cased models.")
 
-flags.DEFINE_integer("batch_size", 32, "Batch size for predictions.")
+flags.DEFINE_integer("batch_size", 16, "Batch size for predictions.")
 
 flags.DEFINE_bool("use_tpu", False, "Whether to use TPU or GPU/CPU.")
 
@@ -80,18 +79,16 @@ flags.DEFINE_bool(
 
 class InputExample(object):
 
-  def __init__(self, unique_id, text_a, text_b):
+  def __init__(self, unique_id, sequence):
     self.unique_id = unique_id
-    self.text_a = text_a
-    self.text_b = text_b
+    self.sequence = sequence
 
 
 class InputFeatures(object):
   """A single set of features of data."""
 
-  def __init__(self, unique_id, tokens, input_ids, input_mask, input_type_ids):
+  def __init__(self, unique_id, input_ids, input_mask, input_type_ids):
     self.unique_id = unique_id
-    self.tokens = tokens
     self.input_ids = input_ids
     self.input_mask = input_mask
     self.input_type_ids = input_type_ids
@@ -122,7 +119,7 @@ def input_fn_builder(features, seq_length):
     # not TPU compatible. The right way to load data is with TFRecordReader.
     d = tf.data.Dataset.from_tensor_slices({
         "unique_ids":
-            tf.constant(all_unique_ids, shape=[num_examples], dtype=tf.int32),
+            tf.constant(all_unique_ids, shape=[num_examples], dtype=tf.string),
         "input_ids":
             tf.constant(
                 all_input_ids, shape=[num_examples, seq_length],
@@ -207,63 +204,14 @@ def model_fn_builder(bert_config, init_checkpoint, layer_indexes, use_tpu,
   return model_fn
 
 
-def convert_examples_to_features(examples, seq_length, tokenizer):
+def convert_examples_to_features(examples, seq_length):
   """Loads a data file into a list of `InputBatch`s."""
 
   features = []
   for (ex_index, example) in enumerate(examples):
-    tokens_a = tokenizer.tokenize(example.text_a)
 
-    tokens_b = None
-    if example.text_b:
-      tokens_b = tokenizer.tokenize(example.text_b)
-
-    if tokens_b:
-      # Modifies `tokens_a` and `tokens_b` in place so that the total
-      # length is less than the specified length.
-      # Account for [CLS], [SEP], [SEP] with "- 3"
-      _truncate_seq_pair(tokens_a, tokens_b, seq_length - 3)
-    else:
-      # Account for [CLS] and [SEP] with "- 2"
-      if len(tokens_a) > seq_length - 2:
-        tokens_a = tokens_a[0:(seq_length - 2)]
-
-    # The convention in BERT is:
-    # (a) For sequence pairs:
-    #  tokens:   [CLS] is this jack ##son ##ville ? [SEP] no it is not . [SEP]
-    #  type_ids: 0     0  0    0    0     0       0 0     1  1  1  1   1 1
-    # (b) For single sequences:
-    #  tokens:   [CLS] the dog is hairy . [SEP]
-    #  type_ids: 0     0   0   0  0     0 0
-    #
-    # Where "type_ids" are used to indicate whether this is the first
-    # sequence or the second sequence. The embedding vectors for `type=0` and
-    # `type=1` were learned during pre-training and are added to the wordpiece
-    # embedding vector (and position vector). This is not *strictly* necessary
-    # since the [SEP] token unambiguously separates the sequences, but it makes
-    # it easier for the model to learn the concept of sequences.
-    #
-    # For classification tasks, the first vector (corresponding to [CLS]) is
-    # used as as the "sentence vector". Note that this only makes sense because
-    # the entire model is fine-tuned.
-    tokens = []
-    input_type_ids = []
-    tokens.append("[CLS]")
-    input_type_ids.append(0)
-    for token in tokens_a:
-      tokens.append(token)
-      input_type_ids.append(0)
-    tokens.append("[SEP]")
-    input_type_ids.append(0)
-
-    if tokens_b:
-      for token in tokens_b:
-        tokens.append(token)
-        input_type_ids.append(1)
-      tokens.append("[SEP]")
-      input_type_ids.append(1)
-
-    input_ids = tokenizer.convert_tokens_to_ids(tokens)
+    input_ids = example.sequence
+    input_type_ids = [1] * len(input_ids)
 
     # The mask has 1 for real tokens and 0 for padding tokens. Only real
     # tokens are attended to.
@@ -282,8 +230,6 @@ def convert_examples_to_features(examples, seq_length, tokenizer):
     if ex_index < 5:
       tf.logging.info("*** Example ***")
       tf.logging.info("unique_id: %s" % (example.unique_id))
-      tf.logging.info("tokens: %s" % " ".join(
-          [tokenization.printable_text(x) for x in tokens]))
       tf.logging.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
       tf.logging.info("input_mask: %s" % " ".join([str(x) for x in input_mask]))
       tf.logging.info(
@@ -292,51 +238,18 @@ def convert_examples_to_features(examples, seq_length, tokenizer):
     features.append(
         InputFeatures(
             unique_id=example.unique_id,
-            tokens=tokens,
             input_ids=input_ids,
             input_mask=input_mask,
             input_type_ids=input_type_ids))
   return features
 
 
-def _truncate_seq_pair(tokens_a, tokens_b, max_length):
-  """Truncates a sequence pair in place to the maximum length."""
-
-  # This is a simple heuristic which will always truncate the longer sequence
-  # one token at a time. This makes more sense than truncating an equal percent
-  # of tokens from each, since if one sequence is very short then each token
-  # that's truncated likely contains more information than a longer sequence.
-  while True:
-    total_length = len(tokens_a) + len(tokens_b)
-    if total_length <= max_length:
-      break
-    if len(tokens_a) > len(tokens_b):
-      tokens_a.pop()
-    else:
-      tokens_b.pop()
-
-
 def read_examples(input_file):
   """Read a list of `InputExample`s from an input file."""
   examples = []
-  unique_id = 0
-  with tf.gfile.GFile(input_file, "r") as reader:
-    while True:
-      line = tokenization.convert_to_unicode(reader.readline())
-      if not line:
-        break
-      line = line.strip()
-      text_a = None
-      text_b = None
-      m = re.match(r"^(.*) \|\|\| (.*)$", line)
-      if m is None:
-        text_a = line
-      else:
-        text_a = m.group(1)
-        text_b = m.group(2)
-      examples.append(
-          InputExample(unique_id=unique_id, text_a=text_a, text_b=text_b))
-      unique_id += 1
+  input = pd.read_pickle(input_file)
+  for index, row in input.iterrows():
+      examples.append(InputExample(unique_id=row[1], sequence=row[2]))
   return examples
 
 
@@ -347,8 +260,6 @@ def main(_):
 
   bert_config = modeling.BertConfig.from_json_file(FLAGS.bert_config_file)
 
-  tokenizer = tokenization.FullTokenizer(
-      vocab_file=FLAGS.vocab_file, do_lower_case=FLAGS.do_lower_case)
 
   is_per_host = tf.contrib.tpu.InputPipelineConfig.PER_HOST_V2
   run_config = tf.contrib.tpu.RunConfig(
@@ -359,8 +270,7 @@ def main(_):
 
   examples = read_examples(FLAGS.input_file)
 
-  features = convert_examples_to_features(
-      examples=examples, seq_length=FLAGS.max_seq_length, tokenizer=tokenizer)
+  features = convert_examples_to_features(examples=examples, seq_length=FLAGS.max_seq_length)
 
   unique_id_to_feature = {}
   for feature in features:
@@ -387,12 +297,13 @@ def main(_):
   with codecs.getwriter("utf-8")(tf.gfile.Open(FLAGS.output_file,
                                                "w")) as writer:
     for result in estimator.predict(input_fn, yield_single_examples=True):
-      unique_id = int(result["unique_id"])
+      unique_id = result["unique_id"].decode("utf-8")
+      print("Processing {}".format(unique_id))
       feature = unique_id_to_feature[unique_id]
       output_json = collections.OrderedDict()
       output_json["linex_index"] = unique_id
       all_features = []
-      for (i, token) in enumerate(feature.tokens):
+      for (i, input_id) in enumerate(feature.input_ids):
         all_layers = []
         for (j, layer_index) in enumerate(layer_indexes):
           layer_output = result["layer_output_%d" % j]
@@ -403,7 +314,6 @@ def main(_):
           ]
           all_layers.append(layers)
         features = collections.OrderedDict()
-        features["token"] = token
         features["layers"] = all_layers
         all_features.append(features)
       output_json["features"] = all_features
@@ -412,7 +322,7 @@ def main(_):
 
 if __name__ == "__main__":
   flags.mark_flag_as_required("input_file")
-  flags.mark_flag_as_required("vocab_file")
+  # flags.mark_flag_as_required("vocab_file")
   flags.mark_flag_as_required("bert_config_file")
   flags.mark_flag_as_required("init_checkpoint")
   flags.mark_flag_as_required("output_file")
