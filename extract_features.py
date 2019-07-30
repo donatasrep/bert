@@ -34,7 +34,7 @@ flags.DEFINE_string("input_file", None, "")
 
 flags.DEFINE_string("output_file", None, "")
 
-flags.DEFINE_string("layers", "-1", "")
+flags.DEFINE_string("layers", "-1,-2,-3,-4,-5,-6,-7,-8", "")
 
 flags.DEFINE_string(
     "bert_config_file", None,
@@ -300,13 +300,17 @@ def main(_):
 
   # with codecs.getwriter("utf-8")(tf.gfile.Open(FLAGS.output_file,
   #                                              "w")) as writer:
-  df = pd.DataFrame(columns=['uniprot_id', 'output'])
+  columns = ['uniprot_id']
+  for (i, layer_index) in enumerate(layer_indexes):
+      columns.append("layer_output_%d" % i)
+  df = pd.DataFrame(columns=columns)
   i = 0
   for result in estimator.predict(input_fn, yield_single_examples=True):
       unique_id = result["unique_id"].decode("utf-8")
       print("Processing {}".format(unique_id))
-      df.loc[i] = [unique_id, 0]
-      df.loc[i].output = result["layer_output_%d" % 0]
+      df.loc[i] = [unique_id, *columns[1:]]
+      for (l_i, layer_index) in enumerate(layer_indexes):
+        df.loc[i]["layer_output_%d" % l_i] = result["layer_output_%d" % l_i]
       i = i + 1
   df.to_pickle(FLAGS.output_file)
 
