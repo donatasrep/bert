@@ -22,6 +22,8 @@ import codecs
 import collections
 import json
 
+from common.bio.constants import AMINO_ACID_TO_ID
+
 import modeling
 import tensorflow as tf
 import pandas as pd
@@ -214,7 +216,10 @@ def convert_examples_to_features(examples, seq_length):
   features = []
   for (ex_index, example) in enumerate(examples):
 
-    input_ids = example.sequence
+    if isinstance(example.sequence, str):
+        input_ids = [AMINO_ACID_TO_ID[a] for a in example.sequence]
+    else:
+        input_ids = example.sequence
     input_type_ids = [1] * len(input_ids)
 
     # The mask has 1 for real tokens and 0 for padding tokens. Only real
@@ -236,8 +241,7 @@ def convert_examples_to_features(examples, seq_length):
       tf.logging.info("unique_id: %s" % (example.unique_id))
       tf.logging.info("input_ids: %s" % " ".join([str(x) for x in input_ids]))
       tf.logging.info("input_mask: %s" % " ".join([str(x) for x in input_mask]))
-      tf.logging.info(
-          "input_type_ids: %s" % " ".join([str(x) for x in input_type_ids]))
+      tf.logging.info("input_type_ids: %s" % " ".join([str(x) for x in input_type_ids]))
 
     features.append(
         InputFeatures(
