@@ -170,6 +170,7 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
 
                 scaffold_fn = tpu_scaffold
             else:
+                tf.logging.info("****** Loading from %s", init_checkpoint)
                 tf.train.init_from_checkpoint(init_checkpoint, assignment_map)
 
         tf.logging.info("**** Trainable Variables ****")
@@ -177,8 +178,8 @@ def model_fn_builder(bert_config, init_checkpoint, learning_rate,
             init_string = ""
             if var.name in initialized_variable_names:
                 init_string = ", *INIT_FROM_CKPT*"
-            tf.logging.info("  name = %s, shape = %s%s", var.name, var.shape,
-                            init_string)
+#             tf.logging.info("  name = %s, shape = %s%s", var.name, var.shape,
+#                             init_string)
         tf.logging.info("**** {} parameters ****".format(np.sum([np.prod(v.shape) for v in tf.trainable_variables()])))
 
         n_predictions = masked_lm_ids.get_shape().as_list()[-1]
@@ -403,7 +404,7 @@ def _decode_record(record, max_seq_length, max_predictions_per_seq, vocab_size, 
         "length": tf.FixedLenFeature([], tf.int64),
         'seq': tf.FixedLenSequenceFeature([], tf.int64, allow_missing=True)
     })
-
+    max_seq_length=280
     # tf.Example only supports tf.int64, but the TPU only supports tf.int32.
     # So cast all int64 to int32.
     for name in list(feature.keys()):
