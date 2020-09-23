@@ -1,0 +1,854 @@
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:516: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:517: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:518: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:519: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:520: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:525: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:541: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:542: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:543: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:544: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:545: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:550: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/optimization.py:86: The name tf.train.Optimizer is deprecated. Please use tf.compat.v1.train.Optimizer instead.
+
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/absl/flags/_validators.py:359: UserWarning: Flag --input_file has a non-None default value; therefore, mark_flag_as_required will pass even if flag is not specified in the command line!
+  'command line!' % flag_name)
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/absl/flags/_validators.py:359: UserWarning: Flag --bert_config_file has a non-None default value; therefore, mark_flag_as_required will pass even if flag is not specified in the command line!
+  'command line!' % flag_name)
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/absl/flags/_validators.py:359: UserWarning: Flag --output_dir has a non-None default value; therefore, mark_flag_as_required will pass even if flag is not specified in the command line!
+  'command line!' % flag_name)
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:583: The name tf.app.run is deprecated. Please use tf.compat.v1.app.run instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:456: The name tf.logging.set_verbosity is deprecated. Please use tf.compat.v1.logging.set_verbosity instead.
+
+W0527 13:31:00.086789 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:456: The name tf.logging.set_verbosity is deprecated. Please use tf.compat.v1.logging.set_verbosity instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:456: The name tf.logging.INFO is deprecated. Please use tf.compat.v1.logging.INFO instead.
+
+W0527 13:31:00.086959 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:456: The name tf.logging.INFO is deprecated. Please use tf.compat.v1.logging.INFO instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:93: The name tf.gfile.GFile is deprecated. Please use tf.io.gfile.GFile instead.
+
+W0527 13:31:00.087133 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/modeling.py:93: The name tf.gfile.GFile is deprecated. Please use tf.io.gfile.GFile instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:463: The name tf.gfile.MakeDirs is deprecated. Please use tf.io.gfile.makedirs instead.
+
+W0527 13:31:00.087444 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:463: The name tf.gfile.MakeDirs is deprecated. Please use tf.io.gfile.makedirs instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:467: The name tf.gfile.Glob is deprecated. Please use tf.io.gfile.glob instead.
+
+W0527 13:31:00.087558 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:467: The name tf.gfile.Glob is deprecated. Please use tf.io.gfile.glob instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:469: The name tf.logging.info is deprecated. Please use tf.compat.v1.logging.info instead.
+
+W0527 13:31:00.321064 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:469: The name tf.logging.info is deprecated. Please use tf.compat.v1.logging.info instead.
+
+INFO:tensorflow:*** Input Files ***
+I0527 13:31:00.321234 140316806956864 run_pretraining.py:469] *** Input Files ***
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/0.tfrecords.gz
+I0527 13:31:00.321298 140316806956864 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/0.tfrecords.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/3.tfrecords.gz
+I0527 13:31:00.321352 140316806956864 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/3.tfrecords.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/8.tfrecords.gz
+I0527 13:31:00.321401 140316806956864 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/8.tfrecords.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/4.tfrecords.gz
+I0527 13:31:00.321457 140316806956864 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/4.tfrecords.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/6.tfrecords.gz
+I0527 13:31:00.321505 140316806956864 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/6.tfrecords.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/9.tfrecords.gz
+I0527 13:31:00.321551 140316806956864 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/9.tfrecords.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/7.tfrecords.gz
+I0527 13:31:00.321596 140316806956864 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/7.tfrecords.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/5.tfrecords.gz
+I0527 13:31:00.321642 140316806956864 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/5.tfrecords.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/1.tfrecords.gz
+I0527 13:31:00.321702 140316806956864 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/1.tfrecords.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/2.tfrecords.gz
+I0527 13:31:00.321745 140316806956864 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/2.tfrecords.gz
+WARNING:tensorflow:Estimator's model_fn (<function model_fn_builder.<locals>.model_fn at 0x7f9d9e1ea158>) includes params argument, but params are not passed to Estimator.
+W0527 13:31:00.322224 140316806956864 estimator.py:1984] Estimator's model_fn (<function model_fn_builder.<locals>.model_fn at 0x7f9d9e1ea158>) includes params argument, but params are not passed to Estimator.
+INFO:tensorflow:Using config: {'_model_dir': 'weights/evotune', '_tf_random_seed': None, '_save_summary_steps': 100, '_save_checkpoints_steps': 1000, '_save_checkpoints_secs': None, '_session_config': allow_soft_placement: true
+graph_options {
+  rewrite_options {
+    meta_optimizer_iterations: ONE
+  }
+}
+, '_keep_checkpoint_max': 5, '_keep_checkpoint_every_n_hours': 10000, '_log_step_count_steps': None, '_train_distribute': None, '_device_fn': None, '_protocol': None, '_eval_distribute': None, '_experimental_distribute': None, '_experimental_max_worker_delay_secs': None, '_service': None, '_cluster_spec': <tensorflow.python.training.server_lib.ClusterSpec object at 0x7f9d9e1ddd30>, '_task_type': 'worker', '_task_id': 0, '_global_id_in_cluster': 0, '_master': '', '_evaluation_master': '', '_is_chief': True, '_num_ps_replicas': 0, '_num_worker_replicas': 1, '_tpu_config': TPUConfig(iterations_per_loop=1000, num_shards=8, num_cores_per_replica=None, per_host_input_for_training=3, tpu_job_name=None, initial_infeed_sleep_secs=None, input_partition_dims=None, eval_training_input_configuration=2), '_cluster': None}
+I0527 13:31:00.323109 140316806956864 estimator.py:209] Using config: {'_model_dir': 'weights/evotune', '_tf_random_seed': None, '_save_summary_steps': 100, '_save_checkpoints_steps': 1000, '_save_checkpoints_secs': None, '_session_config': allow_soft_placement: true
+graph_options {
+  rewrite_options {
+    meta_optimizer_iterations: ONE
+  }
+}
+, '_keep_checkpoint_max': 5, '_keep_checkpoint_every_n_hours': 10000, '_log_step_count_steps': None, '_train_distribute': None, '_device_fn': None, '_protocol': None, '_eval_distribute': None, '_experimental_distribute': None, '_experimental_max_worker_delay_secs': None, '_service': None, '_cluster_spec': <tensorflow.python.training.server_lib.ClusterSpec object at 0x7f9d9e1ddd30>, '_task_type': 'worker', '_task_id': 0, '_global_id_in_cluster': 0, '_master': '', '_evaluation_master': '', '_is_chief': True, '_num_ps_replicas': 0, '_num_worker_replicas': 1, '_tpu_config': TPUConfig(iterations_per_loop=1000, num_shards=8, num_cores_per_replica=None, per_host_input_for_training=3, tpu_job_name=None, initial_infeed_sleep_secs=None, input_partition_dims=None, eval_training_input_configuration=2), '_cluster': None}
+INFO:tensorflow:_TPUContext: eval_on_tpu True
+I0527 13:31:00.323319 140316806956864 tpu_context.py:209] _TPUContext: eval_on_tpu True
+WARNING:tensorflow:eval_on_tpu ignored because use_tpu is False.
+W0527 13:31:00.323492 140316806956864 tpu_context.py:211] eval_on_tpu ignored because use_tpu is False.
+INFO:tensorflow:***** Running training *****
+I0527 13:31:00.323617 140316806956864 run_pretraining.py:517] ***** Running training *****
+INFO:tensorflow:  Batch size = 24
+I0527 13:31:00.323676 140316806956864 run_pretraining.py:518]   Batch size = 24
+WARNING:tensorflow:From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/training/training_util.py:236: Variable.initialized_value (from tensorflow.python.ops.variables) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use Variable.read_value. Variables in 2.X are initialized automatically both in eager and graph (inside tf.defun) contexts.
+W0527 13:31:00.331842 140316806956864 deprecation.py:323] From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/training/training_util.py:236: Variable.initialized_value (from tensorflow.python.ops.variables) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use Variable.read_value. Variables in 2.X are initialized automatically both in eager and graph (inside tf.defun) contexts.
+INFO:tensorflow:Using 9 threads
+I0527 13:31:00.340133 140316806956864 run_pretraining.py:329] Using 9 threads
+INFO:tensorflow:There are 10 files for training
+I0527 13:31:00.340231 140316806956864 run_pretraining.py:337] There are 10 files for training
+INFO:tensorflow:[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+I0527 13:31:00.340296 140316806956864 run_pretraining.py:339] [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:357: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.experimental.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.experimental_determinstic`.
+W0527 13:31:00.344578 140316806956864 deprecation.py:323] From /home/donatas_repecka/workspace/bert/run_pretraining.py:357: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.experimental.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.experimental_determinstic`.
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:386: map_and_batch (from tensorflow.python.data.experimental.ops.batching) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map(map_func, num_parallel_calls)` followed by `tf.data.Dataset.batch(batch_size, drop_remainder)`. Static tf.data optimizations will take care of using the fused implementation.
+W0527 13:31:00.367233 140316806956864 deprecation.py:323] From /home/donatas_repecka/workspace/bert/run_pretraining.py:386: map_and_batch (from tensorflow.python.data.experimental.ops.batching) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map(map_func, num_parallel_calls)` followed by `tf.data.Dataset.batch(batch_size, drop_remainder)`. Static tf.data optimizations will take care of using the fused implementation.
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:403: The name tf.parse_single_example is deprecated. Please use tf.io.parse_single_example instead.
+
+W0527 13:31:00.368429 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:403: The name tf.parse_single_example is deprecated. Please use tf.io.parse_single_example instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:404: The name tf.FixedLenFeature is deprecated. Please use tf.io.FixedLenFeature instead.
+
+W0527 13:31:00.368552 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:404: The name tf.FixedLenFeature is deprecated. Please use tf.io.FixedLenFeature instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:405: The name tf.FixedLenSequenceFeature is deprecated. Please use tf.io.FixedLenSequenceFeature instead.
+
+W0527 13:31:00.368668 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:405: The name tf.FixedLenSequenceFeature is deprecated. Please use tf.io.FixedLenSequenceFeature instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:413: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+W0527 13:31:00.370608 140316806956864 deprecation.py:323] From /home/donatas_repecka/workspace/bert/run_pretraining.py:413: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+2020-05-27 13:31:00.406907: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcuda.so.1
+2020-05-27 13:31:00.444547: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-27 13:31:00.445196: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1640] Found device 0 with properties: 
+name: Tesla V100-SXM2-16GB major: 7 minor: 0 memoryClockRate(GHz): 1.53
+pciBusID: 0000:00:04.0
+2020-05-27 13:31:00.445424: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudart.so.10.0
+2020-05-27 13:31:00.446621: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcublas.so.10.0
+2020-05-27 13:31:00.447704: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcufft.so.10.0
+2020-05-27 13:31:00.448002: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcurand.so.10.0
+2020-05-27 13:31:00.449346: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusolver.so.10.0
+2020-05-27 13:31:00.450649: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusparse.so.10.0
+2020-05-27 13:31:00.454736: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudnn.so.7
+2020-05-27 13:31:00.454888: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-27 13:31:00.455537: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-27 13:31:00.456110: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1763] Adding visible gpu devices: 0
+INFO:tensorflow:Calling model_fn.
+I0527 13:31:00.492600 140316806956864 estimator.py:1145] Calling model_fn.
+INFO:tensorflow:Running train on CPU
+I0527 13:31:00.492800 140316806956864 tpu_estimator.py:2965] Running train on CPU
+INFO:tensorflow:*** Features ***
+I0527 13:31:00.493082 140316806956864 run_pretraining.py:132] *** Features ***
+INFO:tensorflow:  name = input_ids, shape = (24, 280)
+I0527 13:31:00.493189 140316806956864 run_pretraining.py:134]   name = input_ids, shape = (24, 280)
+INFO:tensorflow:  name = input_mask, shape = (24, 280)
+I0527 13:31:00.493279 140316806956864 run_pretraining.py:134]   name = input_mask, shape = (24, 280)
+INFO:tensorflow:  name = length, shape = (24,)
+I0527 13:31:00.493348 140316806956864 run_pretraining.py:134]   name = length, shape = (24,)
+INFO:tensorflow:  name = masked_lm_ids, shape = (24, 20)
+I0527 13:31:00.493420 140316806956864 run_pretraining.py:134]   name = masked_lm_ids, shape = (24, 20)
+INFO:tensorflow:  name = masked_lm_positions, shape = (24, 20)
+I0527 13:31:00.493486 140316806956864 run_pretraining.py:134]   name = masked_lm_positions, shape = (24, 20)
+INFO:tensorflow:  name = masked_lm_weights, shape = (24, 20)
+I0527 13:31:00.493552 140316806956864 run_pretraining.py:134]   name = masked_lm_weights, shape = (24, 20)
+INFO:tensorflow:  name = seq, shape = (24, 280)
+I0527 13:31:00.493626 140316806956864 run_pretraining.py:134]   name = seq, shape = (24, 280)
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:171: The name tf.variable_scope is deprecated. Please use tf.compat.v1.variable_scope instead.
+
+W0527 13:31:00.495307 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/modeling.py:171: The name tf.variable_scope is deprecated. Please use tf.compat.v1.variable_scope instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:408: The name tf.get_variable is deprecated. Please use tf.compat.v1.get_variable instead.
+
+W0527 13:31:00.496620 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/modeling.py:408: The name tf.get_variable is deprecated. Please use tf.compat.v1.get_variable instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:358: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+W0527 13:31:00.533362 140316806956864 deprecation.py:506] From /home/donatas_repecka/workspace/bert/modeling.py:358: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:674: dense (from tensorflow.python.layers.core) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.dense instead.
+W0527 13:31:00.546087 140316806956864 deprecation.py:323] From /home/donatas_repecka/workspace/bert/modeling.py:674: dense (from tensorflow.python.layers.core) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.dense instead.
+INFO:tensorflow:****** Loading from weights/evotune/
+I0527 13:31:02.844530 140316806956864 run_pretraining.py:173] ****** Loading from weights/evotune/
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:174: The name tf.train.init_from_checkpoint is deprecated. Please use tf.compat.v1.train.init_from_checkpoint instead.
+
+W0527 13:31:02.867769 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:174: The name tf.train.init_from_checkpoint is deprecated. Please use tf.compat.v1.train.init_from_checkpoint instead.
+
+INFO:tensorflow:**** Trainable Variables ****
+I0527 13:31:03.539428 140316806956864 run_pretraining.py:176] **** Trainable Variables ****
+INFO:tensorflow:**** 86648854 parameters ****
+I0527 13:31:03.545447 140316806956864 run_pretraining.py:183] **** 86648854 parameters ****
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/optimization.py:27: The name tf.train.get_or_create_global_step is deprecated. Please use tf.compat.v1.train.get_or_create_global_step instead.
+
+W0527 13:31:03.551074 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/optimization.py:27: The name tf.train.get_or_create_global_step is deprecated. Please use tf.compat.v1.train.get_or_create_global_step instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/optimization.py:32: The name tf.train.polynomial_decay is deprecated. Please use tf.compat.v1.train.polynomial_decay instead.
+
+W0527 13:31:03.551774 140316806956864 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/optimization.py:32: The name tf.train.polynomial_decay is deprecated. Please use tf.compat.v1.train.polynomial_decay instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/keras/optimizer_v2/learning_rate_schedule.py:409: div (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Deprecated in favor of operator or tf.math.divide.
+W0527 13:31:03.555979 140316806956864 deprecation.py:323] From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/keras/optimizer_v2/learning_rate_schedule.py:409: div (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Deprecated in favor of operator or tf.math.divide.
+WARNING:tensorflow:From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/ops/math_grad.py:1205: add_dispatch_support.<locals>.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+W0527 13:31:03.623974 140316806956864 deprecation.py:323] From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/ops/math_grad.py:1205: add_dispatch_support.<locals>.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+INFO:tensorflow:Done calling model_fn.
+I0527 13:31:11.050473 140316806956864 estimator.py:1147] Done calling model_fn.
+INFO:tensorflow:Create CheckpointSaverHook.
+I0527 13:31:11.051838 140316806956864 basic_session_run_hooks.py:541] Create CheckpointSaverHook.
+INFO:tensorflow:Graph was finalized.
+I0527 13:31:14.119967 140316806956864 monitored_session.py:240] Graph was finalized.
+2020-05-27 13:31:14.120348: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-05-27 13:31:14.126326: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2300000000 Hz
+2020-05-27 13:31:14.126907: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5624b49bc9b0 executing computations on platform Host. Devices:
+2020-05-27 13:31:14.126936: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
+2020-05-27 13:31:14.127305: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-27 13:31:14.127997: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1640] Found device 0 with properties: 
+name: Tesla V100-SXM2-16GB major: 7 minor: 0 memoryClockRate(GHz): 1.53
+pciBusID: 0000:00:04.0
+2020-05-27 13:31:14.128075: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudart.so.10.0
+2020-05-27 13:31:14.128092: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcublas.so.10.0
+2020-05-27 13:31:14.128106: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcufft.so.10.0
+2020-05-27 13:31:14.128119: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcurand.so.10.0
+2020-05-27 13:31:14.128131: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusolver.so.10.0
+2020-05-27 13:31:14.128154: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusparse.so.10.0
+2020-05-27 13:31:14.128168: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudnn.so.7
+2020-05-27 13:31:14.128283: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-27 13:31:14.128969: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-27 13:31:14.129596: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1763] Adding visible gpu devices: 0
+2020-05-27 13:31:14.129647: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudart.so.10.0
+2020-05-27 13:31:14.289805: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1181] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-05-27 13:31:14.289846: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1187]      0 
+2020-05-27 13:31:14.289855: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1200] 0:   N 
+2020-05-27 13:31:14.290200: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-27 13:31:14.290923: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-27 13:31:14.291832: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-05-27 13:31:14.292529: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1326] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 15052 MB memory) -> physical GPU (device: 0, name: Tesla V100-SXM2-16GB, pci bus id: 0000:00:04.0, compute capability: 7.0)
+2020-05-27 13:31:14.294425: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5624b804bf50 executing computations on platform CUDA. Devices:
+2020-05-27 13:31:14.294452: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Tesla V100-SXM2-16GB, Compute Capability 7.0
+WARNING:tensorflow:From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/training/saver.py:1276: checkpoint_exists (from tensorflow.python.training.checkpoint_management) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use standard file APIs to check for files with this prefix.
+W0527 13:31:14.295587 140316806956864 deprecation.py:323] From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/training/saver.py:1276: checkpoint_exists (from tensorflow.python.training.checkpoint_management) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use standard file APIs to check for files with this prefix.
+INFO:tensorflow:Restoring parameters from weights/evotune/model.ckpt-1404000
+I0527 13:31:14.296718 140316806956864 saver.py:1280] Restoring parameters from weights/evotune/model.ckpt-1404000
+WARNING:tensorflow:From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/training/saver.py:1066: get_checkpoint_mtimes (from tensorflow.python.training.checkpoint_management) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use standard file utilities to get mtimes.
+W0527 13:31:17.152606 140316806956864 deprecation.py:323] From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/training/saver.py:1066: get_checkpoint_mtimes (from tensorflow.python.training.checkpoint_management) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use standard file utilities to get mtimes.
+2020-05-27 13:31:18.009431: W tensorflow/compiler/jit/mark_for_compilation_pass.cc:1412] (One-time warning): Not using XLA:CPU for cluster because envvar TF_XLA_FLAGS=--tf_xla_cpu_global_jit was not set.  If you want XLA:CPU, either set that envvar, or use experimental_jit_scope to enable XLA:CPU.  To confirm that XLA is active, pass --vmodule=xla_compilation_cache=1 (as a proper command-line flag, not via TF_XLA_FLAGS) or set the envvar XLA_FLAGS=--xla_hlo_profile.
+INFO:tensorflow:Running local_init_op.
+I0527 13:31:18.093993 140316806956864 session_manager.py:500] Running local_init_op.
+INFO:tensorflow:Done running local_init_op.
+I0527 13:31:18.261050 140316806956864 session_manager.py:502] Done running local_init_op.
+INFO:tensorflow:Saving checkpoints for 1404000 into weights/evotune/model.ckpt.
+I0527 13:31:24.577625 140316806956864 basic_session_run_hooks.py:606] Saving checkpoints for 1404000 into weights/evotune/model.ckpt.
+Traceback (most recent call last):
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/home/donatas_repecka/workspace/bert/run_pretraining.py", line 26, in <module>
+    from tensorflow.contrib.tpu import TPUEstimator, TPUEstimatorSpec
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/site-packages/tensorflow/contrib/__init__.py", line 31, in <module>
+    from tensorflow.contrib import cloud
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/site-packages/tensorflow/contrib/cloud/__init__.py", line 24, in <module>
+    from tensorflow.contrib.cloud.python.ops.bigquery_reader_ops import *
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/site-packages/tensorflow/contrib/cloud/python/ops/bigquery_reader_ops.py", line 21, in <module>
+    from tensorflow.contrib.cloud.python.ops import gen_bigquery_reader_ops
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/site-packages/tensorflow/contrib/cloud/python/ops/gen_bigquery_reader_ops.py", line 369, in <module>
+    _op_def_lib = _InitOpDefLibrary(b"\n\355\001\n\016BigQueryReader\032\024\n\rreader_handle\030\007\200\001\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"\024\n\nproject_id\022\006string\"\024\n\ndataset_id\022\006string\"\022\n\010table_id\022\006string\"\027\n\007columns\022\014list(string)\"\027\n\020timestamp_millis\022\003int\"\034\n\016test_end_point\022\006string\032\002\022\000\210\001\001\n\331\001\n GenerateBigQueryReaderPartitions\032\016\n\npartitions\030\007\"\024\n\nproject_id\022\006string\"\024\n\ndataset_id\022\006string\"\022\n\010table_id\022\006string\"\027\n\007columns\022\014list(string)\"\027\n\020timestamp_millis\022\003int\"\025\n\016num_partitions\022\003int\"\034\n\016test_end_point\022\006string\032\002\022\000")
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/site-packages/tensorflow/contrib/cloud/python/ops/gen_bigquery_reader_ops.py", line 277, in _InitOpDefLibrary
+    _op_def_registry.register_op_list(op_list)
+AttributeError: module 'tensorflow.python.framework.op_def_registry' has no attribute 'register_op_list'
+Traceback (most recent call last):
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/runpy.py", line 193, in _run_module_as_main
+    "__main__", mod_spec)
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/runpy.py", line 85, in _run_code
+    exec(code, run_globals)
+  File "/home/donatas_repecka/workspace/bert/run_pretraining.py", line 26, in <module>
+    from tensorflow.contrib.tpu import TPUEstimator, TPUEstimatorSpec
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/site-packages/tensorflow/contrib/__init__.py", line 31, in <module>
+    from tensorflow.contrib import cloud
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/site-packages/tensorflow/contrib/cloud/__init__.py", line 24, in <module>
+    from tensorflow.contrib.cloud.python.ops.bigquery_reader_ops import *
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/site-packages/tensorflow/contrib/cloud/python/ops/bigquery_reader_ops.py", line 21, in <module>
+    from tensorflow.contrib.cloud.python.ops import gen_bigquery_reader_ops
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/site-packages/tensorflow/contrib/cloud/python/ops/gen_bigquery_reader_ops.py", line 369, in <module>
+    _op_def_lib = _InitOpDefLibrary(b"\n\355\001\n\016BigQueryReader\032\024\n\rreader_handle\030\007\200\001\001\"\027\n\tcontainer\022\006string\032\002\022\000\"\031\n\013shared_name\022\006string\032\002\022\000\"\024\n\nproject_id\022\006string\"\024\n\ndataset_id\022\006string\"\022\n\010table_id\022\006string\"\027\n\007columns\022\014list(string)\"\027\n\020timestamp_millis\022\003int\"\034\n\016test_end_point\022\006string\032\002\022\000\210\001\001\n\331\001\n GenerateBigQueryReaderPartitions\032\016\n\npartitions\030\007\"\024\n\nproject_id\022\006string\"\024\n\ndataset_id\022\006string\"\022\n\010table_id\022\006string\"\027\n\007columns\022\014list(string)\"\027\n\020timestamp_millis\022\003int\"\025\n\016num_partitions\022\003int\"\034\n\016test_end_point\022\006string\032\002\022\000")
+  File "/home/donatas_repecka/anaconda3/lib/python3.7/site-packages/tensorflow/contrib/cloud/python/ops/gen_bigquery_reader_ops.py", line 277, in _InitOpDefLibrary
+    _op_def_registry.register_op_list(op_list)
+AttributeError: module 'tensorflow.python.framework.op_def_registry' has no attribute 'register_op_list'
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:516: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:517: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:518: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:519: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:520: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:525: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:541: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:542: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:543: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:544: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:545: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:550: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/optimization.py:86: The name tf.train.Optimizer is deprecated. Please use tf.compat.v1.train.Optimizer instead.
+
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/absl/flags/_validators.py:359: UserWarning: Flag --input_file has a non-None default value; therefore, mark_flag_as_required will pass even if flag is not specified in the command line!
+  'command line!' % flag_name)
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/absl/flags/_validators.py:359: UserWarning: Flag --bert_config_file has a non-None default value; therefore, mark_flag_as_required will pass even if flag is not specified in the command line!
+  'command line!' % flag_name)
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/absl/flags/_validators.py:359: UserWarning: Flag --output_dir has a non-None default value; therefore, mark_flag_as_required will pass even if flag is not specified in the command line!
+  'command line!' % flag_name)
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:583: The name tf.app.run is deprecated. Please use tf.compat.v1.app.run instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:456: The name tf.logging.set_verbosity is deprecated. Please use tf.compat.v1.logging.set_verbosity instead.
+
+W0602 15:22:58.542285 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:456: The name tf.logging.set_verbosity is deprecated. Please use tf.compat.v1.logging.set_verbosity instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:456: The name tf.logging.INFO is deprecated. Please use tf.compat.v1.logging.INFO instead.
+
+W0602 15:22:58.542433 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:456: The name tf.logging.INFO is deprecated. Please use tf.compat.v1.logging.INFO instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:93: The name tf.gfile.GFile is deprecated. Please use tf.io.gfile.GFile instead.
+
+W0602 15:22:58.542549 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/modeling.py:93: The name tf.gfile.GFile is deprecated. Please use tf.io.gfile.GFile instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:463: The name tf.gfile.MakeDirs is deprecated. Please use tf.io.gfile.makedirs instead.
+
+W0602 15:22:58.542856 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:463: The name tf.gfile.MakeDirs is deprecated. Please use tf.io.gfile.makedirs instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:467: The name tf.gfile.Glob is deprecated. Please use tf.io.gfile.glob instead.
+
+W0602 15:22:58.542986 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:467: The name tf.gfile.Glob is deprecated. Please use tf.io.gfile.glob instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:469: The name tf.logging.info is deprecated. Please use tf.compat.v1.logging.info instead.
+
+W0602 15:22:58.649140 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:469: The name tf.logging.info is deprecated. Please use tf.compat.v1.logging.info instead.
+
+INFO:tensorflow:*** Input Files ***
+I0602 15:22:58.649356 140465457649472 run_pretraining.py:469] *** Input Files ***
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/15.tfrecord.gz
+I0602 15:22:58.649446 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/15.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/13.tfrecord.gz
+I0602 15:22:58.649520 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/13.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/4.tfrecord.gz
+I0602 15:22:58.649588 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/4.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/14.tfrecord.gz
+I0602 15:22:58.649651 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/14.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/3.tfrecord.gz
+I0602 15:22:58.649715 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/3.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/7.tfrecord.gz
+I0602 15:22:58.649779 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/7.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/1.tfrecord.gz
+I0602 15:22:58.649841 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/1.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/9.tfrecord.gz
+I0602 15:22:58.649903 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/9.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/12.tfrecord.gz
+I0602 15:22:58.649967 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/12.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/0.tfrecord.gz
+I0602 15:22:58.650072 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/0.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/6.tfrecord.gz
+I0602 15:22:58.650135 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/6.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/2.tfrecord.gz
+I0602 15:22:58.650218 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/2.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/10.tfrecord.gz
+I0602 15:22:58.650284 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/10.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/8.tfrecord.gz
+I0602 15:22:58.650351 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/8.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/11.tfrecord.gz
+I0602 15:22:58.650459 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/11.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/5.tfrecord.gz
+I0602 15:22:58.650547 140465457649472 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/5.tfrecord.gz
+WARNING:tensorflow:Estimator's model_fn (<function model_fn_builder.<locals>.model_fn at 0x7fc03a397b70>) includes params argument, but params are not passed to Estimator.
+W0602 15:22:58.651158 140465457649472 estimator.py:1984] Estimator's model_fn (<function model_fn_builder.<locals>.model_fn at 0x7fc03a397b70>) includes params argument, but params are not passed to Estimator.
+INFO:tensorflow:Using config: {'_model_dir': 'weights/evotune2', '_tf_random_seed': None, '_save_summary_steps': 100, '_save_checkpoints_steps': 1000, '_save_checkpoints_secs': None, '_session_config': allow_soft_placement: true
+graph_options {
+  rewrite_options {
+    meta_optimizer_iterations: ONE
+  }
+}
+, '_keep_checkpoint_max': 5, '_keep_checkpoint_every_n_hours': 10000, '_log_step_count_steps': None, '_train_distribute': None, '_device_fn': None, '_protocol': None, '_eval_distribute': None, '_experimental_distribute': None, '_experimental_max_worker_delay_secs': None, '_service': None, '_cluster_spec': <tensorflow.python.training.server_lib.ClusterSpec object at 0x7fc03a394a90>, '_task_type': 'worker', '_task_id': 0, '_global_id_in_cluster': 0, '_master': '', '_evaluation_master': '', '_is_chief': True, '_num_ps_replicas': 0, '_num_worker_replicas': 1, '_tpu_config': TPUConfig(iterations_per_loop=1000, num_shards=8, num_cores_per_replica=None, per_host_input_for_training=3, tpu_job_name=None, initial_infeed_sleep_secs=None, input_partition_dims=None, eval_training_input_configuration=2), '_cluster': None}
+I0602 15:22:58.652452 140465457649472 estimator.py:209] Using config: {'_model_dir': 'weights/evotune2', '_tf_random_seed': None, '_save_summary_steps': 100, '_save_checkpoints_steps': 1000, '_save_checkpoints_secs': None, '_session_config': allow_soft_placement: true
+graph_options {
+  rewrite_options {
+    meta_optimizer_iterations: ONE
+  }
+}
+, '_keep_checkpoint_max': 5, '_keep_checkpoint_every_n_hours': 10000, '_log_step_count_steps': None, '_train_distribute': None, '_device_fn': None, '_protocol': None, '_eval_distribute': None, '_experimental_distribute': None, '_experimental_max_worker_delay_secs': None, '_service': None, '_cluster_spec': <tensorflow.python.training.server_lib.ClusterSpec object at 0x7fc03a394a90>, '_task_type': 'worker', '_task_id': 0, '_global_id_in_cluster': 0, '_master': '', '_evaluation_master': '', '_is_chief': True, '_num_ps_replicas': 0, '_num_worker_replicas': 1, '_tpu_config': TPUConfig(iterations_per_loop=1000, num_shards=8, num_cores_per_replica=None, per_host_input_for_training=3, tpu_job_name=None, initial_infeed_sleep_secs=None, input_partition_dims=None, eval_training_input_configuration=2), '_cluster': None}
+INFO:tensorflow:_TPUContext: eval_on_tpu True
+I0602 15:22:58.652821 140465457649472 tpu_context.py:209] _TPUContext: eval_on_tpu True
+WARNING:tensorflow:eval_on_tpu ignored because use_tpu is False.
+W0602 15:22:58.653121 140465457649472 tpu_context.py:211] eval_on_tpu ignored because use_tpu is False.
+INFO:tensorflow:***** Running training *****
+I0602 15:22:58.653242 140465457649472 run_pretraining.py:517] ***** Running training *****
+INFO:tensorflow:  Batch size = 24
+I0602 15:22:58.653328 140465457649472 run_pretraining.py:518]   Batch size = 24
+WARNING:tensorflow:From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/training/training_util.py:236: Variable.initialized_value (from tensorflow.python.ops.variables) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use Variable.read_value. Variables in 2.X are initialized automatically both in eager and graph (inside tf.defun) contexts.
+W0602 15:22:58.662246 140465457649472 deprecation.py:323] From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/training/training_util.py:236: Variable.initialized_value (from tensorflow.python.ops.variables) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use Variable.read_value. Variables in 2.X are initialized automatically both in eager and graph (inside tf.defun) contexts.
+INFO:tensorflow:Using 9 threads
+I0602 15:22:58.671786 140465457649472 run_pretraining.py:329] Using 9 threads
+INFO:tensorflow:There are 16 files for training
+I0602 15:22:58.671949 140465457649472 run_pretraining.py:337] There are 16 files for training
+INFO:tensorflow:[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+I0602 15:22:58.672040 140465457649472 run_pretraining.py:339] [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:357: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.experimental.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.experimental_determinstic`.
+W0602 15:22:58.676976 140465457649472 deprecation.py:323] From /home/donatas_repecka/workspace/bert/run_pretraining.py:357: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.experimental.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.experimental_determinstic`.
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:386: map_and_batch (from tensorflow.python.data.experimental.ops.batching) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map(map_func, num_parallel_calls)` followed by `tf.data.Dataset.batch(batch_size, drop_remainder)`. Static tf.data optimizations will take care of using the fused implementation.
+W0602 15:22:58.703851 140465457649472 deprecation.py:323] From /home/donatas_repecka/workspace/bert/run_pretraining.py:386: map_and_batch (from tensorflow.python.data.experimental.ops.batching) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map(map_func, num_parallel_calls)` followed by `tf.data.Dataset.batch(batch_size, drop_remainder)`. Static tf.data optimizations will take care of using the fused implementation.
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:403: The name tf.parse_single_example is deprecated. Please use tf.io.parse_single_example instead.
+
+W0602 15:22:58.705368 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:403: The name tf.parse_single_example is deprecated. Please use tf.io.parse_single_example instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:404: The name tf.FixedLenFeature is deprecated. Please use tf.io.FixedLenFeature instead.
+
+W0602 15:22:58.705510 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:404: The name tf.FixedLenFeature is deprecated. Please use tf.io.FixedLenFeature instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:405: The name tf.FixedLenSequenceFeature is deprecated. Please use tf.io.FixedLenSequenceFeature instead.
+
+W0602 15:22:58.705590 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:405: The name tf.FixedLenSequenceFeature is deprecated. Please use tf.io.FixedLenSequenceFeature instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:413: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+W0602 15:22:58.707795 140465457649472 deprecation.py:323] From /home/donatas_repecka/workspace/bert/run_pretraining.py:413: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+2020-06-02 15:22:58.747935: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcuda.so.1
+2020-06-02 15:22:58.786249: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-06-02 15:22:58.787112: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1640] Found device 0 with properties: 
+name: Tesla V100-SXM2-16GB major: 7 minor: 0 memoryClockRate(GHz): 1.53
+pciBusID: 0000:00:05.0
+2020-06-02 15:22:58.787330: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudart.so.10.0
+2020-06-02 15:22:58.788328: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcublas.so.10.0
+2020-06-02 15:22:58.789428: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcufft.so.10.0
+2020-06-02 15:22:58.789825: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcurand.so.10.0
+2020-06-02 15:22:58.791163: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusolver.so.10.0
+2020-06-02 15:22:58.792394: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusparse.so.10.0
+2020-06-02 15:22:58.796243: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudnn.so.7
+2020-06-02 15:22:58.796472: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-06-02 15:22:58.797668: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-06-02 15:22:58.798617: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1763] Adding visible gpu devices: 0
+INFO:tensorflow:Calling model_fn.
+I0602 15:22:58.838599 140465457649472 estimator.py:1145] Calling model_fn.
+INFO:tensorflow:Running train on CPU
+I0602 15:22:58.838810 140465457649472 tpu_estimator.py:2965] Running train on CPU
+INFO:tensorflow:*** Features ***
+I0602 15:22:58.839065 140465457649472 run_pretraining.py:132] *** Features ***
+INFO:tensorflow:  name = input_ids, shape = (24, 280)
+I0602 15:22:58.839172 140465457649472 run_pretraining.py:134]   name = input_ids, shape = (24, 280)
+INFO:tensorflow:  name = input_mask, shape = (24, 280)
+I0602 15:22:58.839241 140465457649472 run_pretraining.py:134]   name = input_mask, shape = (24, 280)
+INFO:tensorflow:  name = length, shape = (24,)
+I0602 15:22:58.839301 140465457649472 run_pretraining.py:134]   name = length, shape = (24,)
+INFO:tensorflow:  name = masked_lm_ids, shape = (24, 20)
+I0602 15:22:58.839360 140465457649472 run_pretraining.py:134]   name = masked_lm_ids, shape = (24, 20)
+INFO:tensorflow:  name = masked_lm_positions, shape = (24, 20)
+I0602 15:22:58.839419 140465457649472 run_pretraining.py:134]   name = masked_lm_positions, shape = (24, 20)
+INFO:tensorflow:  name = masked_lm_weights, shape = (24, 20)
+I0602 15:22:58.839475 140465457649472 run_pretraining.py:134]   name = masked_lm_weights, shape = (24, 20)
+INFO:tensorflow:  name = seq, shape = (24, 280)
+I0602 15:22:58.839532 140465457649472 run_pretraining.py:134]   name = seq, shape = (24, 280)
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:171: The name tf.variable_scope is deprecated. Please use tf.compat.v1.variable_scope instead.
+
+W0602 15:22:58.841640 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/modeling.py:171: The name tf.variable_scope is deprecated. Please use tf.compat.v1.variable_scope instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:408: The name tf.get_variable is deprecated. Please use tf.compat.v1.get_variable instead.
+
+W0602 15:22:58.843307 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/modeling.py:408: The name tf.get_variable is deprecated. Please use tf.compat.v1.get_variable instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:358: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+W0602 15:22:58.883148 140465457649472 deprecation.py:506] From /home/donatas_repecka/workspace/bert/modeling.py:358: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:674: dense (from tensorflow.python.layers.core) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.dense instead.
+W0602 15:22:58.983054 140465457649472 deprecation.py:323] From /home/donatas_repecka/workspace/bert/modeling.py:674: dense (from tensorflow.python.layers.core) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.dense instead.
+INFO:tensorflow:****** Loading from weights/evotune2/
+I0602 15:23:01.294974 140465457649472 run_pretraining.py:173] ****** Loading from weights/evotune2/
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:174: The name tf.train.init_from_checkpoint is deprecated. Please use tf.compat.v1.train.init_from_checkpoint instead.
+
+W0602 15:23:01.297414 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:174: The name tf.train.init_from_checkpoint is deprecated. Please use tf.compat.v1.train.init_from_checkpoint instead.
+
+INFO:tensorflow:**** Trainable Variables ****
+I0602 15:23:01.854048 140465457649472 run_pretraining.py:176] **** Trainable Variables ****
+INFO:tensorflow:**** 86648854 parameters ****
+I0602 15:23:01.859247 140465457649472 run_pretraining.py:183] **** 86648854 parameters ****
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/optimization.py:27: The name tf.train.get_or_create_global_step is deprecated. Please use tf.compat.v1.train.get_or_create_global_step instead.
+
+W0602 15:23:01.864330 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/optimization.py:27: The name tf.train.get_or_create_global_step is deprecated. Please use tf.compat.v1.train.get_or_create_global_step instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/optimization.py:32: The name tf.train.polynomial_decay is deprecated. Please use tf.compat.v1.train.polynomial_decay instead.
+
+W0602 15:23:01.864987 140465457649472 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/optimization.py:32: The name tf.train.polynomial_decay is deprecated. Please use tf.compat.v1.train.polynomial_decay instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/keras/optimizer_v2/learning_rate_schedule.py:409: div (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Deprecated in favor of operator or tf.math.divide.
+W0602 15:23:01.868808 140465457649472 deprecation.py:323] From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/keras/optimizer_v2/learning_rate_schedule.py:409: div (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Deprecated in favor of operator or tf.math.divide.
+WARNING:tensorflow:From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/ops/math_grad.py:1205: add_dispatch_support.<locals>.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+W0602 15:23:01.933138 140465457649472 deprecation.py:323] From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/ops/math_grad.py:1205: add_dispatch_support.<locals>.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+INFO:tensorflow:Done calling model_fn.
+I0602 15:23:08.990802 140465457649472 estimator.py:1147] Done calling model_fn.
+INFO:tensorflow:Create CheckpointSaverHook.
+I0602 15:23:08.992360 140465457649472 basic_session_run_hooks.py:541] Create CheckpointSaverHook.
+INFO:tensorflow:Graph was finalized.
+I0602 15:23:11.969300 140465457649472 monitored_session.py:240] Graph was finalized.
+2020-06-02 15:23:11.969680: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: AVX2 FMA
+2020-06-02 15:23:11.975342: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2300000000 Hz
+2020-06-02 15:23:11.975932: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x557685073d00 executing computations on platform Host. Devices:
+2020-06-02 15:23:11.975988: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): <undefined>, <undefined>
+2020-06-02 15:23:11.976287: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-06-02 15:23:11.977261: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1640] Found device 0 with properties: 
+name: Tesla V100-SXM2-16GB major: 7 minor: 0 memoryClockRate(GHz): 1.53
+pciBusID: 0000:00:05.0
+2020-06-02 15:23:11.977355: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudart.so.10.0
+2020-06-02 15:23:11.977369: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcublas.so.10.0
+2020-06-02 15:23:11.977380: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcufft.so.10.0
+2020-06-02 15:23:11.977391: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcurand.so.10.0
+2020-06-02 15:23:11.977402: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusolver.so.10.0
+2020-06-02 15:23:11.977413: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusparse.so.10.0
+2020-06-02 15:23:11.977424: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudnn.so.7
+2020-06-02 15:23:11.977549: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-06-02 15:23:11.978374: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-06-02 15:23:11.979124: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1763] Adding visible gpu devices: 0
+2020-06-02 15:23:11.979183: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudart.so.10.0
+2020-06-02 15:23:12.152912: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1181] Device interconnect StreamExecutor with strength 1 edge matrix:
+2020-06-02 15:23:12.152956: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1187]      0 
+2020-06-02 15:23:12.152963: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1200] 0:   N 
+2020-06-02 15:23:12.153198: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-06-02 15:23:12.153942: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-06-02 15:23:12.154693: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-06-02 15:23:12.155415: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1326] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 15052 MB memory) -> physical GPU (device: 0, name: Tesla V100-SXM2-16GB, pci bus id: 0000:00:05.0, compute capability: 7.0)
+2020-06-02 15:23:12.157190: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x5576886c7290 executing computations on platform CUDA. Devices:
+2020-06-02 15:23:12.157228: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Tesla V100-SXM2-16GB, Compute Capability 7.0
+WARNING:tensorflow:From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/training/saver.py:1276: checkpoint_exists (from tensorflow.python.training.checkpoint_management) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use standard file APIs to check for files with this prefix.
+W0602 15:23:12.158534 140465457649472 deprecation.py:323] From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/training/saver.py:1276: checkpoint_exists (from tensorflow.python.training.checkpoint_management) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use standard file APIs to check for files with this prefix.
+INFO:tensorflow:Restoring parameters from weights/evotune2/model.ckpt-1420000
+I0602 15:23:12.159713 140465457649472 saver.py:1280] Restoring parameters from weights/evotune2/model.ckpt-1420000
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:516: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:517: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:518: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:519: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:520: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/framework/dtypes.py:525: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:541: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint8 = np.dtype([("qint8", np.int8, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:542: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint8 = np.dtype([("quint8", np.uint8, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:543: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint16 = np.dtype([("qint16", np.int16, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:544: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_quint16 = np.dtype([("quint16", np.uint16, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:545: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  _np_qint32 = np.dtype([("qint32", np.int32, 1)])
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorboard/compat/tensorflow_stub/dtypes.py:550: FutureWarning: Passing (type, 1) or '1type' as a synonym of type is deprecated; in a future version of numpy, it will be understood as (type, (1,)) / '(1,)type'.
+  np_resource = np.dtype([("resource", np.ubyte, 1)])
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/optimization.py:86: The name tf.train.Optimizer is deprecated. Please use tf.compat.v1.train.Optimizer instead.
+
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/absl/flags/_validators.py:359: UserWarning: Flag --input_file has a non-None default value; therefore, mark_flag_as_required will pass even if flag is not specified in the command line!
+  'command line!' % flag_name)
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/absl/flags/_validators.py:359: UserWarning: Flag --bert_config_file has a non-None default value; therefore, mark_flag_as_required will pass even if flag is not specified in the command line!
+  'command line!' % flag_name)
+/home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/absl/flags/_validators.py:359: UserWarning: Flag --output_dir has a non-None default value; therefore, mark_flag_as_required will pass even if flag is not specified in the command line!
+  'command line!' % flag_name)
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:583: The name tf.app.run is deprecated. Please use tf.compat.v1.app.run instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:456: The name tf.logging.set_verbosity is deprecated. Please use tf.compat.v1.logging.set_verbosity instead.
+
+W0602 15:23:26.969168 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:456: The name tf.logging.set_verbosity is deprecated. Please use tf.compat.v1.logging.set_verbosity instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:456: The name tf.logging.INFO is deprecated. Please use tf.compat.v1.logging.INFO instead.
+
+W0602 15:23:26.969336 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:456: The name tf.logging.INFO is deprecated. Please use tf.compat.v1.logging.INFO instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:93: The name tf.gfile.GFile is deprecated. Please use tf.io.gfile.GFile instead.
+
+W0602 15:23:26.969478 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/modeling.py:93: The name tf.gfile.GFile is deprecated. Please use tf.io.gfile.GFile instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:463: The name tf.gfile.MakeDirs is deprecated. Please use tf.io.gfile.makedirs instead.
+
+W0602 15:23:26.969773 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:463: The name tf.gfile.MakeDirs is deprecated. Please use tf.io.gfile.makedirs instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:467: The name tf.gfile.Glob is deprecated. Please use tf.io.gfile.glob instead.
+
+W0602 15:23:26.969883 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:467: The name tf.gfile.Glob is deprecated. Please use tf.io.gfile.glob instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:469: The name tf.logging.info is deprecated. Please use tf.compat.v1.logging.info instead.
+
+W0602 15:23:27.076689 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:469: The name tf.logging.info is deprecated. Please use tf.compat.v1.logging.info instead.
+
+INFO:tensorflow:*** Input Files ***
+I0602 15:23:27.076865 140533576570688 run_pretraining.py:469] *** Input Files ***
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/15.tfrecord.gz
+I0602 15:23:27.076920 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/15.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/13.tfrecord.gz
+I0602 15:23:27.076964 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/13.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/4.tfrecord.gz
+I0602 15:23:27.077013 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/4.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/14.tfrecord.gz
+I0602 15:23:27.077053 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/14.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/3.tfrecord.gz
+I0602 15:23:27.077091 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/3.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/7.tfrecord.gz
+I0602 15:23:27.077129 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/7.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/1.tfrecord.gz
+I0602 15:23:27.077167 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/1.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/9.tfrecord.gz
+I0602 15:23:27.077205 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/9.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/12.tfrecord.gz
+I0602 15:23:27.077242 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/12.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/0.tfrecord.gz
+I0602 15:23:27.077279 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/0.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/6.tfrecord.gz
+I0602 15:23:27.077316 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/6.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/2.tfrecord.gz
+I0602 15:23:27.077365 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/2.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/10.tfrecord.gz
+I0602 15:23:27.077402 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/10.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/8.tfrecord.gz
+I0602 15:23:27.077439 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/8.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/11.tfrecord.gz
+I0602 15:23:27.077476 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/11.tfrecord.gz
+INFO:tensorflow:  /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/5.tfrecord.gz
+I0602 15:23:27.077513 140533576570688 run_pretraining.py:471]   /mnt/shared/AI/data/unirep/gfp_pretraining_tfrecords/5.tfrecord.gz
+WARNING:tensorflow:Estimator's model_fn (<function model_fn_builder.<locals>.model_fn at 0x7fd0166d9bf8>) includes params argument, but params are not passed to Estimator.
+W0602 15:23:27.077908 140533576570688 estimator.py:1984] Estimator's model_fn (<function model_fn_builder.<locals>.model_fn at 0x7fd0166d9bf8>) includes params argument, but params are not passed to Estimator.
+INFO:tensorflow:Using config: {'_model_dir': 'weights/evotune2', '_tf_random_seed': None, '_save_summary_steps': 100, '_save_checkpoints_steps': 1000, '_save_checkpoints_secs': None, '_session_config': allow_soft_placement: true
+graph_options {
+  rewrite_options {
+    meta_optimizer_iterations: ONE
+  }
+}
+, '_keep_checkpoint_max': 5, '_keep_checkpoint_every_n_hours': 10000, '_log_step_count_steps': None, '_train_distribute': None, '_device_fn': None, '_protocol': None, '_eval_distribute': None, '_experimental_distribute': None, '_experimental_max_worker_delay_secs': None, '_service': None, '_cluster_spec': <tensorflow.python.training.server_lib.ClusterSpec object at 0x7fd0166d8ac8>, '_task_type': 'worker', '_task_id': 0, '_global_id_in_cluster': 0, '_master': '', '_evaluation_master': '', '_is_chief': True, '_num_ps_replicas': 0, '_num_worker_replicas': 1, '_tpu_config': TPUConfig(iterations_per_loop=1000, num_shards=8, num_cores_per_replica=None, per_host_input_for_training=3, tpu_job_name=None, initial_infeed_sleep_secs=None, input_partition_dims=None, eval_training_input_configuration=2), '_cluster': None}
+I0602 15:23:27.078789 140533576570688 estimator.py:209] Using config: {'_model_dir': 'weights/evotune2', '_tf_random_seed': None, '_save_summary_steps': 100, '_save_checkpoints_steps': 1000, '_save_checkpoints_secs': None, '_session_config': allow_soft_placement: true
+graph_options {
+  rewrite_options {
+    meta_optimizer_iterations: ONE
+  }
+}
+, '_keep_checkpoint_max': 5, '_keep_checkpoint_every_n_hours': 10000, '_log_step_count_steps': None, '_train_distribute': None, '_device_fn': None, '_protocol': None, '_eval_distribute': None, '_experimental_distribute': None, '_experimental_max_worker_delay_secs': None, '_service': None, '_cluster_spec': <tensorflow.python.training.server_lib.ClusterSpec object at 0x7fd0166d8ac8>, '_task_type': 'worker', '_task_id': 0, '_global_id_in_cluster': 0, '_master': '', '_evaluation_master': '', '_is_chief': True, '_num_ps_replicas': 0, '_num_worker_replicas': 1, '_tpu_config': TPUConfig(iterations_per_loop=1000, num_shards=8, num_cores_per_replica=None, per_host_input_for_training=3, tpu_job_name=None, initial_infeed_sleep_secs=None, input_partition_dims=None, eval_training_input_configuration=2), '_cluster': None}
+INFO:tensorflow:_TPUContext: eval_on_tpu True
+I0602 15:23:27.079008 140533576570688 tpu_context.py:209] _TPUContext: eval_on_tpu True
+WARNING:tensorflow:eval_on_tpu ignored because use_tpu is False.
+W0602 15:23:27.079200 140533576570688 tpu_context.py:211] eval_on_tpu ignored because use_tpu is False.
+INFO:tensorflow:***** Running training *****
+I0602 15:23:27.079336 140533576570688 run_pretraining.py:517] ***** Running training *****
+INFO:tensorflow:  Batch size = 24
+I0602 15:23:27.079390 140533576570688 run_pretraining.py:518]   Batch size = 24
+WARNING:tensorflow:From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/training/training_util.py:236: Variable.initialized_value (from tensorflow.python.ops.variables) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use Variable.read_value. Variables in 2.X are initialized automatically both in eager and graph (inside tf.defun) contexts.
+W0602 15:23:27.088200 140533576570688 deprecation.py:323] From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/training/training_util.py:236: Variable.initialized_value (from tensorflow.python.ops.variables) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use Variable.read_value. Variables in 2.X are initialized automatically both in eager and graph (inside tf.defun) contexts.
+INFO:tensorflow:Using 9 threads
+I0602 15:23:27.098012 140533576570688 run_pretraining.py:329] Using 9 threads
+INFO:tensorflow:There are 16 files for training
+I0602 15:23:27.098179 140533576570688 run_pretraining.py:337] There are 16 files for training
+INFO:tensorflow:[-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+I0602 15:23:27.098253 140533576570688 run_pretraining.py:339] [-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1]
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:357: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.experimental.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.experimental_determinstic`.
+W0602 15:23:27.103212 140533576570688 deprecation.py:323] From /home/donatas_repecka/workspace/bert/run_pretraining.py:357: parallel_interleave (from tensorflow.python.data.experimental.ops.interleave_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.interleave(map_func, cycle_length, block_length, num_parallel_calls=tf.data.experimental.AUTOTUNE)` instead. If sloppy execution is desired, use `tf.data.Options.experimental_determinstic`.
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:386: map_and_batch (from tensorflow.python.data.experimental.ops.batching) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map(map_func, num_parallel_calls)` followed by `tf.data.Dataset.batch(batch_size, drop_remainder)`. Static tf.data optimizations will take care of using the fused implementation.
+W0602 15:23:27.129539 140533576570688 deprecation.py:323] From /home/donatas_repecka/workspace/bert/run_pretraining.py:386: map_and_batch (from tensorflow.python.data.experimental.ops.batching) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.data.Dataset.map(map_func, num_parallel_calls)` followed by `tf.data.Dataset.batch(batch_size, drop_remainder)`. Static tf.data optimizations will take care of using the fused implementation.
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:403: The name tf.parse_single_example is deprecated. Please use tf.io.parse_single_example instead.
+
+W0602 15:23:27.131041 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:403: The name tf.parse_single_example is deprecated. Please use tf.io.parse_single_example instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:404: The name tf.FixedLenFeature is deprecated. Please use tf.io.FixedLenFeature instead.
+
+W0602 15:23:27.131212 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:404: The name tf.FixedLenFeature is deprecated. Please use tf.io.FixedLenFeature instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:405: The name tf.FixedLenSequenceFeature is deprecated. Please use tf.io.FixedLenSequenceFeature instead.
+
+W0602 15:23:27.131305 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:405: The name tf.FixedLenSequenceFeature is deprecated. Please use tf.io.FixedLenSequenceFeature instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:413: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+W0602 15:23:27.133867 140533576570688 deprecation.py:323] From /home/donatas_repecka/workspace/bert/run_pretraining.py:413: to_int32 (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use `tf.cast` instead.
+2020-06-02 15:23:27.173286: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcuda.so.1
+2020-06-02 15:23:27.211041: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-06-02 15:23:27.211858: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1640] Found device 0 with properties: 
+name: Tesla V100-SXM2-16GB major: 7 minor: 0 memoryClockRate(GHz): 1.53
+pciBusID: 0000:00:05.0
+2020-06-02 15:23:27.212086: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudart.so.10.0
+2020-06-02 15:23:27.213253: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcublas.so.10.0
+2020-06-02 15:23:27.214351: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcufft.so.10.0
+2020-06-02 15:23:27.214723: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcurand.so.10.0
+2020-06-02 15:23:27.215985: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusolver.so.10.0
+2020-06-02 15:23:27.217312: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcusparse.so.10.0
+2020-06-02 15:23:27.221202: I tensorflow/stream_executor/platform/default/dso_loader.cc:42] Successfully opened dynamic library libcudnn.so.7
+2020-06-02 15:23:27.221464: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-06-02 15:23:27.222627: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1005] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2020-06-02 15:23:27.223505: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1763] Adding visible gpu devices: 0
+INFO:tensorflow:Calling model_fn.
+I0602 15:23:27.266950 140533576570688 estimator.py:1145] Calling model_fn.
+INFO:tensorflow:Running train on CPU
+I0602 15:23:27.267179 140533576570688 tpu_estimator.py:2965] Running train on CPU
+INFO:tensorflow:*** Features ***
+I0602 15:23:27.267456 140533576570688 run_pretraining.py:132] *** Features ***
+INFO:tensorflow:  name = input_ids, shape = (24, 280)
+I0602 15:23:27.267599 140533576570688 run_pretraining.py:134]   name = input_ids, shape = (24, 280)
+INFO:tensorflow:  name = input_mask, shape = (24, 280)
+I0602 15:23:27.267674 140533576570688 run_pretraining.py:134]   name = input_mask, shape = (24, 280)
+INFO:tensorflow:  name = length, shape = (24,)
+I0602 15:23:27.267740 140533576570688 run_pretraining.py:134]   name = length, shape = (24,)
+INFO:tensorflow:  name = masked_lm_ids, shape = (24, 20)
+I0602 15:23:27.267818 140533576570688 run_pretraining.py:134]   name = masked_lm_ids, shape = (24, 20)
+INFO:tensorflow:  name = masked_lm_positions, shape = (24, 20)
+I0602 15:23:27.267884 140533576570688 run_pretraining.py:134]   name = masked_lm_positions, shape = (24, 20)
+INFO:tensorflow:  name = masked_lm_weights, shape = (24, 20)
+I0602 15:23:27.267947 140533576570688 run_pretraining.py:134]   name = masked_lm_weights, shape = (24, 20)
+INFO:tensorflow:  name = seq, shape = (24, 280)
+I0602 15:23:27.268010 140533576570688 run_pretraining.py:134]   name = seq, shape = (24, 280)
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:171: The name tf.variable_scope is deprecated. Please use tf.compat.v1.variable_scope instead.
+
+W0602 15:23:27.270060 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/modeling.py:171: The name tf.variable_scope is deprecated. Please use tf.compat.v1.variable_scope instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:408: The name tf.get_variable is deprecated. Please use tf.compat.v1.get_variable instead.
+
+W0602 15:23:27.271697 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/modeling.py:408: The name tf.get_variable is deprecated. Please use tf.compat.v1.get_variable instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:358: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+W0602 15:23:27.314540 140533576570688 deprecation.py:506] From /home/donatas_repecka/workspace/bert/modeling.py:358: calling dropout (from tensorflow.python.ops.nn_ops) with keep_prob is deprecated and will be removed in a future version.
+Instructions for updating:
+Please use `rate` instead of `keep_prob`. Rate should be set to `rate = 1 - keep_prob`.
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/modeling.py:674: dense (from tensorflow.python.layers.core) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.dense instead.
+W0602 15:23:27.415780 140533576570688 deprecation.py:323] From /home/donatas_repecka/workspace/bert/modeling.py:674: dense (from tensorflow.python.layers.core) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use keras.layers.dense instead.
+INFO:tensorflow:****** Loading from weights/evotune2/
+I0602 15:23:30.160220 140533576570688 run_pretraining.py:173] ****** Loading from weights/evotune2/
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/run_pretraining.py:174: The name tf.train.init_from_checkpoint is deprecated. Please use tf.compat.v1.train.init_from_checkpoint instead.
+
+W0602 15:23:30.160424 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/run_pretraining.py:174: The name tf.train.init_from_checkpoint is deprecated. Please use tf.compat.v1.train.init_from_checkpoint instead.
+
+INFO:tensorflow:**** Trainable Variables ****
+I0602 15:23:30.706530 140533576570688 run_pretraining.py:176] **** Trainable Variables ****
+INFO:tensorflow:**** 86648854 parameters ****
+I0602 15:23:30.712004 140533576570688 run_pretraining.py:183] **** 86648854 parameters ****
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/optimization.py:27: The name tf.train.get_or_create_global_step is deprecated. Please use tf.compat.v1.train.get_or_create_global_step instead.
+
+W0602 15:23:30.717111 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/optimization.py:27: The name tf.train.get_or_create_global_step is deprecated. Please use tf.compat.v1.train.get_or_create_global_step instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/workspace/bert/optimization.py:32: The name tf.train.polynomial_decay is deprecated. Please use tf.compat.v1.train.polynomial_decay instead.
+
+W0602 15:23:30.717734 140533576570688 deprecation_wrapper.py:119] From /home/donatas_repecka/workspace/bert/optimization.py:32: The name tf.train.polynomial_decay is deprecated. Please use tf.compat.v1.train.polynomial_decay instead.
+
+WARNING:tensorflow:From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/keras/optimizer_v2/learning_rate_schedule.py:409: div (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Deprecated in favor of operator or tf.math.divide.
+W0602 15:23:30.721598 140533576570688 deprecation.py:323] From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/keras/optimizer_v2/learning_rate_schedule.py:409: div (from tensorflow.python.ops.math_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Deprecated in favor of operator or tf.math.divide.
+WARNING:tensorflow:From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/ops/math_grad.py:1205: add_dispatch_support.<locals>.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+W0602 15:23:30.786291 140533576570688 deprecation.py:323] From /home/donatas_repecka/anaconda3/envs/old/lib/python3.7/site-packages/tensorflow/python/ops/math_grad.py:1205: add_dispatch_support.<locals>.wrapper (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+INFO:tensorflow:Done calling model_fn.
+I0602 15:23:37.807203 140533576570688 estimator.py:1147] Done calling model_fn.
+INFO:tensorflow:Create CheckpointSaverHook.
+I0602 15:23:37.808941 140533576570688 basic_session_run_hooks.py:541] Create CheckpointSaverHook.
